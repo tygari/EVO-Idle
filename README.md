@@ -71,3 +71,7 @@ Stage 5 - Not planned
 Stage 6 - Not planned
      Combat Grade 3:
      Combat Evolution 3:                
+
+
+
+EVO Idle is copyrighted by Tygari Davis ©2017.
