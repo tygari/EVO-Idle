@@ -1,0 +1,67 @@
+<html>
+<head>
+	<title>EVO Idle</title>
+	<script src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
+</head>
+<body id="stage" style="background-color:rgb(0%,0%,0%); user-select: none; cursor:crosshair; overflow: hidden"; oncontextmenu="return false"; onload="start()">
+	<img id="swirl" src="swirl.png" style="position: absolute; z-index: 2; width: 50px; height: 50px;" onclick="move()">
+	<div style="color:orange; border-style: hidden; height: 700px; width: 25%; float: left">
+		<p>
+			<span id="moveButton">Movement Cost: </span><span id="moveHTML"></span>
+			<br>Food: <span id="food"></span>
+		</p>
+		<p>
+			Cell Structures
+			<br>Membrane: <span id="membrane">Bubble</span>
+			<br><span id="cytoskeletonHTML"></span>
+			<br><span id="nucleusHTML"></span>
+			<br><span id="mitosisHTML"></span>
+			<br>&nbsp;
+			<br>&nbsp;
+			<br>&nbsp;
+			<br>&nbsp;
+			<br>&nbsp;
+			<br><span id="adHTML"><button type="button" onclick="ad()"><b>Play Ad</b></button></span>
+		</p>
+	</div>
+	<div style="color:red; border-style: hidden; height: 700px; width: 25%; float: right">
+		Developmental Evolutions
+		<br><br>Metabolism: <span id="metabolismType">Basic</span> <span id="photosynthesis"></span>
+		<span id="boostHTML"></span>
+	</div>
+	<span id="eventHTML"></span>
+	<div style="color:white; border-style: hidden; width: 25%; float: left; text-align:center; overflow-y: auto">
+		<div onmouseover="tip('grow')" onmouseout="tap('grow')" onclick="manualClick()">
+			<p>
+				<b style="color:green">Grow!</b>
+				<br>ATP: <span id="atp"></span>
+			</p>
+		</div>
+		<span id="grow"></span>
+		<span id="reproduceHTML"></span>
+		<span id="cytoplasmHTML"></span>
+		<span id="rnaHTML"></span>
+		<span id="metabolismHTML"></span>
+		<span id="dnaHTML"></span>
+		<span id="mitochondriaHTML"></span>
+		<div onmouseover="tip('evoTip')" onmouseout="tap('evoTip')" onclick="buyEvolution()">
+			<p>
+				<b id="evolutionButton">Evolve</b>
+				<br>Evolution: <span id="evolution">0</span>
+				<br>Evolution Cost: <span id="evolutionCost"></span>
+			</p>
+		</div>
+		<span id="evoTip"></span>
+		<br>
+		<span id="evolutionUpgrade"></span>
+	</div>
+	<div style="color:white; border-style: hidden; width: 25%; float: left; text-align:center; overflow-y: auto">
+		<span id="ciliaHTML"></span>
+		<span id="flagellumHTML"></span>
+		<span id="cilflaHTML"></span>
+	</div>
+	<br>
+	<script type="text/javascript" src="REC.js"></script>
+	<script type="text/javascript" src="EVO1.js"></script>
+</body>
+</html>

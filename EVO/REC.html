@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>EVO Idle</title>
+</head>
+<body style="background-color:rgb(0%,0%,0%); user-select: none; cursor:crosshair; overflow: hidden"; oncontextmenu="return false";  onload="recstart()">
+	<div style="color:white; border-style: hidden; text-align:center">
+		<p style="color:white"> You have <span id="bonus"></span> Reincarnation points.</p>
+		<p>Cost: <span id="cost"></span></p>
+	</div>
+	<div style="color:white; border-style: hidden; height: 80%; width: 25%; float: left; text-align:center; overflow-y: auto">
+		<span id="stageOne"></span>
+	</div>
+	<div style="color:white; border-style: hidden; height: 80%; width: 25%; float: left; text-align:center; overflow-y: auto">
+		<span id="foodHTML"></span>
+	</div>
+	<div style="color:white; border-style: hidden; height: 80%; width: 25%; float: right; text-align:center; overflow-y: auto">
+		<p>Combat Level Upgrades</p>
+		<span id="gradeHTML"></span>
+	</div>
+	<div style="color:white; border-style: hidden; height: 80%; width: 25%; float: right; text-align:center; overflow-y: auto">
+		<p>Combat Stat Upgrades</p>
+		<span id="combatHTML"></span>
+	</div>
+	<div style="color:white; border-style: hidden; text-align:center">
+		<p onclick="restart()"><b id="restart">Reincarnate</b></p>
+	</div>
+	<script type="text/javascript" src="REC.js"></script>
+</body>
+</html>
