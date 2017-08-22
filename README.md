@@ -69,11 +69,15 @@ Stage 4 - In planning
           Carries till Reincarnation.
 
 Stage 5 - Not planned
-     Boost Evolution 2:
+     Boost Evolution 2: Branch Evolution
+          Carries till Reincarnation.
 
 Stage 6 - Not planned
-     Combat Grade 3:
-     Combat Evolution 3:                
+     Combat Grade 3: Branch Evolution & Upgrade Evolution
+          Carries till Reincarnation.
+          
+     Combat Evolution 3: Branch Evolution
+          Carries till Reincarnation.
 
 
 
