@@ -3,10 +3,11 @@ var EVO = {
 	"stage": 3,
 	"date": Date.now(),
 	"one": {
-		"metabolismType": 'basic',
+		"metabolismType": null,
 		"metabolism": 0,
 		"mitochondria": 0,
 		"cilia": 0,
+		"flagellum": 0,
 		"cytoplasm": 0,
 	},
 	"two": {
@@ -31,12 +32,15 @@ var EVO = {
 		"digestive": 0,
 		"excretion": 0,
 		"sight": 0,
+		"skeleton": null,
 		"boost": null,
 	},
 	"photosynthesis": 0,
 	"current": 50,
 	"currentDamage": 0,
-	"pH": 70,
+	"ph": 70,
+	"phd": 0,
+	"eps": 0,
 	"salinity": 35,
 	"salinityCurse": 0,
 	"sunSwitch": 'on',
@@ -114,6 +118,7 @@ var fun = {
 		"digestive": function(){return (1+(EVO.two.digestive/100))*(1+(EVO.three.digestive/100));},
 		"excretion": function(){return (1+(EVO.two.excretion/100))*(1+(EVO.three.excretion/100));},
 		"sight": function(){return (1+(EVO.two.sight/100))*(1+(EVO.three.sight/100));},
+		"eps": function(){return (1-(EVO.phd/100));},
 	},
 	"food":{
 		"max": function(){return ((REC.food.max+EVO.size.max)*10)+100;},
@@ -151,106 +156,12 @@ function start(){
 			localStorage.removeItem("EVOE");
 		}
 	}
-	EVO = {
-		"version": 0,
-		"stage": 3,
-		"date": Date.now(),
-		"one": {
-			"metabolismType": 'Aerobic Respiration',
-			"metabolism": 10,
-			"mitochondria": 0,
-			"cilia": 1000,
-			"cytoplasm": 0,
-		},
-		"two": {
-			"adhesionLearn": 0,
-			"osmisisLearn": 0,
-			"balance": 0,
-			"nerve": 0,
-			"vascular": 0,
-			"muscle": 10,
-			"respiratory": 0,
-			"digestive": 0,
-			"excretion": 0,
-			"sight": 0,
-		},
-		"three": {
-			"diet": null,
-			"balance": 0,
-			"nerve": 0,
-			"vascular": 0,
-			"muscle": 0,
-			"respiratory": 0,
-			"digestive": 0,
-			"excretion": 0,
-			"sight": 0,
-			"boost": null,
-		},
-		"photosynthesis": 0,
-		"current": 50,
-		"currentDamage": 0,
-		"pH": 70,
-		"salinity": 35,
-		"salinityCurse": 0,
-		"sunSwitch": 'on',
-		"sun": 0,
-		"food": 10000,
-		"mineral": 100000,
-		"predator": 0,
-		"grazer": 0,
-		"field": 0,
-		"evolution": 0,
-		"evolved": 0,
-		"bonus": 1000,
-		"sex": 0,
-		"peristalsisSwitch": 'off',
-		"peristalsis": 0,
-		"peristalsisLearn": 0,
-		"evolutionSwitch": 'off',
-		"specialized": 1,
-		"specialzedEvo": 4,
-		"balanceSwitch": 'off',
-		"nerveSwitch": 'on',
-		"vascularSwitch": 'on',
-		"muscleSwitch": 'off',
-		"respiratorySwitch": 'on',
-		"digestiveSwitch": 'off',
-		"excretionSwitch": 'off',
-		"sightSwitch": 'on',
-		"radial": null,
-		"bilateral": null,
-		"size": {
-			"max": 0,
-			"stage": 0,
-		},
-		"cbtMax": 1,
-		"cbtevo": [],
-		"mhp": 0,
-		"hp": 10,
-		"msp": 0,
-		"sp": 10,
-		"exp": 1000000,
-		"scar": 0,
-		"offG": 1,
-		"off": 0,
-		"defG": 0,
-		"def": 0,
-		"spdG": 0,
-		"spd": 0,
-		"splG": 0,
-		"spl": 0,
-		"hlth": 100,
-		"spcl": 100,
-		"run": 20,
-		"won": 0,
-		"lost": 0,
-	};
 	evos();
 	specialized();
 	var offline = Date.now() - EVO.date;
 	var speedUp = [0, 0, 0, 0];
 	while (offline >= speedUp[0]){
-		if (speedUp[0] >= speedUp[1] + (2001-((fun.add.vascular()*10)+EVO.salinityCurse)){
+		if (speedUp[0] >= speedUp[1] + (2001-((fun.add.vascular()*10)+EVO.salinityCurse))){
 			autoClick();
 			if (EVO.metabolismType == 'Photophosphorylation') {photosynth();}
 			speedUp[1] = speedUp[0];
@@ -277,8 +188,10 @@ function start(){
 	doc('evolutionCost',evolutionMath());
 	doc('moveHTML',4000-EVO.peristalsis-(fun.add.muscle()*10));
 	doc('current',(EVO.current/10));
-	doc('pH',(EVO.pH/10));
+	doc('ph',(EVO.ph/10));
 	doc('salinity',EVO.salinity);
+	doc('eps',EVO.eps);
+	doc('epsCost',epsMath());
 	light();
 	setTimeout(environment, 60000);
 	setTimeout(timer, 1000);
@@ -317,15 +230,15 @@ function currentMath(){
 
 function phMath(){
 	var ph = Math.floor(Math.random()*3);
-	if (ph == 0 && EVO.pH < 140){EVO.pH += 1;}
-	if (ph == 1 && EVO.pH > 0){EVO.pH -= 1;}
-	doc('pH',(EVO.pH/10));
+	if (ph == 0 && EVO.ph < 140){EVO.ph += 1;}
+	if (ph == 1 && EVO.ph > 0){EVO.ph -= 1;}
+	doc('ph',(EVO.ph/10));
 }
 
 function salinityMath(){
-	var salinitys = Math.floor(Math.random()*3);
-	if (salinitys == 0 && EVO.salinity < 40){EVO.salinity += 1;}
-	if (salinitys == 1 && EVO.salinity > 30){EVO.salinity -= 1;}
+	var salinity = Math.floor(Math.random()*3);
+	if (salinity == 0 && EVO.salinity < 40){EVO.salinity += 1;}
+	if (salinity == 1 && EVO.salinity > 30){EVO.salinity -= 1;}
 	doc('salinity',EVO.salinity);
 	salinityDebuff();
 }
@@ -364,7 +277,7 @@ function move(x){
 			updateMineral();
 			EVO.current = Math.floor(Math.random()*100)+1;
 			currentMath();
-			EVO.pH = Math.floor(Math.random()*140);
+			EVO.ph = Math.floor(Math.random()*140);
 			phMath();
 			EVO.salinity = Math.floor(Math.random()*11)+30;
 			salinityMath();
@@ -430,24 +343,24 @@ function hunt(){
 				if (EVO.predator > fight && EVO.predator > 0){
 					doc('event1HTML','You meet an aggressive predatore.  You are being attacked.');
 					run;
-					cbt(res,0,'hunt');
+					cbt(res,'hunt',Math.floor(Math.random()*3)+3);
 				}
 				else if (EVO.predator+(EVO.grazer*4)+a > fight && EVO.grazer > 0){
 					doc('event1HTML','You meet a unattentive grazer.  You are attacking.');
 					run;
-					cbt(res,Math.floor(Math.random()*10)*-1,'hunt');
+					cbt(res,'hunt',Math.floor(Math.random()*3));
 				}
 			}
 			if (EVO.three.diet == 'Herbivore'){
 				if (EVO.predator*4-a > fight && EVO.predator > 0){
 					doc('event1HTML','You meet an aggressive predatore.  You are being attacked.');
 					run;
-					cbt(res,Math.floor(Math.random()*10),'hunt');
+					cbt(res,'hunt',Math.floor(Math.random()*3)+3);
 				}
 				else if (EVO.predator*4+(EVO.grazer/4)-a > fight && EVO.grazer > 0){
 					doc('event1HTML','You meet a territorial grazer.  You are being attacked.');
 					run;
-					cbt(res,0,'hunt');
+					cbt(res,'hunt',Math.floor(Math.random()*3));
 				}
 				if (EVO.field > 0){
 					EVO.field -= 1;
@@ -467,6 +380,7 @@ function hunt(){
 function updateMineral(){
 	doc('mineral',Math.floor(EVO.mineral));
 	color('evolution');
+	color('eps');
 	color('move');
 	if (EVO.balanceSwitch == 'on'){color('balance');}
 	if (EVO.nerveSwitch == 'on'){color('nerve');}
@@ -484,7 +398,7 @@ function autoClick(){
 		EVO.food -= feed;
 		var a = 0;
 		if (EVO.three.boost == 'Hyper Metabolic' && EVO.hp < EVO.mhp){a = EVO.spl;}
-		if (EVO.metabolismType == 'Aerobic Respiration'){feed *= fun.mul.metabolism() * fun.mul.respiratory() * (1+(a/100));}
+		if (EVO.metabolismType == 'Aerobic Respiration'){feed *= fun.mul.metabolism() * fun.mul.respiratory() * (1+(a/100)) * fun.mul.eps();}
 		EVO.mineral += feed;
 		updateFood();
 		updateMineral();
@@ -505,7 +419,7 @@ function timer(){
 function photosynth(){
 	var a = 0;
 	if (EVO.three.boost == 'Hyper Metabolic' && EVO.hp < EVO.mhp){a = EVO.spl;}
-	EVO.photosynthesis += (1+(EVO.sun/100)) * fun.mul.metabolism() * fun.mul.respiratory() * (1+(a/100));
+	EVO.photosynthesis += (1+(EVO.sun/100)) * fun.mul.metabolism() * fun.mul.respiratory() * (1+(a/100)) * fun.mul.eps();
 	while (EVO.photosynthesis >= 100){
 		EVO.photosynthesis -= 100;
 		EVO.mineral += 1;
@@ -528,11 +442,12 @@ function buyEvolution(){
 }
 
 var cost = {
-	"sex": 1,
+	"sex": 2,
+	"peristalsis": 3,
 	"specialized": 5,
-	"peristalsis": 4,
 	"diet": 10,
-	"boost": 30,
+	"skeleton": 10,
+	"boost": 20,
 	"fight": 'off',
 }
 
@@ -550,13 +465,10 @@ function updateEvolution(){
 	var sightCode = '';
 	var symmetryCode = '';
 	var peristalsisCode = '';
-	var carnCode = '';
-	var herbCode = '';
+	var dietCode = '';
+	var skeletonCode = '';
 	var sizeCode = '';
-	var camoCode = '';
-	var terriCode = '';
-	var roamCode = '';
-	var metaCode = '';
+	var boostCode = '';
 	var special = EVO.specialized * cost.specialized;
 	function evo(y,z){return '<p onclick="specialized(' + y + ')"><b style="color:blue">' + z + '</b></p>';}
 	function specializationSwitch(){
@@ -588,26 +500,25 @@ function updateEvolution(){
 	}
 	if (EVO.bilateral == 'bilateral' && creation >= cost.diet && EVO.three.diet == null){
 		EVO.evolutionSwitch = 'on';
-		carnCode = '<p title="Your diet specializes to break down animal matter." onclick="evos(\'carn\')"><b style="color:blue">Carnivore</b></p>';
+		dietCode = '<p title="Your diet specializes to break down animal matter." onclick="evos(\'carn\')"><b style="color:blue">Carnivore</b></p><p title="Your diet specializes to break down plant matter." onclick="evos(\'herb\')"><b style="color:blue">Herbivore</b></p>';
 	}
-	if (EVO.bilateral == 'bilateral' && creation >= cost.diet && EVO.three.diet == null){
+	if (EVO.three.diet !== null && creation >= cost.diet && EVO.three.skeleton == null){
 		EVO.evolutionSwitch = 'on';
-		herbCode = '<p title="Your diet specializes to break down plant matter." onclick="evos(\'herb\')"><b style="color:blue">Herbivore</b></p>';
+		skeletonCode = '<p title="Your worm develops an internal skeleton to give structure to its growing size." onclick="evos(\'inn\')"><b style="color:blue">Internal Skeleton</b></p><p title="Your worm develops an external skeleton to give structure to its growing size." onclick="evos(\'exo\')"><b style="color:blue">External Skeleton</b></p>';
 	}
-	if (EVO.stage > EVO.size.stage && EVO.three.diet !== null && creation >= EVO.size.max+1){
+	var a = 0;
+	if (EVO.three.skeleton == 'Inner Skeleton'){a = 1;}
+	if (EVO.stage + a > EVO.size.stage && EVO.three.diet !== null && creation >= EVO.size.max+1){
 		EVO.evolutionSwitch = 'on';
 		sizeCode = '<p title="Growing larger has many effects." onclick="evos(\'size\')"><b style="color:blue">Size ' + (EVO.size.max+1) + '</b></p>';
 	}
 	if (creation >= cost.boost && EVO.three.diet !== null && EVO.three.boost == null){
 		EVO.evolutionSwitch = 'on';
-		camoCode = '<p title="Camoflauge assists with hiding when hunting or avoiding being hunted." onclick="evos(\'camo\')"><b style="color:blue">Camoflauge</b></p>';
-		terriCode = '<p title="Territorial creatures protect their area slowing potential food loss." onclick="evos(\'terri\')"><b style="color:blue">Territorial</b></p>';
-		roamCode = '<p title="Raoming creatures can\'t stop moving finding new areas faster." onclick="evos(\'roam\')"><b style="color:blue">Roaming</b></p>';
-		metaCode = '<p title="Hyper Metabolic creatures enter a hieghtened metabolic state when wounded." onclick="evos(\'meta\')"><b style="color:blue">Hyper Metabolic</b></p>';
+		boostCode = '<p title="Camoflauge assists with hiding when hunting or avoiding being hunted." onclick="evos(\'camo\')"><b style="color:blue">Camoflauge</b></p><p title="Territorial creatures protect their area slowing potential food loss." onclick="evos(\'terri\')"><b style="color:blue">Territorial</b></p><p title="Raoming creatures can\'t stop moving finding new areas faster." onclick="evos(\'roam\')"><b style="color:blue">Roaming</b></p><p title="Hyper Metabolic creatures enter a hieghtened metabolic state when wounded." onclick="evos(\'meta\')"><b style="color:blue">Hyper Metabolic</b></p>';
 	}
 	var evolutionCode = '<p style="color:gold"><b>Evolutions</b></p>';
 	if (EVO.evolutionSwitch == 'off'){doc('evolutionUpgrade','');}
-	if (EVO.evolutionSwitch == 'on'){doc('evolutionUpgrade',evolutionCode + sexCode + balanceCode + nerveCode + vascularCode + muscleCode + respiratoryCode + digestiveCode + excretionCode + sightCode + symmetryCode + peristalsisCode + carnCode + herbCode + sizeCode + camoCode + terriCode + roamCode + metaCode);}
+	if (EVO.evolutionSwitch == 'on'){doc('evolutionUpgrade',evolutionCode + sexCode + balanceCode + nerveCode + vascularCode + muscleCode + respiratoryCode + digestiveCode + excretionCode + sightCode + symmetryCode + peristalsisCode + dietCode + skeletonCode + sizeCode + boostCode);}
 }
 
 function evos(x){
@@ -652,10 +563,16 @@ function evos(x){
 		doc('special','Special: <span onclick="spcl(\'+\')"> << </span><span id="spcl"></span><span onclick="spcl(\'-\')">% >> </span>');
 		doc('spcl',EVO.spcl);
 	}
-	if (x == 'size'){
-		EVO.size.max += 1;
-		EVO.size.stage += 1;
-		EVO.evolved += EVO.size.max;
+	if (x == 'inn'){
+		EVO.three.skeleton = 'Inner Skeleton';
+		EVO.evolved += cost.skeleton;
+	}
+	if (x == 'exo'){
+		EVO.three.skeleton = 'ExoSkeleton';
+		EVO.evolved += cost.skeleton;
+	}
+	if (EVO.three.skeleton !== null){
+		doc('skeletonHTML',EVO.three.skeleton);
 	}
 	if (x == 'camo'){
 		EVO.three.boost = 'Camoflauge';
@@ -672,6 +589,11 @@ function evos(x){
 	if (x == 'meta'){
 		EVO.three.boost = 'Hyper Metabolic';
 		EVO.evolved += cost.boost;
+	}
+	if (x == 'size'){
+		EVO.size.max += 1;
+		EVO.size.stage += 1;
+		EVO.evolved += EVO.size.max;
 	}
 	if (EVO.size.max > 0 || EVO.three.boost !== null){
 		var size = '';
@@ -737,6 +659,29 @@ function mouseOff(x){
 	specializeNext();
 }
 
+function epsMath(){return Math.floor(10*Math.pow(1.01,EVO.eps));}
+
+function eps(){
+	if(EVO.mineral >= epsMath()){
+		EVO.mineral -= epsMath();
+		EVO.eps += 1;
+		doc('eps',EVO.eps);
+		updateMineral();
+	}
+	doc('epsCost',epsMath());
+}
+
+function phDmg(){
+	var phd = 0;
+	if (EVO.ph < 71){phd = 70 - EVO.ph;}
+	if (EVO.ph > 70){phd = EVO.ph - 70;}
+	EVO.eps -= phd;
+	if (EVO.eps < 0){
+		EVO.phd = Math.abs(phd);
+		EVO.eps = 0;
+	}
+}
+
 function salinityDebuff(){
 	if (Math.floor(Math.random()*100)+1 > EVO.osmoregulation){
 		EVO.salinityCurse = ((Math.abs(EVO.salinity-35))*200)-EVO.osmoregulation;
@@ -800,6 +745,7 @@ function light(){
 function color(x){
 	var color = document.getElementById(x + 'Button');
 	if (x == 'evolution' && EVO.mineral >= evolutionMath()){color.style.color = 'red';}
+	else if (x == 'eps' && EVO.mineral >= epsMath()){color.style.color = 'red';}
 	else if (x == 'move' && EVO.mineral >= 4000-EVO.peristalsis-(fun.add.muscle()*10)){color.style.color = 'red';}
 	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/) && EVO.mineral >= specializeMath(x)){color.style.color = 'red';}
 	else {color.style.color = 'green';}
@@ -807,6 +753,7 @@ function color(x){
 
 function tip(x){
 	if (x == 'evoTip'){doc(x,'<p>Click for a chance to gain evolution points to evolve your cell.<br>Evolution points are used to purchase evolutions.</p>');}
+	if (x == 'epsTip'){doc(x,'<p>Click to make Extracellular Polymeric Substances to protect from the pH of the water.</p>');}
 	if (x == 'balTip'){doc(x,'Click to improve Statocyst quality.<br>Statocyst is your cells evolution of balance.');}
 	if (x == 'nerTip'){doc(x,'Click to improve Nerve quality.<br>Nerves improve your cells ability to learn.');}
 	if (x == 'vasTip'){doc(x,'Click to improve Vascular quality.<br>Vascular improves your cells ability to act.');}

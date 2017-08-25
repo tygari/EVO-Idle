@@ -3,10 +3,11 @@ var EVO = {
 	"stage": 2,
 	"date": Date.now(),
 	"one": {
-		"metabolismType": 'basic',
+		"metabolismType": null,
 		"metabolism": 0,
 		"mitochondria": 0,
 		"cilia": 0,
+		"flagellum": 0,
 		"cytoplasm": 0,
 	},
 	"two": {
@@ -23,7 +24,8 @@ var EVO = {
 	"current": 50,
 	"currentDamage": 0,
 	"adhesionLearn": 0,
-	"pH": 70,
+	"ph": 70,
+	"phd": 0,
 	"salinity": 35,
 	"salinityCurse": 0,
 	"osmisisLearn": 0,
@@ -43,6 +45,8 @@ var EVO = {
 	"celladhesion": -1,
 	"communication": null,
 	"quorum": null,
+	"biofilm": null,
+	"eps": 0,
 	"organization": null,
 	"osmoregulation": -1,
 	"motility": 0,
@@ -69,7 +73,7 @@ var EVO = {
 	"cbtevo": [],
 	"mhp": 0,
 	"hp": 10,
-	"msp" 0,
+	"msp": 0,
 	"sp": 10,
 	"exp": 0,
 	"scar": 0,
@@ -107,6 +111,7 @@ var fun = {
 		"digestive": function(){return (1+(EVO.two.digestive/100));},
 		"excretion": function(){return (1+(EVO.two.excretion/100));},
 		"sight": function(){return (1+(EVO.two.sight/100));},
+		"eps": function(){return (1-(EVO.phd/100));},
 	},
 	"food":{
 		"max": function(){return ((REC.food.max+EVO.size.max)*10)+100;},
@@ -144,7 +149,6 @@ function start(){
 	}
 	evos();
 	if (EVO.specialized > 1){specialized();}
-	cost.metabolism = (1+(EVO.one.metabolism/100))*(1+(EVO.one.mitochondria/100));
 	var offline = Date.now() - EVO.date;
 	var speedUp = [0, 0, 0, 0, 0];
 	while (offline >= speedUp[0]){
@@ -180,7 +184,7 @@ function start(){
 	doc('evolutionCost',evolutionMath());
 	doc('moveHTML',2000-EVO.motility-EVO.two.muscle*10);
 	doc('current',(EVO.current/10));
-	doc('pH',(EVO.pH/10));
+	doc('ph',(EVO.ph/10));
 	doc('salinity',EVO.salinity);
 	light();
 	setTimeout(environment, 60000);
@@ -201,7 +205,7 @@ function events(){
 		updateNutrient();
 		doc('event1HTML','An aggressive colony of cells has entered your area.  They are attacking you.');
 		cost.fight = 'on';
-		cbt(res,0,'event');
+		cbt(res,'event',Math.floor(Math.random()*3));
 	}
 	if (10 < random && 20 >= random){
 		swch = 'on';
@@ -214,7 +218,7 @@ function events(){
 
 function eventEnd(){
 	doc('eventHTML','');
-	setTimeout(events, (Math.floor((Math.random() * 240000)+60001)));
+	setTimeout(events, (Math.floor((Math.random() * 240000)+1)));
 }
 
 function environment(){
@@ -222,8 +226,9 @@ function environment(){
 	phMath();
 	salinityMath();
 	sun();
-	if (EVO.cellB-EVO.cellL > 0){toxinMath();}
 	if (EVO.cellB-EVO.cellL > 0){cellAdhesion();}
+	if (EVO.cellB-EVO.cellL > 0){phDmg;}
+	if (EVO.cellB-EVO.cellL > 0){toxinMath();}
 	setTimeout(environment, 60000);
 }
 
@@ -236,15 +241,15 @@ function currentMath(){
 
 function phMath(){
 	var ph = Math.floor(Math.random()*3);
-	if (ph == 0 && EVO.pH < 140){EVO.pH += 1;}
-	if (ph == 1 && EVO.pH > 0){EVO.pH -= 1;}
-	doc('pH',(EVO.pH/10));
+	if (ph == 0 && EVO.ph < 140){EVO.ph += 1;}
+	if (ph == 1 && EVO.ph > 0){EVO.ph -= 1;}
+	doc('ph',(EVO.ph/10));
 }
 
 function salinityMath(){
-	var salinitys = Math.floor(Math.random()*3);
-	if (salinitys == 0 && EVO.salinity < 40){EVO.salinity += 1;}
-	if (salinitys == 1 && EVO.salinity > 30){EVO.salinity -= 1;}
+	var salinity = Math.floor(Math.random()*3);
+	if (salinity == 0 && EVO.salinity < 40){EVO.salinity += 1;}
+	if (salinity == 1 && EVO.salinity > 30){EVO.salinity -= 1;}
 	doc('salinity',EVO.salinity);
 	salinityDebuff();
 }
@@ -276,7 +281,7 @@ function move(x){
 			updateNutrient();
 			EVO.current = Math.floor(Math.random()*100)+1;
 			currentMath();
-			EVO.pH = Math.floor(Math.random()*140);
+			EVO.ph = Math.floor(Math.random()*140);
 			phMath();
 			EVO.salinity = Math.floor(Math.random()*11)+30;
 			salinityMath();
@@ -292,6 +297,7 @@ function updateNutrient(){
 	color('cell');
 	color('evolution');
 	color('move');
+	if (EVO.biofilm == 'Biofilm'){color('eps');}
 	if (EVO.balanceSwitch == 'on'){color('balance');}
 	if (EVO.nerveSwitch == 'on'){color('nerve');}
 	if (EVO.vascularSwitch == 'on'){color('vascular');}
@@ -306,7 +312,7 @@ function autoClick(){
 	var feed = Math.floor(EVO.one.cilia/2) + EVO.cellB-EVO.cellL + EVO.two.digestive;
 	if (EVO.food >= feed){
 		EVO.food -= feed;
-		if (EVO.metabolismType == 'Aerobic Respiration'){feed *= cost.metabolism * fun.mul.respiratory();}
+		if (EVO.metabolismType == 'Aerobic Respiration'){feed *= fun.mul.metabolism() * fun.mul.respiratory() * fun.mul.eps();}
 		EVO.nutrient += feed;
 		updateFood();
 		updateNutrient();
@@ -325,7 +331,7 @@ function timer(){
 }
 
 function photosynth(){
-	EVO.photosynthesis += (1+(EVO.sun/100)) * cost.metabolism * fun.mul.respiratory;
+	EVO.photosynthesis += (1+(EVO.sun/100)) * fun.mul.metabolism() * fun.mul.respiratory() * fun.mul.eps();
 	while (EVO.photosynthesis >= 100){
 		EVO.photosynthesis -= 100;
 		EVO.nutrient += 1;
@@ -352,9 +358,7 @@ function buyCell(){
 	if (EVO.quorum == 'sensing'){doc('cellCost',cellMath());}
 }
 
-function cellUpdate(){
-	if (EVO.quorum == 'sensing'){doc('cell',EVO.cellB-EVO.cellL);}
-}
+function cellUpdate(){if (EVO.quorum == 'sensing'){doc('cell',EVO.cellB-EVO.cellL);}}
 
 function evolutionMath(){return Math.floor(10*Math.pow(1.5-(EVO.sex/10),EVO.evolution));}
 
@@ -374,12 +378,12 @@ var cost = {
 	"celladhesion": 1,
 	"communication": 2,
 	"quorum": 2,
+	"eps": 2,
+	"osmoregulation": 2,
 	"organization": 3,
-	"osmoregulation": 4,
 	"motility": 3,
 	"specialization": 4,
 	"specialized": 5,
-	"metabolism": 0,
 	"fight": 'off',
 }
 
@@ -435,6 +439,10 @@ function updateEvolution(){
 		EVO.evolutionSwitch = 'on';
 		quorumCode = '<p title="Your cells evolve the ability to sense and calculate their own numbers." onclick="evos(\'quorum\')"><b style="color:blue">Quorum Sensing</b></p>';	
 	}
+	if (EVO.cellB-EVO.cellL >= 20 && EVO.communication == 'communication' && EVO.biofilm == null && creation >= cost.eps){
+		EVO.evolutionSwitch = 'on';
+		epsCode = '<p title="Your cells evolve Extracellular Polymeric Substances creatng a protective Biofilm around itself." onclick="evos(\'eps\')"><b style="color:blue">Biofilm</b></p>';	
+	}
 	if (EVO.cellB-EVO.cellL >= 20 && EVO.communication == 'communication' && EVO.organization == null && creation >= cost.organization){
 		EVO.evolutionSwitch = 'on';
 		organizationCode = '<p title="Your cells evolve Self Organization." onclick="evos(\'organization\')"><b style="color:blue">Self Organization</b></p>';	
@@ -473,7 +481,7 @@ function updateEvolution(){
 	}
 	var evolutionCode = '<p style="color:gold"><b>Evolutions</b></p>';
 	if (EVO.evolutionSwitch == 'off'){doc('evolutionUpgrade','');}
-	if (EVO.evolutionSwitch == 'on'){doc('evolutionUpgrade',evolutionCode + sexCode + celladhesionCode + communicationCode + quorumCode + organizationCode + osmoregulationCode + motilityCode + specializationCode + balanceCode + nerveCode + vascularCode + muscleCode + respiratoryCode + digestiveCode + excretionCode + sightCode + symmetryCode + dependencyCode + sizeCode);}
+	if (EVO.evolutionSwitch == 'on'){doc('evolutionUpgrade',evolutionCode + sexCode + celladhesionCode + communicationCode + quorumCode + epsCode + organizationCode + osmoregulationCode + motilityCode + specializationCode + balanceCode + nerveCode + vascularCode + muscleCode + respiratoryCode + digestiveCode + excretionCode + sightCode + symmetryCode + dependencyCode + sizeCode);}
 }
 
 function evos(x){
@@ -503,6 +511,16 @@ function evos(x){
 		doc('quorumHTML','Quorum Sensing');
 		doc('sensingHTML','<br>Cell: <span id="cell"></span><br>Cell Cost: <span id="cellCost"></span>');
 		doc('cellCost',cellMath());
+	}
+	if (x == 'eps'){
+		EVO.biofilm = 'Biofilm';
+		EVO.evolved += cost.eps;
+	}
+	if (EVO.biofilm == 'Biofilm'){
+		doc('biofilmHTML','Biofilm');
+		doc('epsHTML','<div onmouseover="tip(\'epsTip\')" onmouseout="tap(\'epsTip\')" onclick="eps()"><p><b id="epsButton">Make EPS</b><br>EPS: <span id="eps"></span><br>EPS Cost: <span id="epsCost"></span></p></div><span id="epsTip"></span>');
+		doc('eps',EVO.eps);
+		doc('epsCost',epsMath());
 	}
 	if (x == 'organization'){
 		EVO.organization = 'organization';
@@ -610,6 +628,29 @@ function cellAdhesion(){
 	}
 }
 
+function epsMath(){return Math.floor(10*Math.pow(1.01,EVO.eps));}
+
+function eps(){
+	if(EVO.nutrient >= epsMath()){
+		EVO.nutrient -= epsMath();
+		EVO.eps += 1;
+		doc('eps',EVO.eps);
+		updateNutrient();
+	}
+	doc('epsCost',epsMath());
+}
+
+function phDmg(){
+	var phd = 0;
+	if (EVO.ph < 71){phd = 70 - EVO.ph;}
+	if (EVO.ph > 70){phd = EVO.ph - 70;}
+	EVO.eps -= phd;
+	if (EVO.eps < 0){
+		EVO.phd = Math.abs(phd);
+		EVO.eps = 0;
+	}
+}
+
 function salinityDebuff(){
 	if (Math.floor(Math.random()*100)+1 > EVO.osmoregulation){
 		EVO.salinityCurse = ((Math.abs(EVO.salinity-35))*200)-EVO.osmoregulation;
@@ -676,6 +717,7 @@ function light(){
 function color(x){
 	var color = document.getElementById(x + 'Button');
 	if (x == 'cell' && EVO.nutrient >= cellMath()){color.style.color = 'red';}
+	else if (x == 'eps' && EVO.mineral >= epsMath()){color.style.color = 'red';}
 	else if (x == 'evolution' && EVO.nutrient >= evolutionMath()){color.style.color = 'red';}
 	else if (x == 'move' && EVO.nutrient >= 2000 - EVO.motility - (EVO.two.muscle*10)){color.style.color = 'red';}
 	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/) && EVO.nutrient >= specializeMath(x) && EVO.cellB-EVO.cellL > EVO[x]){color.style.color = 'red';}
@@ -684,6 +726,7 @@ function color(x){
 
 function tip(x){
 	if (x == 'cellTip'){doc(x,'<p>Click to mitosis a cell and try to adhere to it.<br>It will help you gather nutrients</p>');}
+	if (x == 'epsTip'){doc(x,'<p>Click to make Extracellular Polymeric Substances to protect from the pH of the water.</p>');}
 	if (x == 'evoTip'){doc(x,'<p>Click for a chance to gain evolution points to evolve your cell.<br>Evolution points are used to purchase evolutions.</p>');}
 	if (x == 'balTip'){doc(x,'Click to improve Statocyst quality.<br>Statocyst is your cells evolution of balance.');}
 	if (x == 'nerTip'){doc(x,'Click to improve Nerve quality.<br>Nerves improve your cells ability to learn.');}

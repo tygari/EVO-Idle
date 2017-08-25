@@ -1,19 +1,20 @@
 Cell > MultiCell > Worm > Fish > Amphibian > Reptile
-	
+
 Stage 1 Cell
 Bubble > Double Bubble > Phospholipid > Cell Wall
 Bubble > RNA > Aerobic Respiration / Photophosphorylation > Nucleus > DNA > Mitochondria
 Phospholipid > Cytoskeleton > Cilia & Flagellum
 RNA & Phospholipid > Mitosis.  Mitosis is cell devide.  Lottery to get more evolution points.
 Metabolism & Mitosis >> MultiCellular
-	
+
 Stage 2 MultiCellular
 Stage Factor: 
 Sexual Reproduction
 Cellular Adhesion > Cellular Communication 	> Self-Organization
 											> Quorum Sensing
-											> Swarming Motility
+											> Biofilm
 											> Osmoregulation
+											> Swarming Motility
 Self-Organization > Cellular Specialization	> Statocyst
 											> Nerves
 											> Vascular
@@ -26,10 +27,6 @@ Self-Organization > Cellular Specialization	> Statocyst
 Dependency >> Worm
 Circular Symmetry Gate tech 8 sides
 
-
-
-Stage 2 Add Maybe
-Touch
 
 Stage 3 Worms
 Movement = 3000 - Peristalsis - Muscle*10
@@ -85,21 +82,26 @@ Hunting/Grazing System
 
 
 CbtBoost
-
-		Camoflauge = carnivore hunt timer reduced / herbivore fight precentage reduced. Offense +5
-		Territorial = opposition timer takes longer to reduce a sub area. Defense +5
-		Roaming = auto move timer is reduced. Speed +5
-		Hyper Metabolic = metabolism is boosted while injured, injuries recover faster. Special +5
+		Camoflauge = carnivore hunt timer reduced / herbivore fight precentage reduced. Offense +5.
+		Territorial = opposition timer takes longer to reduce a sub area. Defense +5.
+		Roaming = auto move timer is reduced. Speed +5.
+		Hyper Metabolic = metabolism is boosted while injured, injuries recover faster. Special +5.
 
 Skeleton
-	Skeleton =
-	Exoskeleton =
+	Skeleton = Max Size +1; +1 Max Size per 100 Skeleton;
+	Exoskeleton = Armor +1; +1 Armor per 100 Skeleton; Can not exceed Max Size.
 
 Stage 4 Fish
 ??? Skeleton
 Hearing
 Scent
 Taste
+
+Size Evolution
+Str = ???
+Con = ???
+Dex = Removes Dex penalty due to size.
+Agl = Removes Agl penalty due to size.
 
 CBT
 

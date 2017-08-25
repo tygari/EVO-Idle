@@ -194,7 +194,7 @@ function stat(){
 	doc('dex',Math.floor(EVO.spl+(fun.add.respiratory()+fun.add.sight())/10));
 	doc('con',Math.floor(EVO.def+(fun.add.vascular()+fun.add.excretion())/10));
 	doc('agl',Math.floor(EVO.spd+(fun.add.balance()+fun.add.nerve())/10));
-	EVO.mhp = (Math.floor(EVO.def+(fun.add.vascular()+fun.add.excretion())/10) * (1+(EVO.off + EVO.def + EVO.spd + EVO.spl)/100)) * (1-(EVO.scar/100));
+	EVO.mhp = Math.floor((EVO.def+(fun.add.vascular()+fun.add.excretion())/10) * (1+(EVO.off+EVO.def+EVO.spd+EVO.spl)/100) * (1-(EVO.scar/100)));
 	if (EVO.mhp < 10){EVO.mhp = 10;}
 	doc('mhp',EVO.mhp);
 	doc('hp', EVO.hp);
@@ -219,6 +219,7 @@ function stat(){
 
 function cbt(a,b,c){
 	cost.fight = 'on';
+	var size;
 	var one = {
 		"off": EVO.off,
 		"def": EVO.def,
@@ -232,6 +233,7 @@ function cbt(a,b,c){
 		"hp": EVO.hp,
 		"msp": EVO.msp,
 		"sp": EVO.sp,
+		"size": EVO.size.max,
 		"arm": 0,
 		"cbtevo": EVO.cbtevo,
 		"run": EVO.run,
@@ -240,11 +242,16 @@ function cbt(a,b,c){
 		"venom": 'off',
 		"vendur": 0,
 	};
-	one.str = Math.floor(EVO.off+(fun.add.muscle()+fun.add.digestive())/10);
-	one.dex = Math.floor(EVO.spl+(fun.add.respiratory()+fun.add.sight())/10);
-	one.con = Math.floor(EVO.def+(fun.add.vascular()+fun.add.excretion())/10);
-	one.agl = Math.floor(EVO.spd+(fun.add.balance()+fun.add.nerve())/10);
+	size = one.size - c;
+	one.str = Math.floor((EVO.off+(fun.add.muscle()+fun.add.digestive())/10)*(1+(size/10)));
+	one.dex = Math.floor((EVO.spl+(fun.add.respiratory()+fun.add.sight())/10)*(1+(size/10)));
+	one.con = Math.floor((EVO.def+(fun.add.vascular()+fun.add.excretion())/10)*(1-(size/10)));
+	one.agl = Math.floor((EVO.spd+(fun.add.balance()+fun.add.nerve())/10)*(1-(size/10)));
 	if (check(one,'Shell') > -1){one.arm += EVO.def;}
+	if (EVO.three.skeleton == 'ExoSkeleton'){
+		one.arm += 1;
+		if (EVO.stage > 3){Math.floor(fun.add.skeleton()/100);}
+	}
 	if (check(one,'Streamline') > -1){one.line = Math.floor(one.spd/10);}
 	var two = {
 		"off": 0,
@@ -269,12 +276,21 @@ function cbt(a,b,c){
 	};
 	npc();
 	function npc(){
-		two.mhp = Math.floor(one.mhp + (EVO.stage+b)*5 - Math.random()*EVO.stage*10);
-		two.msp = Math.floor(one.msp + (EVO.stage+b)*5 - Math.random()*EVO.stage*10);
-		two.str = Math.floor(one.str + EVO.stage+b - Math.random()*EVO.stage*2);
-		two.dex = Math.floor(one.dex + EVO.stage+b - Math.random()*EVO.stage*2);
-		two.con = Math.floor(one.con + EVO.stage+b - Math.random()*EVO.stage*2);
-		two.agl = Math.floor(one.agl + EVO.stage+b - Math.random()*EVO.stage*2);
+		size = c - one.size;
+		var points = Math.floor((EVO.off+EVO.def+EVO.spd+EVO.spl)+(fun.add.muscle()+fun.add.digestive()+fun.add.vascular()+fun.add.excretion()+fun.add.balance()+fun.add.nerve()+fun.add.respiratory()+fun.add.sight())/10);
+		for (i = 0; i < points; i++){
+			rnd = Math.floor(Math.random()*4);
+			if (rnd == 0){two.str++;}
+			else if (rnd == 1){two.con++;}
+			else if (rnd == 2){two.dex++;}
+			else if (rnd == 3){two.agl++;}
+		}
+		two.str = Math.floor(two.str*(1+(size/10)));
+		two.con = Math.floor(two.con*(1+(size/10)));
+		two.dex = Math.floor(two.dex*(1-(size/10)));
+		two.agl = Math.floor(two.agl*(1-(size/10)));
+		two.mhp = Math.floor(two.con*(1+(two.off+two.def+two.spd+two.spl)/100));
+		two.msp = two.off+two.def+two.spd+two.spl+10;
 		two.arm = EVO.cbtevo.length;
 		two.run = 20;
 	}
@@ -282,11 +298,6 @@ function cbt(a,b,c){
 	two.hp = two.mhp;
 	if (two.msp < 10){two.msp = 10;}
 	two.sp = two.msp;
-	if (two.sp < 10){two.sp = 10;}
-	if (two.str < 0){two.str = 0;}
-	if (two.dex < 0){two.dex = 0;}
-	if (two.con < 0){two.con = 0;}
-	if (two.agl < 0){two.agl = 0;}
 	if (check(two,'Streamline') > -1){two.line = Math.floor(two.spd/10);}
 	function sp(x,y){
 		var spc = y - x.line;
@@ -478,10 +489,10 @@ function cbt(a,b,c){
 		if (one.hp < 1 && fled == 'off'){setTimeout(lose, 3000);}
 		if (two.hp < 1 && fled == 'off'){setTimeout(win, 3000);}
 		spcx = spcx - x.line;
-		if (spcx < 0){spcx = 0:}
+		if (spcx < 0){spcx = 0;}
 		x.sp -= spcx;
 		spcy = spcy - y.line;
-		if (spcy < 0){spcy = 0:}
+		if (spcy < 0){spcy = 0;}
 		y.sp -= spcy;
 		EVO.hp = one.hp;
 		EVO.sp = one.sp;
@@ -489,29 +500,24 @@ function cbt(a,b,c){
 		doc('sp', EVO.sp);
 	}
 	function flee(x){
+		exp /= 2;
+		EVO.exp += exp;
+		if (EVO.stage == 2){EVO.nutrient += a;}
+		if (EVO.stage == 3){EVO.mineral += a;}
 		if (x == one){
 			doc('event1HTML','You successfully ran away.  You have run to a new area.');
 			doc('event2HTML','You gained ' + exp + ' experince.');
-			EVO.exp += exp/2;
-			if (EVO.stage == 2){EVO.nutrient += a;}
-			if (EVO.stage == 3){EVO.mineral += a;}
-			EVO.won += 1;
+			EVO.lost += 1;
 			move();
-			stat();
-			if (c == 'event'){event();}
-			if (c == 'hunt'){hunts();}
 		}
 		if (x == two){
 			doc('event1HTML','Your opponent has successfully ran away.  They have ran to a new area.');
 			doc('event2HTML','You gained ' + exp + ' experince.');
-			EVO.exp += exp/2;
-			if (EVO.stage == 2){EVO.nutrient += a;}
-			if (EVO.stage == 3){EVO.mineral += a;}
-			EVO.lost += 1;
-			stat();
-			if (c == 'event'){event();}
-			if (c == 'hunt'){hunts();}
+			EVO.won += 1;
 		}
+		stat();
+		if (b == 'event'){event();}
+		if (b == 'hunt'){hunts();}
 	}
 	function win(){
 		var eat = eat += fun.add.digestive()*10;
@@ -527,8 +533,8 @@ function cbt(a,b,c){
 		if (EVO.stage == 3){EVO.mineral += a;}
 		EVO.won += 1;
 		stat();
-		if (c == 'event'){event();}
-		if (c == 'hunt'){hunts();}
+		if (b == 'event'){event();}
+		if (b == 'hunt'){hunts();}
 	}
 	function lose(){
 		doc('event1HTML','Your opponent defeated you.');

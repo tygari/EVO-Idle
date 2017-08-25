@@ -5,36 +5,37 @@ function start(){
 	var REC;
 	if (localStorage.getItem("EVO") !== null){
 		EVO = JSON.parse(localStorage.getItem("EVO"));
+		if (EVO.version < 0){soft();}
+		if (EVO.stage == 1){
+			if (EVO.one.metabolism > 100){hard();}
+			if (EVO.one.mitochondria > 100){hard();}
+			if (EVO.one.cytoplasm > 1000){hard();}
+			if (EVO.one.cilia > 1000){hard();}
+			if (EVO.flagellum > 1000){hard();}
+		}
+		if (EVO.stage == 2){
+			if (EVO.two.balance > REC.balance.max + 100){hard();}
+			if (EVO.two.nerve > REC.nerve.max + 100){hard();}
+			if (EVO.two.vascular > REC.vascular.max + 100){hard();}
+			if (EVO.two.muscle > REC.muscle.max + 100){hard();}
+			if (EVO.two.respiratory > REC.respiratory.max + 100){hard();}
+			if (EVO.two.digestive > REC.digestive.max + 100){hard();}
+			if (EVO.two.excretion > REC.excretion.max + 100){hard();}
+			if (EVO.two.sight > REC.sight.max + 100){hard();}
+		}
+		if (EVO.stage == 3){
+			if (EVO.three.balance > REC.balance.max + 100){hard();}
+			if (EVO.three.nerve > REC.nerve.max + 100){hard();}
+			if (EVO.three.vascular > REC.vascular.max + 100){hard();}
+			if (EVO.three.muscle > REC.muscle.max + 100){hard();}
+			if (EVO.three.respiratory > REC.respiratory.max + 100){hard();}
+			if (EVO.three.digestive > REC.digestive.max + 100){hard();}
+			if (EVO.three.excretion > REC.excretion.max + 100){hard();}
+			if (EVO.three.sight > REC.sight.max + 100){hard();}
+		}
 	}
 	if (localStorage.getItem("REC") !== null){
 		var REC = JSON.parse(localStorage.getItem("REC"));
-	}
-	if (EVO.stage == 1){
-		if (EVO.one.metabolism > 100){hard();}
-		if (EVO.one.mitochondria > 100){hard();}
-		if (EVO.one.cytoplasm > 1000){hard();}
-		if (EVO.one.cilia > 1000){hard();}
-		if (EVO.flagellum > 1000){hard();}
-	}
-	if (EVO.stage == 2){
-		if (EVO.two.balance > REC.balance.max + 100){hard();}
-		if (EVO.two.nerve > REC.nerve.max + 100){hard();}
-		if (EVO.two.vascular > REC.vascular.max + 100){hard();}
-		if (EVO.two.muscle > REC.muscle.max + 100){hard();}
-		if (EVO.two.respiratory > REC.respiratory.max + 100){hard();}
-		if (EVO.two.digestive > REC.digestive.max + 100){hard();}
-		if (EVO.two.excretion > REC.excretion.max + 100){hard();}
-		if (EVO.two.sight > REC.sight.max + 100){hard();}
-	}
-	if (EVO.stage == 3){
-		if (EVO.three.balance > REC.balance.max + 100){hard();}
-		if (EVO.three.nerve > REC.nerve.max + 100){hard();}
-		if (EVO.three.vascular > REC.vascular.max + 100){hard();}
-		if (EVO.three.muscle > REC.muscle.max + 100){hard();}
-		if (EVO.three.respiratory > REC.respiratory.max + 100){hard();}
-		if (EVO.three.digestive > REC.digestive.max + 100){hard();}
-		if (EVO.three.excretion > REC.excretion.max + 100){hard();}
-		if (EVO.three.sight > REC.sight.max + 100){hard();}
 	}
 }
 
@@ -83,4 +84,8 @@ function hard(){
 	localStorage.removeItem("EVO");
 	localStorage.removeItem("REC");
 	window.location.assign("index.html")
+}
+
+function donate(){
+	window.open("https://www.paypal.me/tygari");
 }

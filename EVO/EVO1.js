@@ -1,5 +1,5 @@
 var EVO = {
-	"version": 0,
+	"version": 1,
 	"stage": 1,
 	"date": Date.now(),
 	"one": {
@@ -140,7 +140,6 @@ function antivirusA(){
 
 function eventEnd(){
 	doc('eventHTML','');
-	
 	setTimeout(events, (Math.floor((Math.random() * 240000)+1)));
 }
 
@@ -329,13 +328,13 @@ function updateEvolution(){
 		EVO.evolutionSwitch = 'on';
 		naCode = '<p title="Deoxyribonucleic Acid, One of the grand building blocks of all life." onclick="evos(\'dna\')"><b style="color:blue">DNA</b></p>';
 	}
-	if (EVO.one.metabolism >= 0 && EVO.mitosisSwitch == 'on' && creation >= cost.multicell && (EVO.atp/2 + (EVO.rnaB-EVO.rnaS)*100 + (EVO.dnaB-EVO.dnaS)*10000) > 2000){
-		EVO.evolutionSwitch = 'on';
-		multicelluarCode = '<p title="MultiCelluar Evolution" onclick="multicelluar()"><b style="color:blue">MultiCelluar</b></p>';
-	}
 	if (EVO.stage > EVO.size.stage && EVO.one.metabolism >= 0 && creation >= EVO.size.max+1){
 		EVO.evolutionSwitch = 'on';
 		sizeCode = '<p title="Growing larger has many effects." onclick="evos(\'size\')"><b style="color:blue">Size ' + (EVO.size.max+1) + '</b></p>';
+	}
+	if (EVO.one.metabolism >= 0 && EVO.mitosisSwitch == 'on' && creation >= cost.multicell && (EVO.atp/2 + (EVO.rnaB-EVO.rnaS)*100 + (EVO.dnaB-EVO.dnaS)*10000) > 2000){
+		EVO.evolutionSwitch = 'on';
+		multicelluarCode = '<p title="MultiCelluar Evolution" onclick="multicelluar()"><b style="color:blue">MultiCelluar</b></p>';
 	}
 	var evolutionCode = '<p style="color:gold" title="Choose your evolution carefully."><b>Evolutions</b></p>';
 	if (EVO.evolutionSwitch == 'off') {doc("evolutionUpgrade",'');}
