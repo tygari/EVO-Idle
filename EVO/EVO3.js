@@ -2,26 +2,8 @@ var EVO = {
 	"version": 0,
 	"stage": 3,
 	"date": Date.now(),
-	"one": {
-		"metabolismType": null,
-		"metabolism": 0,
-		"mitochondria": 0,
-		"cilia": 0,
-		"flagellum": 0,
-		"cytoplasm": 0,
-	},
-	"two": {
-		"adhesionLearn": 0,
-		"osmisisLearn": 0,
-		"balance": 0,
-		"nerve": 0,
-		"vascular": 0,
-		"muscle": 0,
-		"respiratory": 0,
-		"digestive": 0,
-		"excretion": 0,
-		"sight": 0,
-	},
+	"one": {},
+	"two": {},
 	"three": {
 		"diet": null,
 		"balance": 0,
@@ -35,16 +17,19 @@ var EVO = {
 		"skeleton": null,
 		"boost": null,
 	},
-	"photosynthesis": 0,
+	"sun":{},
+	"size": {
+		"max": 0,
+		"stage": 0,
+	},
 	"current": 50,
 	"currentDamage": 0,
 	"ph": 70,
 	"phd": 0,
-	"eps": 0,
+	"osmoregulation": 0,
+	"osmisisLearn": 0,
 	"salinity": 35,
 	"salinityCurse": 0,
-	"sunSwitch": 'on',
-	"sun": 0,
 	"food": 0,
 	"mineral": 0,
 	"predator": 0,
@@ -58,43 +43,9 @@ var EVO = {
 	"peristalsis": 0,
 	"peristalsisLearn": 0,
 	"evolutionSwitch": 'off',
-	"specialized": 1,
 	"specialzedEvo": 0,
-	"balanceSwitch": 'off',
-	"nerveSwitch": 'off',
-	"vascularSwitch": 'off',
-	"muscleSwitch": 'off',
-	"respiratorySwitch": 'off',
-	"digestiveSwitch": 'off',
-	"excretionSwitch": 'off',
-	"sightSwitch": 'off',
-	"radial": null,
 	"bilateral": null,
-	"size": {
-		"max": 0,
-		"stage": 0,
-	},
-	"cbtMax": 0,
-	"cbtevo": [],
-	"mhp": 0,
-	"hp": 10,
-	"msp": 0,
-	"sp": 10,
-	"exp": 0,
-	"scar": 0,
-	"offG": 0,
-	"off": 0,
-	"defG": 0,
-	"def": 0,
-	"spdG": 0,
-	"spd": 0,
-	"splG": 0,
-	"spl": 0,
-	"hlth": 100,
-	"spcl": 100,
-	"run": 0,
-	"won": 0,
-	"lost": 0,
+	"combat": {},
 };
 
 var fun = {
@@ -140,17 +91,31 @@ function start(){
 	if (localStorage.getItem("EVOE") !== null){
 		var checksave = JSON.parse(localStorage.getItem("EVOE"));
 		if (checksave.stage == 3){
-			EVO.metabolismType = checksave.metabolismType;
 			EVO.one = checksave.one;
 			EVO.two = checksave.two;
-			EVO.photosynthesis = checksave.photosynthesis;
-			EVO.sunSwitch = checksave.sunSwitch;
 			EVO.sun = checksave.sun;
+			EVO.size.max = checksave.size;
 			EVO.food = checksave.food;
 			EVO.mineral = checksave.mineral;
 			EVO.evolution = checksave.evolution;
 			EVO.evolved = checksave.evolved;
 			EVO.bonus = checksave.bonus;
+			EVO.combat = checksave.combat;
+			EVO.peristalsis = EVO.one.flagellum;
+			EVO.combat.hlth = 100;
+			EVO.combat.spcl = 100;
+			EVO.specialized = checksave.specialized;
+			EVO.balanceSwitch = checksave.balanceSwitch;
+			EVO.nerveSwitch = checksave.nerveSwitch;
+			EVO.vascularSwitch = checksave.vascularSwitch;
+			EVO.muscleSwitch = checksave.muscleSwitch;
+			EVO.respiratorySwitch = checksave.respiratorySwitch;
+			EVO.digestiveSwitch = checksave.digestiveSwitch;
+			EVO.excretionSwitch = checksave.excretionSwitch;
+			EVO.sightSwitch = checksave.sightSwitch;
+			EVO.radial = checksave.radial;
+			EVO.eps = checksave.eps;
+			EVO.phd = checksave.phd;
 			EVO.date = Date.now();
 			localStorage.setItem("EVO", JSON.stringify(EVO));
 			localStorage.removeItem("EVOE");
@@ -171,10 +136,7 @@ function start(){
 			speedUp[2] = speedUp[0];
 		}
 		if (speedUp[0] >= speedUp[3] + 60000){
-			currentMath();
-			phMath();
-			salinityMath();
-			sun();
+			environment('start');
 			speedUp[3] = speedUp[0];
 		}
 		speedUp[0] += 1;
@@ -213,12 +175,13 @@ function events(){
 	}
 }
 
-function environment(){
+function environment(x){
 	currentMath();
 	phMath();
 	salinityMath();
 	sun();
-	setTimeout(environment, 60000);
+	phDmg();
+	if (x !== 'start'){setTimeout(environment, 60000);}
 }
 
 function currentMath(){
@@ -332,7 +295,7 @@ function huntAuto(x){
 
 function hunt(){
 	if (cost.fight == 'off'){
-		if (EVO.food < 1 && EVO.three.diet !== null && EVO.hp >= Math.floor(EVO.hlth*EVO.mhp/100) && EVO.sp >= Math.floor(EVO.spcl*EVO.msp/100)){
+		if (EVO.food < 1 && EVO.three.diet !== null && EVO.hp >= Math.floor(EVO.combat.hlth*EVO.mhp/100) && EVO.sp >= Math.floor(EVO.combat.spcl*EVO.msp/100)){
 			doc('eventHTML','<div style="color:white; border-style: hidden; text-align:center"><p><span id="event1HTML"></span><br><span id="event2HTML"></span></p></div>');
 			var res = 4000-EVO.peristalsis-((EVO.two.muscle+EVO.three.muscle)*10);
 			var run = function (){EVO.mineral -= res; updateMineral();}
@@ -419,12 +382,12 @@ function timer(){
 function photosynth(){
 	var a = 0;
 	if (EVO.three.boost == 'Hyper Metabolic' && EVO.hp < EVO.mhp){a = EVO.spl;}
-	EVO.photosynthesis += (1+(EVO.sun/100)) * fun.mul.metabolism() * fun.mul.respiratory() * (1+(a/100)) * fun.mul.eps();
-	while (EVO.photosynthesis >= 100){
-		EVO.photosynthesis -= 100;
+	EVO.sun.photosynthesis += (1+(EVO.sun.position/100)) * fun.mul.metabolism() * fun.mul.respiratory() * (1+(a/100)) * fun.mul.eps();
+	while (EVO.sun.photosynthesis >= 100){
+		EVO.sun.photosynthesis -= 100;
 		EVO.mineral += 1;
 	}
-	doc('photosynthesis',Math.floor(EVO.photosynthesis)+'%');
+	doc('photosynthesis',Math.floor(EVO.sun.photosynthesis)+'%');
 	updateMineral();
 }
 
@@ -559,9 +522,9 @@ function evos(x){
 	if (EVO.three.diet !== null){
 		doc('dietHTML','<br>Diet: ' + EVO.three.diet);
 		doc('health','Health: <span onclick="hlth(\'+\')"> << </span><span id="hlth"></span><span onclick="hlth(\'-\')">% >> </span>');
-		doc('hlth',EVO.hlth);
+		doc('hlth',EVO.combat.hlth);
 		doc('special','Special: <span onclick="spcl(\'+\')"> << </span><span id="spcl"></span><span onclick="spcl(\'-\')">% >> </span>');
-		doc('spcl',EVO.spcl);
+		doc('spcl',EVO.combat.spcl);
 	}
 	if (x == 'inn'){
 		EVO.three.skeleton = 'Inner Skeleton';
@@ -641,7 +604,7 @@ function specialized(x){
 	doc('moveHTML',4000-EVO.peristalsis-(EVO.two.muscle+EVO.three.muscle)*10);
 	doc('specializeHTML','<p>Specilization Cost: <span id="specializeCost"></span></p>');
 	doc('retreat','Retreat: <span onclick="run(\'+\')"> << </span><span id="run"></span><span onclick="run(\'-\')">% >> </span>');
-	doc('run',EVO.run);
+	doc('run',EVO.combat.run);
 	specializeNext(x);
 	updateMineral();
 	updateEvolution();
@@ -675,11 +638,13 @@ function phDmg(){
 	var phd = 0;
 	if (EVO.ph < 71){phd = 70 - EVO.ph;}
 	if (EVO.ph > 70){phd = EVO.ph - 70;}
-	EVO.eps -= phd;
+	EVO.eps -= Math.floor(phd/10);
 	if (EVO.eps < 0){
 		EVO.phd = Math.abs(phd);
 		EVO.eps = 0;
 	}
+	EVO.combat.hp -= EVO.phd;
+	if(EVO.combat.hp < 0){EVO.combat.hp = 0;}
 }
 
 function salinityDebuff(){
@@ -707,16 +672,17 @@ function peristalsis(){
 }
 
 function specializeMath(x){
+	var y = function(a){return EVO.three[a]*(100-REC[a].cost/2)/100;}
 	var z = {
-		"balance": EVO.three.balance*(100-REC.balance.cost/2)/100,
-		"nerve": EVO.three.nerve*(100-REC.nerve.cost/2)/100,
-		"vascular": EVO.three.vascular*(100-REC.vascular.cost/2)/100,
-		"muscle": EVO.three.muscle*(100-REC.muscle.cost/2)/100,
-		"respiratory": EVO.three.respiratory*(100-REC.respiratory.cost/2)/100,
-		"digestive": EVO.three.digestive*(100-REC.digestive.cost/2)/100,
-		"excretion": EVO.three.excretion*(100-REC.excretion.cost/2)/100,
-		"sight": EVO.three.sight*(100-REC.sight.cost/2)/100,
-	}
+		"balance": y('balance'),
+		"nerve":  y('nerve'),
+		"vascular":  y('vascular'),
+		"muscle":  y('muscle'),
+		"respiratory":  y('respiratory'),
+		"digestive":  y('digestive'),
+		"excretion":  y('excretion'),
+		"sight":  y('sight'),
+	};
 	if (x !== undefined){z[x] = EVO.three[x]*(100-REC[x].cost)/100;}
 	return Math.floor(10*Math.pow(2,z.balance + z.nerve + z.vascular + z.muscle + z.respiratory + z.digestive + z.excretion + z.sight));
 }
@@ -738,7 +704,7 @@ function specialize(x){
 
 function light(){
 	y = fun.add.sight();
-	if (EVO.sun < y){y = EVO.sun;}
+	if (EVO.sun.position < y){y = EVO.sun.position;}
 	document.getElementById("stage").style.backgroundColor = 'rgb(' + [y,y,y].join(',') + ')';
 }
 

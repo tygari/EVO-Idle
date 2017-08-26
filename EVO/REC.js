@@ -29,10 +29,10 @@ function ad(){
 }
 
 function sun(){
-	if (EVO.sunSwitch == 'on' && EVO.sun < 100){EVO.sun += 1;}
-	else if (EVO.sunSwitch == 'off' && EVO.sun > 0){EVO.sun -= 1;}
-	else if (EVO.sunSwitch == 'on' && EVO.sun >= 100){EVO.sunSwitch = 'off';}
-	else {EVO.sunSwitch = 'on';}
+	if (EVO.sun.sunSwitch == 'on' && EVO.sun.position < 100){EVO.sun.position += 1;}
+	else if (EVO.sun.sunSwitch == 'off' && EVO.sun.position > 0){EVO.sun.position -= 1;}
+	else if (EVO.sun.sunSwitch == 'on' && EVO.sun.position >= 100){EVO.sun.sunSwitch = 'off';}
+	else {EVO.sun.sunSwitch = 'on';}
 	if (EVO.stage > 1){light();}
 }
 

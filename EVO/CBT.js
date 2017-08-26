@@ -1,31 +1,31 @@
 function hlth(x){
-	var hlth = EVO.hlth;
+	var hlth = EVO.combat.hlth;
 	if (x == '+'){hlth++;}
 	if (x == '-'){hlth--;}
 	if (hlth < 0){hlth = 0;}
 	if (hlth > 100){hlth = 100;}
-	EVO.hlth = hlth;
-	doc('hlth',EVO.hlth);
+	EVO.combat.hlth = hlth;
+	doc('hlth',EVO.combat.hlth);
 }
 
 function spcl(x){
-	var spcl = EVO.spcl;
+	var spcl = EVO.combat.spcl;
 	if (x == '+'){spcl++;}
 	if (x == '-'){spcl--;}
 	if (spcl < 0){spcl = 0;}
 	if (spcl > 100){spcl = 100;}
-	EVO.spcl = spcl;
-	doc('spcl',EVO.spcl);
+	EVO.combat.spcl = spcl;
+	doc('spcl',EVO.combat.spcl);
 }
 
 function run(x){
-	var run = EVO.run;
+	var run = EVO.combat.run;
 	if (x == '+'){run++;}
 	if (x == '-'){run--;}
 	if (run < 0){run = 0;}
 	if (run > 100){run = 100;}
-	EVO.run = run;
-	doc('run',EVO.run);
+	EVO.combat.run = run;
+	doc('run',EVO.combat.run);
 }
 
 function check(x,y){return x.cbtevo.indexOf(y);}
@@ -38,25 +38,25 @@ function evolutionCombat(){
 	var spdCode = '';
 	var splCode = '';
 	var combatCode = '';
-	var mth = (1+EVO.cbtevo.length)*10;
+	var mth = (1+EVO.combat.cbtevo.length)*10;
 	var chk;
 	var stg;
 	var cnt;
-	var max = EVO.cbtMax + REC.cbt;
-	if (EVO.specialized > 1 && Math.floor(EVO.stage/2) > EVO.offG + EVO.defG + EVO.spdG + EVO.splG && creation >= (EVO.offG + EVO.defG + EVO.spdG + EVO.splG + 1)*10){
+	var max = EVO.combat.cbtMax + REC.cbt;
+	if (EVO.specialized > 1 && Math.floor(EVO.stage/2) > EVO.combat.offG + EVO.combat.defG + EVO.combat.spdG + EVO.combat.splG && creation >= (EVO.combat.offG + EVO.combat.defG + EVO.combat.spdG + EVO.combat.splG + 1)*10){
 		swt = 'on';
 		if (EVO.muscleSwitch == 'on' || EVO.digestiveSwitch == 'on' || EVO.stage > 3) {offCode = '<p title="Offensive evolutions are the embodiment of those who strike first strike last." onclick="combat(\'off\')"><b style="color:purple">Offensive</b></p>';}
 		if (EVO.respiratorySwitch == 'on' || EVO.sightSwitch == 'on' || EVO.stage > 3) {defCode = '<p title="Defensive evolutions are the embodiment of not having to last forever just last long enough." onclick="combat(\'def\')"><b style="color:purple">Defensive</b></p>';}
 		if (EVO.vascularSwitch == 'on' || EVO.excretionSwitch == 'on' || EVO.stage > 3) {spdCode = '<p title="Speed evolutions are the embodiment if they can\'t be caught they can\'t be hurt." onclick="combat(\'spd\')"><b style="color:purple">Speed</b></p>';}
 		if (EVO.balanceSwitch == 'on' || EVO.nerveSwitch == 'on' || EVO.stage > 3) {splCode = '<p title="Special evolutions are the embodiment of being able to do something amazing and terrifying." onclick="combat(\'spl\')"><b style="color:purple">Special</b></p>';}
 	}
-	if (EVO.offG > 0){
+	if (EVO.combat.offG > 0){
 		chk = 0;
 		if (check(EVO,'Extra Limbs') > -1){chk += 1;}
 		if (check(EVO,'Fierce') > -1){chk += 1;}
 		if (check(EVO,'Critical') > -1){chk += 1;}
 		//if (check(EVO,'Gluttonous') > -1){chk += 1;}
-		if (EVO.offG + REC.off > chk && max > EVO.cbtevo.length && creation >= mth){
+		if (EVO.combat.offG + REC.off > chk && max > EVO.combat.cbtevo.length && creation >= mth){
 			swt = 'on';
 			stg = '';
 			cnt = 0;
@@ -68,12 +68,12 @@ function evolutionCombat(){
 			offCode = stg + off[0] + off[1];
 		}
 	}
-	if (EVO.defG > 0){
+	if (EVO.combat.defG > 0){
 		chk = 0;
 		if (check(EVO,'Shell') > -1){chk += 1;}
 		if (check(EVO,'Anti-Venom') > -1){chk += 1;}
 		if (check(EVO,'Regeneration') > -1){chk += 1;}
-		if (EVO.defG + REC.def > chk && max > EVO.cbtevo.length && creation >= mth){
+		if (EVO.combat.defG + REC.def > chk && max > EVO.combat.cbtevo.length && creation >= mth){
 			swt = 'on';
 			stg = '';
 			cnt = 0;
@@ -84,12 +84,12 @@ function evolutionCombat(){
 			defCode = stg + def[0] + def[1];
 		}
 	}
-	if (EVO.spdG > 0){
+	if (EVO.combat.spdG > 0){
 		chk = 0;
 		if (check(EVO,'Burst') > -1){chk += 1;}
 		if (check(EVO,'Run') > -1){chk += 1;}
 		if (check(EVO,'Streamline') > -1){chk += 1;}
-		if (EVO.spdG + REC.spd > chk && max > EVO.cbtevo.length && creation >= mth){
+		if (EVO.combat.spdG + REC.spd > chk && max > EVO.combat.cbtevo.length && creation >= mth){
 			swt = 'on';
 			stg = '';
 			cnt = 0;
@@ -100,12 +100,12 @@ function evolutionCombat(){
 			spdCode = stg + spd[0] + spd[1];
 		}
 	}
-	if (EVO.splG > 0){
+	if (EVO.combat.splG > 0){
 		chk = 0;
 		if (check(EVO,'Electrogenesis') > -1){chk += 1;}
 		if (check(EVO,'Venom') > -1){chk += 1;}
 		if (check(EVO,'Luminesence') > -1){chk += 1;}
-		if (EVO.splG + REC.spl > chk && max > EVO.cbtevo.length && creation >= mth){
+		if (EVO.combat.splG + REC.spl > chk && max > EVO.combat.cbtevo.length && creation >= mth){
 			swt = 'on';
 			stg = '';
 			cnt = 0;
@@ -123,61 +123,61 @@ function evolutionCombat(){
 	spdCode = '';
 	splCode = '';
 	var grade = 0;
-	grade = EVO.offG*10;
+	grade = EVO.combat.offG*10;
 	if (EVO.three.boost == 'Camoflauge'){grade += 5;}
-	if (grade > EVO.off){offCode = '<p title="Offense effects health, stamina, and strength." onclick="cbtupg(\'off\')"><b style="color:purple">Offensive</b>';}
-	grade = EVO.defG*10;
+	if (grade > EVO.combat.off){offCode = '<p title="Offense effects health, stamina, and strength." onclick="cbtupg(\'off\')"><b style="color:purple">Offensive</b>';}
+	grade = EVO.combat.defG*10;
 	if (EVO.three.boost == 'Territorial'){grade += 5;}
-	if (grade > EVO.def){defCode = '<p title="Defense effects health, stamina, and constituion." onclick="cbtupg(\'def\')"><b style="color:purple">Defense</b>';}
-	grade = EVO.spdG*10;
+	if (grade > EVO.combat.def){defCode = '<p title="Defense effects health, stamina, and constituion." onclick="cbtupg(\'def\')"><b style="color:purple">Defense</b>';}
+	grade = EVO.combat.spdG*10;
 	if (EVO.three.boost == 'Roaming'){grade += 5;}
-	if (grade > EVO.spd){spdCode = '<p title="Speed effects health, stamina, and agility." onclick="cbtupg(\'spd\')"><b style="color:purple">Speed</b>';}
-	grade = EVO.splG*10;
+	if (grade > EVO.combat.spd){spdCode = '<p title="Speed effects health, stamina, and agility." onclick="cbtupg(\'spd\')"><b style="color:purple">Speed</b>';}
+	grade = EVO.combat.splG*10;
 	if (EVO.three.boost == 'Roaming'){grade += 5;}
-	if (grade*10 > EVO.spl){splCode = '<p title="Special effects health, stamina, and dexterity." onclick="cbtupg(\'spl\')"><b style="color:purple">Special</b>';}
+	if (grade*10 > EVO.combat.spl){splCode = '<p title="Special effects health, stamina, and dexterity." onclick="cbtupg(\'spl\')"><b style="color:purple">Special</b>';}
 	var cbtcost = '<br>Experience: <span id="exp"></span><br>Combat Cost: <span id="cbtCost"></span></p>';
 	if (offCode !== '' || defCode !== '' || spdCode !== '' || splCode !== ''){
 		doc('cbt', offCode + defCode + spdCode + splCode + cbtcost);
-		doc('exp',EVO.exp);
+		doc('exp',EVO.combat.exp);
 		doc('cbtCost',cbtMath());
 	} else {doc('cbt','');}
-	if (EVO.cbtevo.length > 0){
+	if (EVO.combat.cbtevo.length > 0){
 		var cbtevo = '';
-		for (i = 0; i < EVO.cbtevo.length; i++){
-			cbtevo = cbtevo + '<br>' + EVO.cbtevo[i];
+		for (i = 0; i < EVO.combat.cbtevo.length; i++){
+			cbtevo = cbtevo + '<br>' + EVO.combat.cbtevo[i];
 		}
 		doc('cbtevoHTML','<p>Combat Evolutions<br>' + cbtevo + '</p>');
 	}
 }
 
 function combat(x){
-	if (x == 'off'){EVO.offG += 1; EVO.cbtMax += 1;}
-	if (x == 'def'){EVO.defG += 1; EVO.cbtMax += 1;}
-	if (x == 'spd'){EVO.spdG += 1; EVO.cbtMax += 1;}
-	if (x == 'spl'){EVO.splG += 1; EVO.cbtMax += 1;}
-	if (x == 'limb'){EVO.cbtevo.push("Extra Limbs");}
-	if (x == 'frce'){EVO.cbtevo.push("Fierce");}
-	if (x == 'crit'){EVO.cbtevo.push("Critical");}
-	//if (x == 'glut'){EVO.cbtevo.push("Gluttonous");}
-	if (x == 'shell'){EVO.cbtevo.push("Shell");}
-	if (x == 'anti'){EVO.cbtevo.push("Anti-Venom");}
-	if (x == 'regen'){EVO.cbtevo.push("Regeneration");}
-	if (x == 'burst'){EVO.cbtevo.push("Burst");}
-	if (x == 'run'){EVO.cbtevo.push("Run");}
-	if (x == 'line'){EVO.cbtevo.push("Streamline");}
-	if (x == 'elec'){EVO.cbtevo.push("Electrogenesis");}
-	if (x == 'venom'){EVO.cbtevo.push("Venom");}
-	if (x == 'lumin'){EVO.cbtevo.push("Luminesence");}
-	if (x.match(/^(off|def|spd|spl)$/)) {EVO.evolved += (EVO.offG + EVO.defG + EVO.spdG + EVO.splG)*10;}
-	else {EVO.evolved += (1+EVO.cbtevo.length)*10;}
+	if (x == 'off'){EVO.combat.offG += 1; EVO.combat.cbtMax += 1;}
+	if (x == 'def'){EVO.combat.defG += 1; EVO.combat.cbtMax += 1;}
+	if (x == 'spd'){EVO.combat.spdG += 1; EVO.combat.cbtMax += 1;}
+	if (x == 'spl'){EVO.combat.splG += 1; EVO.combat.cbtMax += 1;}
+	if (x == 'limb'){EVO.combat.cbtevo.push("Extra Limbs");}
+	if (x == 'frce'){EVO.combat.cbtevo.push("Fierce");}
+	if (x == 'crit'){EVO.combat.cbtevo.push("Critical");}
+	//if (x == 'glut'){EVO.combat.cbtevo.push("Gluttonous");}
+	if (x == 'shell'){EVO.combat.cbtevo.push("Shell");}
+	if (x == 'anti'){EVO.combat.cbtevo.push("Anti-Venom");}
+	if (x == 'regen'){EVO.combat.cbtevo.push("Regeneration");}
+	if (x == 'burst'){EVO.combat.cbtevo.push("Burst");}
+	if (x == 'run'){EVO.combat.cbtevo.push("Run");}
+	if (x == 'line'){EVO.combat.cbtevo.push("Streamline");}
+	if (x == 'elec'){EVO.combat.cbtevo.push("Electrogenesis");}
+	if (x == 'venom'){EVO.combat.cbtevo.push("Venom");}
+	if (x == 'lumin'){EVO.combat.cbtevo.push("Luminesence");}
+	if (x.match(/^(off|def|spd|spl)$/)) {EVO.evolved += (EVO.combat.offG + EVO.combat.defG + EVO.combat.spdG + EVO.combat.splG)*10;}
+	else {EVO.evolved += (1+EVO.combat.cbtevo.length)*10;}
 	evolutionCombat();
 }
 
-function cbtMath(){return Math.floor(10*Math.pow(2,EVO.off + EVO.def + EVO.spd + EVO.spl));}
+function cbtMath(){return Math.floor(10*Math.pow(2,EVO.combat.off + EVO.combat.def + EVO.combat.spd + EVO.combat.spl));}
 
 function cbtupg(x){
-	if(EVO.exp >= cbtMath()){
-		EVO.exp -= cbtMath();
+	if(EVO.combat.exp >= cbtMath()){
+		EVO.combat.exp -= cbtMath();
 		EVO[x] += 1;
 		doc(x,EVO[x]);
 		stat();
@@ -186,34 +186,34 @@ function cbtupg(x){
 }
 
 function stat(){
-	doc('off',EVO.off);
-	doc('def',EVO.def);
-	doc('spd',EVO.spd);
-	doc('spl',EVO.spl);
-	doc('str',Math.floor(EVO.off+(fun.add.muscle()+fun.add.digestive())/10));
-	doc('dex',Math.floor(EVO.spl+(fun.add.respiratory()+fun.add.sight())/10));
-	doc('con',Math.floor(EVO.def+(fun.add.vascular()+fun.add.excretion())/10));
-	doc('agl',Math.floor(EVO.spd+(fun.add.balance()+fun.add.nerve())/10));
-	EVO.mhp = Math.floor((EVO.def+(fun.add.vascular()+fun.add.excretion())/10) * (1+(EVO.off+EVO.def+EVO.spd+EVO.spl)/100) * (1-(EVO.scar/100)));
-	if (EVO.mhp < 10){EVO.mhp = 10;}
-	doc('mhp',EVO.mhp);
-	doc('hp', EVO.hp);
-	EVO.msp = EVO.off + EVO.def + EVO.spd + EVO.spl + 10;
-	doc('msp',EVO.msp);
-	doc('sp', EVO.sp);
+	doc('off',EVO.combat.off);
+	doc('def',EVO.combat.def);
+	doc('spd',EVO.combat.spd);
+	doc('spl',EVO.combat.spl);
+	doc('str',Math.floor(EVO.combat.off+(fun.add.muscle()+fun.add.digestive())/10));
+	doc('dex',Math.floor(EVO.combat.spl+(fun.add.respiratory()+fun.add.sight())/10));
+	doc('con',Math.floor(EVO.combat.def+(fun.add.vascular()+fun.add.excretion())/10));
+	doc('agl',Math.floor(EVO.combat.spd+(fun.add.balance()+fun.add.nerve())/10));
+	EVO.combat.mhp = Math.floor((EVO.combat.def+(fun.add.vascular()+fun.add.excretion())/10) * (1+(EVO.combat.off+EVO.combat.def+EVO.combat.spd+EVO.combat.spl)/100) * (1-(EVO.combat.scar/100)));
+	if (EVO.combat.mhp < 10){EVO.combat.mhp = 10;}
+	doc('mhp',EVO.combat.mhp);
+	doc('hp', EVO.combat.hp);
+	EVO.combat.msp = EVO.combat.off + EVO.combat.def + EVO.combat.spd + EVO.combat.spl + 10;
+	doc('msp',EVO.combat.msp);
+	doc('sp', EVO.combat.sp);
 	var time = fun.mul.balance();
-	if (EVO.hp < EVO.mhp || EVO.sp < EVO.msp){setTimeout(heal, Math.ceil(60000*time));}
+	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*time));}
 	function heal(){
-		if (EVO.hp < EVO.mhp){
+		if (EVO.combat.hp < EVO.combat.mhp){
 			EVO.nutrient -= EVO.cellT;
-			EVO.hp += 1;
-			doc('hp', EVO.hp);
-		} else if (EVO.sp < EVO.msp){
+			EVO.combat.hp += 1;
+			doc('hp', EVO.combat.hp);
+		} else if (EVO.combat.sp < EVO.combat.msp){
 			EVO.nutrient -= EVO.cellT;
-			EVO.sp += 1;
-			doc('sp', EVO.sp);
+			EVO.combat.sp += 1;
+			doc('sp', EVO.combat.sp);
 		}
-		if (EVO.hp < EVO.mhp || EVO.sp < EVO.msp){setTimeout(heal, Math.ceil(60000*time));}
+		if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*time));}
 	}
 }
 
@@ -221,33 +221,34 @@ function cbt(a,b,c){
 	cost.fight = 'on';
 	var size;
 	var one = {
-		"off": EVO.off,
-		"def": EVO.def,
-		"spd": EVO.spd,
-		"spl": EVO.spl,
+		"off": EVO.combat.off,
+		"def": EVO.combat.def,
+		"spd": EVO.combat.spd,
+		"spl": EVO.combat.spl,
 		"str": 0,
 		"dex": 0,
 		"con": 0,
 		"agl": 0,
-		"mhp": EVO.mhp,
-		"hp": EVO.hp,
-		"msp": EVO.msp,
-		"sp": EVO.sp,
+		"mhp": EVO.combat.mhp,
+		"hp": EVO.combat.hp,
+		"msp": EVO.combat.msp,
+		"sp": EVO.combat.sp,
 		"size": EVO.size.max,
 		"arm": 0,
-		"cbtevo": EVO.cbtevo,
-		"run": EVO.run,
+		"cbtevo": EVO.combat.cbtevo,
+		"run": EVO.combat.run,
 		"line": 0,
 		"elec": 'off',
 		"venom": 'off',
 		"vendur": 0,
 	};
 	size = one.size - c;
-	one.str = Math.floor((EVO.off+(fun.add.muscle()+fun.add.digestive())/10)*(1+(size/10)));
-	one.dex = Math.floor((EVO.spl+(fun.add.respiratory()+fun.add.sight())/10)*(1+(size/10)));
-	one.con = Math.floor((EVO.def+(fun.add.vascular()+fun.add.excretion())/10)*(1-(size/10)));
-	one.agl = Math.floor((EVO.spd+(fun.add.balance()+fun.add.nerve())/10)*(1-(size/10)));
-	if (check(one,'Shell') > -1){one.arm += EVO.def;}
+	one.str = Math.floor((EVO.combat.off+(fun.add.muscle()+fun.add.digestive())/10)*(1+(size/10)));
+	one.dex = Math.floor((EVO.combat.spl+(fun.add.respiratory()+fun.add.sight())/10)*(1+(size/10)));
+	one.con = Math.floor((EVO.combat.def+(fun.add.vascular()+fun.add.excretion())/10)*(1-(size/10)));
+	one.agl = Math.floor((EVO.combat.spd+(fun.add.balance()+fun.add.nerve())/10)*(1-(size/10)));
+	one.arm = Math.floor(EVO.two.celladhesion/50);
+	if (check(one,'Shell') > -1){one.arm += EVO.combat.def;}
 	if (EVO.three.skeleton == 'ExoSkeleton'){
 		one.arm += 1;
 		if (EVO.stage > 3){Math.floor(fun.add.skeleton()/100);}
@@ -277,7 +278,7 @@ function cbt(a,b,c){
 	npc();
 	function npc(){
 		size = c - one.size;
-		var points = Math.floor((EVO.off+EVO.def+EVO.spd+EVO.spl)+(fun.add.muscle()+fun.add.digestive()+fun.add.vascular()+fun.add.excretion()+fun.add.balance()+fun.add.nerve()+fun.add.respiratory()+fun.add.sight())/10);
+		var points = Math.floor((EVO.combat.off+EVO.combat.def+EVO.combat.spd+EVO.combat.spl)+(fun.add.muscle()+fun.add.digestive()+fun.add.vascular()+fun.add.excretion()+fun.add.balance()+fun.add.nerve()+fun.add.respiratory()+fun.add.sight())/10);
 		for (i = 0; i < points; i++){
 			rnd = Math.floor(Math.random()*4);
 			if (rnd == 0){two.str++;}
@@ -291,7 +292,7 @@ function cbt(a,b,c){
 		two.agl = Math.floor(two.agl*(1-(size/10)));
 		two.mhp = Math.floor(two.con*(1+(two.off+two.def+two.spd+two.spl)/100));
 		two.msp = two.off+two.def+two.spd+two.spl+10;
-		two.arm = EVO.cbtevo.length;
+		two.arm = EVO.combat.cbtevo.length;
 		two.run = 20;
 	}
 	if (two.mhp < 10){two.mhp = 10;}
@@ -494,26 +495,26 @@ function cbt(a,b,c){
 		spcy = spcy - y.line;
 		if (spcy < 0){spcy = 0;}
 		y.sp -= spcy;
-		EVO.hp = one.hp;
-		EVO.sp = one.sp;
-		doc('hp', EVO.hp);
-		doc('sp', EVO.sp);
+		EVO.combat.hp = one.hp;
+		EVO.combat.sp = one.sp;
+		doc('hp', EVO.combat.hp);
+		doc('sp', EVO.combat.sp);
 	}
 	function flee(x){
 		exp /= 2;
-		EVO.exp += exp;
+		EVO.combat.exp += exp;
 		if (EVO.stage == 2){EVO.nutrient += a;}
 		if (EVO.stage == 3){EVO.mineral += a;}
 		if (x == one){
 			doc('event1HTML','You successfully ran away.  You have run to a new area.');
 			doc('event2HTML','You gained ' + exp + ' experince.');
-			EVO.lost += 1;
+			EVO.combat.lost += 1;
 			move();
 		}
 		if (x == two){
 			doc('event1HTML','Your opponent has successfully ran away.  They have ran to a new area.');
 			doc('event2HTML','You gained ' + exp + ' experince.');
-			EVO.won += 1;
+			EVO.combat.won += 1;
 		}
 		stat();
 		if (b == 'event'){event();}
@@ -527,24 +528,24 @@ function cbt(a,b,c){
 		var reward = 'You gained ' + exp + ' experince.';
 		if (EVO.stage == 2 || EVO.three.diet !== 'Herbivore'){reward = 'You gained ' + exp + ' experince and ' + eat + ' food.';}
 		doc('event2HTML',reward);
-		EVO.exp += exp;
+		EVO.combat.exp += exp;
 		if (EVO.stage == 2 || EVO.three.diet !== 'Herbivore'){EVO.food += eat;}
 		if (EVO.stage == 2){EVO.nutrient += a;}
 		if (EVO.stage == 3){EVO.mineral += a;}
-		EVO.won += 1;
+		EVO.combat.won += 1;
 		stat();
 		if (b == 'event'){event();}
 		if (b == 'hunt'){hunts();}
 	}
 	function lose(){
 		doc('event1HTML','Your opponent defeated you.');
-		EVO.exp += exp/2;
+		EVO.combat.exp += exp/2;
 		if (EVO.stage == 2){EVO.nutrient += a;}
 		if (EVO.stage == 3){EVO.mineral += a;}
 		move();
 		EVO.nutrient = 0;
-		EVO.lost += 1;
-		if (check(one,'Regeneration') == -1){EVO.scar += 1;}
+		EVO.combat.lost += 1;
+		if (check(one,'Regeneration') == -1){EVO.combat.scar += 1;}
 		stat();
 		setTimeout(carnate,10000,c);
 	}

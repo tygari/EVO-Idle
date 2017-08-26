@@ -2,15 +2,9 @@ var EVO = {
 	"version": 0,
 	"stage": 2,
 	"date": Date.now(),
-	"one": {
-		"metabolismType": null,
-		"metabolism": 0,
-		"mitochondria": 0,
-		"cilia": 0,
-		"flagellum": 0,
-		"cytoplasm": 0,
-	},
+	"one": {},
 	"two": {
+		"celladhesion": -1,
 		"balance": 0,
 		"nerve": 0,
 		"vascular": 0,
@@ -20,7 +14,11 @@ var EVO = {
 		"excretion": 0,
 		"sight": 0,
 	},
-	"photosynthesis": 0,
+	"sun":{},
+	"size": {
+		"max": 0,
+		"stage": 0,
+	},
 	"current": 50,
 	"currentDamage": 0,
 	"adhesionLearn": 0,
@@ -30,8 +28,6 @@ var EVO = {
 	"salinityCurse": 0,
 	"osmisisLearn": 0,
 	"toxin": 0,
-	"sunSwitch": 'on',
-	"sun": 0,
 	"food": 0,
 	"nutrient": 0,
 	"evolution": 0,
@@ -42,7 +38,6 @@ var EVO = {
 	"cellL": 0,
 	"cellT": 0,
 	"sex": 0,
-	"celladhesion": -1,
 	"communication": null,
 	"quorum": null,
 	"biofilm": null,
@@ -65,29 +60,27 @@ var EVO = {
 	"circular": null,
 	"radial": null,
 	"dependency": null,
-	"size": {
-		"max": 0,
-		"stage": 0,
+	"combat": {
+		"cbtMax": 0,
+		"cbtevo": [],
+		"mhp": 0,
+		"hp": 10,
+		"msp": 0,
+		"sp": 10,
+		"exp": 0,
+		"scar": 0,
+		"offG": 0,
+		"off": 0,
+		"defG": 0,
+		"def": 0,
+		"spdG": 0,
+		"spd": 0,
+		"splG": 0,
+		"spl": 0,
+		"run": 0,
+		"won": 0,
+		"lost": 0,
 	},
-	"cbtMax": 0,
-	"cbtevo": [],
-	"mhp": 0,
-	"hp": 10,
-	"msp": 0,
-	"sp": 10,
-	"exp": 0,
-	"scar": 0,
-	"offG": 0,
-	"off": 0,
-	"defG": 0,
-	"def": 0,
-	"spdG": 0,
-	"spd": 0,
-	"splG": 0,
-	"spl": 0,
-	"run": 0,
-	"won": 0,
-	"lost": 0,
 };
 
 var fun = {
@@ -132,16 +125,15 @@ function start(){
 	if (localStorage.getItem("EVOE") !== null){
 		var checksave = JSON.parse(localStorage.getItem("EVOE"));
 		if (checksave.stage == 2){
-			EVO.metabolismType = checksave.metabolismType;
 			EVO.one = checksave.one;
-			EVO.photosynthesis = checksave.photosynthesis;
-			EVO.sunSwitch = checksave.sunSwitch;
 			EVO.sun = checksave.sun;
 			EVO.food = checksave.food;
+			EVO.size.max = checksave.size;
 			EVO.nutrient = checksave.nutrient;
 			EVO.evolution = checksave.evolution;
 			EVO.evolved = checksave.evolved;
 			EVO.bonus = checksave.bonus;
+			EVO.motility = EVO.one.flagellum;
 			EVO.date = Date.now();
 			localStorage.setItem("EVO", JSON.stringify(EVO));
 			localStorage.removeItem("EVOE");
@@ -162,12 +154,7 @@ function start(){
 			speedUp[2] = speedUp[0];
 		}
 		if (speedUp[0] >= speedUp[3] + 60000){
-			currentMath();
-			phMath();
-			salinityMath();
-			sun();
-			if (EVO.cellB-EVO.cellL > 0){toxinMath();}
-			if (EVO.cellB-EVO.cellL > 0){cellAdhesion();}
+			environment('start');
 			speedUp[3] = speedUp[0];
 		}
 		if (speedUp[0] >= speedUp[4] + Math.ceil(1800000*((100-(EVO.two.balance/2))/100))){
@@ -221,15 +208,15 @@ function eventEnd(){
 	setTimeout(events, (Math.floor((Math.random() * 240000)+1)));
 }
 
-function environment(){
+function environment(x){
 	currentMath();
 	phMath();
 	salinityMath();
 	sun();
+	phDmg();
 	if (EVO.cellB-EVO.cellL > 0){cellAdhesion();}
-	if (EVO.cellB-EVO.cellL > 0){phDmg;}
 	if (EVO.cellB-EVO.cellL > 0){toxinMath();}
-	setTimeout(environment, 60000);
+	if (x !== 'start'){setTimeout(environment, 60000);}
 }
 
 function currentMath(){
@@ -277,15 +264,15 @@ function move(x){
 	if (EVO.nutrient >= moveCost){
 		EVO.nutrient -= moveCost;
 		EVO.food = Math.floor(((Math.random()*((fun.food.max()-fun.food.min())*200)*fun.mul.muscle())+(fun.food.min()*200))*fun.mul.sight());
+		EVO.current = Math.floor(Math.random()*100)+1;
+		currentMath();
+		EVO.ph = Math.floor(Math.random()*140);
+		phMath();
+		EVO.salinity = Math.floor(Math.random()*11)+30;
+		salinityMath();
+		if (EVO.motilitySwitch == 'on'){swarmingMotility();}
 		if (x !== 'start'){
 			updateNutrient();
-			EVO.current = Math.floor(Math.random()*100)+1;
-			currentMath();
-			EVO.ph = Math.floor(Math.random()*140);
-			phMath();
-			EVO.salinity = Math.floor(Math.random()*11)+30;
-			salinityMath();
-			if (EVO.motilitySwitch == 'on'){swarmingMotility();}
 			clearTimeout(fun.move());
 			fun.move();
 		}
@@ -331,12 +318,12 @@ function timer(){
 }
 
 function photosynth(){
-	EVO.photosynthesis += (1+(EVO.sun/100)) * fun.mul.metabolism() * fun.mul.respiratory() * fun.mul.eps();
-	while (EVO.photosynthesis >= 100){
-		EVO.photosynthesis -= 100;
+	EVO.sun.photosynthesis += (1+(EVO.sun/100)) * fun.mul.metabolism() * fun.mul.respiratory() * fun.mul.eps();
+	while (EVO.sun.photosynthesis >= 100){
+		EVO.sun.photosynthesis -= 100;
 		EVO.nutrient += 1;
 	}
-	doc('photosynthesis',Math.floor(EVO.photosynthesis)+'%');
+	doc('photosynthesis',Math.floor(EVO.sun.photosynthesis)+'%');
 	updateNutrient();
 }
 
@@ -384,6 +371,7 @@ var cost = {
 	"motility": 3,
 	"specialization": 4,
 	"specialized": 5,
+	"worm": 20;
 	"fight": 'off',
 }
 
@@ -427,11 +415,11 @@ function updateEvolution(){
 		EVO.evolutionSwitch = 'on';
 		sexCode = '<p title="Your cells evolve sexual reproduction." onclick="evos(\'reproduce\')"><b style="color:blue">Sexual Reproduction</b></p>';
 	}
-	if (EVO.celladhesion == -1 && EVO.cellB-EVO.cellL >= 1 && creation >= cost.celladhesion){
+	if (EVO.two.celladhesion == -1 && EVO.cellB-EVO.cellL >= 1 && creation >= cost.celladhesion){
 		EVO.evolutionSwitch = 'on';
 		celladhesionCode = '<p title="Cellular adhesion is your cell\'s ability to stick to other cells." onclick="evos(\'celladhesion\')"><b style="color:blue">Cell Adhesion</b></p>';
 	}
-	if (EVO.celladhesion >= 0 && EVO.cellB-EVO.cellL >= 10 && EVO.communication == null && creation >= cost.communication){
+	if (EVO.two.celladhesion >= 0 && EVO.cellB-EVO.cellL >= 10 && EVO.communication == null && creation >= cost.communication){
 		EVO.evolutionSwitch = 'on';
 		communicationCode = '<p title="Your cells evolve Cellular Communication." onclick="evos(\'communication\')"><b style="color:blue">Cellular Communication</b></p>';	
 	}
@@ -479,9 +467,13 @@ function updateEvolution(){
 		EVO.evolutionSwitch = 'on';
 		sizeCode = '<p title="Growing larger has many effects." onclick="evos(\'size\')"><b style="color:blue">Size ' + (EVO.size.max+1) + '</b></p>';
 	}
+	if (EVO.dependency == 'dependency' && EVO.quorum == 'sensing' && EVO.biofilm = 'Biofilm' && EVO.osmoregulation > -1 && EVO.motilitySwitch == 'on' && creation >= cost.worm){
+		EVO.evolutionSwitch = 'on';
+		wormCode = '<p title="Worm Evolution" onclick="worm()"><b style="color:blue">Worm</b></p>';
+	}
 	var evolutionCode = '<p style="color:gold"><b>Evolutions</b></p>';
 	if (EVO.evolutionSwitch == 'off'){doc('evolutionUpgrade','');}
-	if (EVO.evolutionSwitch == 'on'){doc('evolutionUpgrade',evolutionCode + sexCode + celladhesionCode + communicationCode + quorumCode + epsCode + organizationCode + osmoregulationCode + motilityCode + specializationCode + balanceCode + nerveCode + vascularCode + muscleCode + respiratoryCode + digestiveCode + excretionCode + sightCode + symmetryCode + dependencyCode + sizeCode);}
+	if (EVO.evolutionSwitch == 'on'){doc('evolutionUpgrade',evolutionCode + sexCode + celladhesionCode + communicationCode + quorumCode + epsCode + organizationCode + osmoregulationCode + motilityCode + specializationCode + balanceCode + nerveCode + vascularCode + muscleCode + respiratoryCode + digestiveCode + excretionCode + sightCode + symmetryCode + dependencyCode + sizeCode + wormCode);}
 }
 
 function evos(x){
@@ -494,10 +486,10 @@ function evos(x){
 		doc('evolutionCost',evolutionMath());
 	}
 	if (x == 'celladhesion'){
-		EVO.celladhesion = 0;
+		EVO.two.celladhesion = 0;
 		EVO.evolved += cost.celladhesion;
 	}
-	if (EVO.celladhesion > -1){doc('celladhesionHTML','Cellular Adhesion: <span id="celladhesion"></span>%'); doc('celladhesion',EVO.celladhesion);}
+	if (EVO.two.celladhesion > -1){doc('celladhesionHTML','Cellular Adhesion: <span id="celladhesion"></span>%'); doc('celladhesion',EVO.two.celladhesion);}
 	if (x == 'communication'){
 		EVO.communication = 'communication';
 		EVO.evolved += cost.communication;
@@ -591,7 +583,7 @@ function specialized(x){
 	doc('specializeHTML','<p>Specilization Cost: <span id="specializeCost"></span></p>');
 	doc('stat','<div style="color:white; border-style: hidden; text-align:center"><p>Off: <span id="off"></span> &nbsp; &nbsp; Def: <span id="def"></span> &nbsp; &nbsp; Spd: <span id="spd"></span> &nbsp; &nbsp; Spl: <span id="spl"></span><br>Health: <span id="hp">0</span> / <span id="mhp"></span> &nbsp; &nbsp; &nbsp; Stats &nbsp; &nbsp; &nbsp; Stamina: <span id="sp">0</span> / <span id="msp"></span><br>Str: <span id="str"></span> &nbsp; &nbsp; Dex: <span id="dex"></span> &nbsp; &nbsp; Con: <span id="con"></span> &nbsp; &nbsp; Agl: <span id="agl"></span></p></div>');
 	doc('retreat','Retreat: <span onclick="run(\'+\')"> << </span><span id="run"></span><span onclick="run(\'-\')">% >> </span>');
-	doc('run',EVO.run);
+	doc('run',EVO.combat.run);
 	specializeNext(x);
 	updateNutrient();
 	updateEvolution();
@@ -610,18 +602,18 @@ function mouseOff(x){
 }
 
 function cellAdhesion(){
-	if (Math.floor(Math.random()*100)+1 > EVO.celladhesion){
+	if (Math.floor(Math.random()*100)+1 > EVO.two.celladhesion){
 		EVO.currentDamage += EVO.current;
 		if (EVO.currentDamage >= 100){
 			EVO.currentDamage = 0;
 			EVO.cellL += 1;
 			cellUpdate();
-			if (EVO.celladhesion >= 0){
+			if (EVO.two.celladhesion >= 0){
 				EVO.adhesionLearn += fun.mul.nerve();
-				if (EVO.adhesionLearn > EVO.celladhesion){
-					EVO.adhesionLearn -= (EVO.celladhesion + 1);
-					EVO.celladhesion += 1;	
-					doc('celladhesion',EVO.celladhesion);
+				if (EVO.adhesionLearn > EVO.two.celladhesion){
+					EVO.adhesionLearn -= (EVO.two.celladhesion + 1);
+					EVO.two.celladhesion += 1;	
+					doc('celladhesion',EVO.two.celladhesion);
 				}
 			}
 		}
@@ -644,11 +636,13 @@ function phDmg(){
 	var phd = 0;
 	if (EVO.ph < 71){phd = 70 - EVO.ph;}
 	if (EVO.ph > 70){phd = EVO.ph - 70;}
-	EVO.eps -= phd;
+	EVO.eps -= Math.floor(phd/10);
 	if (EVO.eps < 0){
 		EVO.phd = Math.abs(phd);
 		EVO.eps = 0;
 	}
+	EVO.combat.hp -= EVO.phd;
+	if(EVO.combat.hp < 0){EVO.combat.hp = 0;}
 }
 
 function salinityDebuff(){
@@ -676,16 +670,17 @@ function swarmingMotility(){
 }
 
 function specializeMath(x){
-	var z ={
-		"balance": EVO.two.balance*(100-REC.balance.cost/2)/100,
-		"nerve": EVO.two.nerve*(100-REC.nerve.cost/2)/100,
-		"vascular": EVO.two.vascular*(100-REC.vascular.cost/2)/100,
-		"muscle": EVO.two.muscle*(100-REC.muscle.cost/2)/100,
-		"respiratory": EVO.two.respiratory*(100-REC.respiratory.cost/2)/100,
-		"digestive": EVO.two.digestive*(100-REC.digestive.cost/2)/100,
-		"excretion": EVO.two.excretion*(100-REC.excretion.cost/2)/100,
-		"sight": EVO.two.sight*(100-REC.sight.cost/2)/100,
-	}
+	var y = function(a){return EVO.two[a]*(100-REC[a].cost/2)/100;}
+	var z = {
+		"balance": y('balance'),
+		"nerve":  y('nerve'),
+		"vascular":  y('vascular'),
+		"muscle":  y('muscle'),
+		"respiratory":  y('respiratory'),
+		"digestive":  y('digestive'),
+		"excretion":  y('excretion'),
+		"sight":  y('sight'),
+	};
 	if (x !== undefined){z[x] = EVO.two[x]*(100-REC[x].cost)/100;}
 	return Math.floor(10*Math.pow(2,z.balance + z.nerve + z.vascular + z.muscle + z.respiratory + z.digestive + z.excretion + z.sight));
 }
@@ -710,7 +705,7 @@ function specialize(x){
 
 function light(){
 	y = EVO.two.sight;
-	if (EVO.sun < y){y = EVO.sun;}
+	if (EVO.sun.position < y){y = EVO.sun.position;}
 	document.getElementById("stage").style.backgroundColor = 'rgb(' + [y,y,y].join(',') + ')';
 }
 
@@ -722,6 +717,40 @@ function color(x){
 	else if (x == 'move' && EVO.nutrient >= 2000 - EVO.motility - (EVO.two.muscle*10)){color.style.color = 'red';}
 	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/) && EVO.nutrient >= specializeMath(x) && EVO.cellB-EVO.cellL > EVO[x]){color.style.color = 'red';}
 	else {color.style.color = 'green';}
+}
+
+function worm(){
+	EVO.evolved += cost.worm;
+	var evolve = {
+		"stage": 3,
+		"date": Date.now(),
+		"one": EVO.one,
+		"two": EVO.two,
+		"sun": EVO.sun,
+		"size": EVO.size.max,
+		"food": EVO.food/2,
+		"mineral": EVO.nutrient/2,
+		"evolution": EVO.evolution,
+		"evolved": EVO.evolved,
+		"bonus": EVO.bonus,
+		"combat": EVO.combat,
+		"specialized": EVO.specialized,
+		"balanceSwitch": EVO.balanceSwitch,
+		"nerveSwitch": EVO.nerveSwitch,
+		"vascularSwitch": EVO.vascularSwitch,
+		"muscleSwitch": EVO.muscleSwitch,
+		"respiratorySwitch": EVO.respiratorySwitch,
+		"digestiveSwitch": EVO.digestiveSwitch,
+		"excretionSwitch": EVO.excretionSwitch,
+		"sightSwitch": EVO.sightSwitch,
+		"radial": EVO.radial,
+		"eps": EVO.eps,
+		"phd": EVO.phd,
+	};
+	localStorage.setItem("EVOE", JSON.stringify(evolve));
+	clearTimeout(save);
+	localStorage.removeItem("EVO");
+	window.location.assign("EVO3.html");
 }
 
 function tip(x){

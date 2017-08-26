@@ -10,8 +10,15 @@ var EVO = {
 		"flagellum": 0,
 		"cytoplasm": -1,
 	},
-	"sunSwitch": 'on',
-	"sun": 0,
+	"sun":{
+		"photosynthesis": 0,
+		"sunSwitch": 'on',
+		"position": 0,
+	},
+	"size": {
+		"max": 0,
+		"stage": 0,
+	},
 	"food": 10000,
 	"atp": 0,
 	"evolution": 0,
@@ -28,17 +35,12 @@ var EVO = {
 	"nucleus": null,
 	"ciliaSwitch": 'off',
 	"flagellumSwitch": 'off',
-	"photosynthesis": 0,
 	"rnaSwitch": 'off',
 	"rnaB": 0,
 	"rnaS": 0,
 	"dnaSwitch": 'off',
 	"dnaB": 0,
 	"dnaS": 0,
-	"size": {
-		"max": 0,
-		"stage": 0,
-	},
 };
 
 var fun = {
@@ -60,9 +62,9 @@ function start(){
 	var offline = Date.now() - EVO.date;
 	var speedUp = [0, 0, 0, 0];
 	while (offline > speedUp[0]){
-		if (speedUp[0] >= speedUp[1] + (1001-EVO.one.cytoplasm)) {
+		if (speedUp[0] >= speedUp[1] + (1001-EVO.one.cytoplasm)){
 			if (EVO.ciliaSwitch == 'on') {autoClick();}
-			if (EVO.one.metabolismType == 'Photophosphorylation') {photosynth();}
+			if (EVO.one.metabolismType == 'Photophosphorylation'){photosynth();}
 			speedUp[1] = speedUp[0];
 		}
 		if (speedUp[0] >= speedUp[2] + 60000){
@@ -219,12 +221,12 @@ function timer(){
 }
 
 function photosynth(){
-	EVO.photosynthesis += (1+(EVO.sun/100)) * fun.metabolism();
-	while (EVO.photosynthesis >= 100){
-		EVO.photosynthesis -= 100;
+	EVO.sun.photosynthesis += (1+(EVO.sun.position/100)) * fun.metabolism();
+	while (EVO.sun.photosynthesis >= 100){
+		EVO.sun.photosynthesis -= 100;
 		EVO.atp += 1 / fun.virus[0];
 	}
-	doc('photosynthesis',Math.floor(EVO.photosynthesis)+'%');
+	doc('photosynthesis',Math.floor(EVO.sun.photosynthesis)+'%');
 	updateATP();
 }
 
@@ -589,21 +591,15 @@ function multicelluar(){
 	var evolve = {
 		"stage": 2,
 		"date": Date.now(),
-		"one": {
-			"cilia": EVO.one.cilia,
-			"metabolism": EVO.one.metabolism,
-			"mitochondria": EVO.one.mitochondria,
-		},
-		"metabolismType": EVO.one.metabolismType,
-		"photosynthesis": EVO.photosynthesis,
-		"sunSwitch": EVO.sunSwitch,
+		"one": EVO.one,
 		"sun": EVO.sun,
+		"size": EVO.size.max,
 		"food": EVO.food/2,
 		"nutrient": EVO.atp/2 + (EVO.rnaB-EVO.rnaS)*100 + (EVO.dnaB-EVO.dnaS)*10000,
 		"evolution": EVO.evolution,
 		"evolved": EVO.evolved,
 		"bonus": EVO.bonus,
-	}
+	};
 	if (evolve.mitochondria < 0){evolve.mitochondria = 0;}
 	localStorage.setItem("EVOE", JSON.stringify(evolve));
 	clearTimeout(save);

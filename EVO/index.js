@@ -12,6 +12,7 @@ function start(){
 			if (EVO.one.cytoplasm > 1000){hard();}
 			if (EVO.one.cilia > 1000){hard();}
 			if (EVO.flagellum > 1000){hard();}
+			if (EVO.size.max > 1){hard();}
 		}
 		if (EVO.stage == 2){
 			if (EVO.two.balance > REC.balance.max + 100){hard();}
@@ -22,6 +23,7 @@ function start(){
 			if (EVO.two.digestive > REC.digestive.max + 100){hard();}
 			if (EVO.two.excretion > REC.excretion.max + 100){hard();}
 			if (EVO.two.sight > REC.sight.max + 100){hard();}
+			if (EVO.size.max > 3){hard();}
 		}
 		if (EVO.stage == 3){
 			if (EVO.three.balance > REC.balance.max + 100){hard();}
@@ -32,6 +34,7 @@ function start(){
 			if (EVO.three.digestive > REC.digestive.max + 100){hard();}
 			if (EVO.three.excretion > REC.excretion.max + 100){hard();}
 			if (EVO.three.sight > REC.sight.max + 100){hard();}
+			if (EVO.size.max > 7){hard();}
 		}
 	}
 	if (localStorage.getItem("REC") !== null){
