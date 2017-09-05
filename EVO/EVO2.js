@@ -327,17 +327,23 @@ function photosynth(){
 	updateNutrient();
 }
 
-function cellMath(){return Math.floor(10*Math.pow(1.1,EVO.cellB));}
+function cellMath(x){
+	if (x == undefined){x = 1;}
+	var cnt = 0;
+	for (var i = 0; i < x; i++){cnt += Math.floor(10*Math.pow(1.1,EVO.cellB+i));}
+	return cnt;
+}
 
 function cellTimer(x){
 	if (EVO.cellB > 0 && EVO.cellL > 0 && EVO.cellB >= EVO.cellL){EVO.cellB -=1; EVO.cellL -=1;}
 	if (x !== 'start'){setTimeout(cellTimer, Math.ceil(1800000*((100-(EVO.two.balance/2))/100)));}
 }
 
-function buyCell(){
-	if (EVO.nutrient >= cellMath()){
-		EVO.nutrient -= cellMath();
-		EVO.cellB += 1;
+function buyCell(x){
+	if (x == undefined){x = 1;}
+	if (EVO.nutrient >= cellMath(x)){
+		EVO.nutrient -= cellMath(x);
+		EVO.cellB += x;
 		updateNutrient();
 		cellUpdate();
 		updateEvolution();
@@ -371,7 +377,7 @@ var cost = {
 	"motility": 3,
 	"specialization": 4,
 	"specialized": 5,
-	"worm": 20;
+	"worm": 20,
 	"fight": 'off',
 }
 
@@ -382,6 +388,7 @@ function updateEvolution(){
 	var celladhesionCode = '';
 	var communicationCode = '';
 	var quorumCode = '';
+	var epsCode = '';
 	var organizationCode = '';
 	var osmoregulationCode = '';
 	var motilityCode = '';
@@ -397,6 +404,7 @@ function updateEvolution(){
 	var symmetryCode = '';
 	var dependencyCode = '';
 	var sizeCode = '';
+	var wormCode = '';
 	var cell = EVO.cellB-EVO.cellL;
 	var cells = 30 + (EVO.specialized * 10);
 	var special = EVO.specialized * cost.specialized;
@@ -467,7 +475,7 @@ function updateEvolution(){
 		EVO.evolutionSwitch = 'on';
 		sizeCode = '<p title="Growing larger has many effects." onclick="evos(\'size\')"><b style="color:blue">Size ' + (EVO.size.max+1) + '</b></p>';
 	}
-	if (EVO.dependency == 'dependency' && EVO.quorum == 'sensing' && EVO.biofilm = 'Biofilm' && EVO.osmoregulation > -1 && EVO.motilitySwitch == 'on' && creation >= cost.worm){
+	if (EVO.dependency == 'dependency' && EVO.quorum == 'sensing' && EVO.biofilm == 'Biofilm' && EVO.osmoregulation > -1 && EVO.motilitySwitch == 'on' && creation >= cost.worm){
 		EVO.evolutionSwitch = 'on';
 		wormCode = '<p title="Worm Evolution" onclick="worm()"><b style="color:blue">Worm</b></p>';
 	}
@@ -510,7 +518,7 @@ function evos(x){
 	}
 	if (EVO.biofilm == 'Biofilm'){
 		doc('biofilmHTML','Biofilm');
-		doc('epsHTML','<div onmouseover="tip(\'epsTip\')" onmouseout="tap(\'epsTip\')" onclick="eps()"><p><b id="epsButton">Make EPS</b><br>EPS: <span id="eps"></span><br>EPS Cost: <span id="epsCost"></span></p></div><span id="epsTip"></span>');
+		doc('epsHTML','<div onmouseover="tip(\'epsTip\')" onmouseout="tap(\'epsTip\')" onclick="eps()"><p><b id="epsButton">Make EPS</b><span id="eps10"></span><br>EPS: <span id="eps"></span><br>EPS Cost: <span id="epsCost"></span></p></div><span id="epsTip"></span>');
 		doc('eps',EVO.eps);
 		doc('epsCost',epsMath());
 	}
@@ -543,6 +551,7 @@ function evos(x){
 		doc('boostHTML','<p>Boosted Evolutions<br><br>' + 'Size: ' + EVO.size.max + '</p>');
 	}
 	EVO.evolutionSwitch = 'off';
+	updateNutrient();
 	cellUpdate();
 	updateEvolution();
 }
@@ -555,7 +564,7 @@ function specialized(x){
 	}
 	function spl(a,b,c){
 		doc(a + 'HTML','<div onmouseover="mouseOn(\'' + b +'\',\'' + a + '\')" onmouseout="mouseOff(\'' + b + '\')" onclick="specialize(\'' + a + '\')"><p><b id=\'' + a + "Button" + '\'>' + c + '</b><br>' + c + ': <span id=\'' + a + '\'></span></p></div><span id=\'' + b + '\'></span>');
-		doc(a,EVO.three[a]);
+		doc(a,EVO.two[a]);
 	}
 	if (x == 'balance'){EVO.balanceSwitch = 'on';}
 	if (EVO.balanceSwitch == 'on'){spl('balance','balTip','Statocyst');}
@@ -620,12 +629,18 @@ function cellAdhesion(){
 	}
 }
 
-function epsMath(){return Math.floor(10*Math.pow(1.01,EVO.eps));}
+function epsMath(x){
+	if (x == undefined){x = 1;}
+	var cnt = 0;
+	for (var i = 0; i < x; i++){cnt += Math.floor(10*Math.pow(1.01,EVO.eps+i));}
+	return cnt;
+}
 
-function eps(){
-	if(EVO.nutrient >= epsMath()){
-		EVO.nutrient -= epsMath();
-		EVO.eps += 1;
+function eps(x){
+	if (x == undefined){x = 1;}
+	if(EVO.nutrient >= epsMath(x)){
+		EVO.nutrient -= epsMath(x);
+		EVO.eps += x;
 		doc('eps',EVO.eps);
 		updateNutrient();
 	}
@@ -711,11 +726,26 @@ function light(){
 
 function color(x){
 	var color = document.getElementById(x + 'Button');
-	if (x == 'cell' && EVO.nutrient >= cellMath()){color.style.color = 'red';}
-	else if (x == 'eps' && EVO.mineral >= epsMath()){color.style.color = 'red';}
+	var mod = 10;
+	if (x == 'cell' && EVO.nutrient >= cellMath()){
+		color.style.color = 'red';
+		var y = '';
+		if (EVO.quorum == 'sensing'){
+			mod = 10-((EVO.cellB-EVO.cellL)%10);
+			y = ' onmouseover="doc(\'cellCost\',cellMath('+mod+'))" onmouseout="doc(\'cellCost\',cellMath())" ';
+		}
+		if (EVO.nutrient >= cellMath(mod) && mod > 1){doc('cell10','<b style="color:violet"' + y + 'onclick="buyCell('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
+		else {doc('cell10','');}
+	}
+	else if (x == 'eps' && EVO.nutrient >= epsMath()){
+		color.style.color = 'red';
+		mod = 10-(EVO.eps%10);
+		if (EVO.nutrient >= epsMath(mod) && mod > 1){doc('eps10','<b style="color:violet" onmouseover="doc(\'epsCost\',epsMath('+mod+'))" onmouseout="doc(\'epsCost\',epsMath())" onclick="eps('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
+		else {doc('eps10','');}
+	}
 	else if (x == 'evolution' && EVO.nutrient >= evolutionMath()){color.style.color = 'red';}
 	else if (x == 'move' && EVO.nutrient >= 2000 - EVO.motility - (EVO.two.muscle*10)){color.style.color = 'red';}
-	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/) && EVO.nutrient >= specializeMath(x) && EVO.cellB-EVO.cellL > EVO[x]){color.style.color = 'red';}
+	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/) && EVO.nutrient >= specializeMath(x) && EVO.cellB-EVO.cellL > EVO.two[x]){color.style.color = 'red';}
 	else {color.style.color = 'green';}
 }
 
@@ -746,6 +776,7 @@ function worm(){
 		"radial": EVO.radial,
 		"eps": EVO.eps,
 		"phd": EVO.phd,
+		"osmoregulation": EVO.osmoregulation,
 	};
 	localStorage.setItem("EVOE", JSON.stringify(evolve));
 	clearTimeout(save);

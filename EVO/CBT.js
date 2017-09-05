@@ -28,7 +28,7 @@ function run(x){
 	doc('run',EVO.combat.run);
 }
 
-function check(x,y){return x.cbtevo.indexOf(y);}
+function check(x,y){return x.combat.cbtevo.indexOf(y);}
 
 function evolutionCombat(){
 	var creation = EVO.evolution - EVO.evolved + EVO.bonus + REC.bonus;
@@ -124,16 +124,16 @@ function evolutionCombat(){
 	splCode = '';
 	var grade = 0;
 	grade = EVO.combat.offG*10;
-	if (EVO.three.boost == 'Camoflauge'){grade += 5;}
+	if (EVO.stage > 2 && EVO.three.boost == 'Camoflauge'){grade += 5;}
 	if (grade > EVO.combat.off){offCode = '<p title="Offense effects health, stamina, and strength." onclick="cbtupg(\'off\')"><b style="color:purple">Offensive</b>';}
 	grade = EVO.combat.defG*10;
-	if (EVO.three.boost == 'Territorial'){grade += 5;}
+	if (EVO.stage > 2 && EVO.three.boost == 'Territorial'){grade += 5;}
 	if (grade > EVO.combat.def){defCode = '<p title="Defense effects health, stamina, and constituion." onclick="cbtupg(\'def\')"><b style="color:purple">Defense</b>';}
 	grade = EVO.combat.spdG*10;
-	if (EVO.three.boost == 'Roaming'){grade += 5;}
+	if (EVO.stage > 2 && EVO.three.boost == 'Roaming'){grade += 5;}
 	if (grade > EVO.combat.spd){spdCode = '<p title="Speed effects health, stamina, and agility." onclick="cbtupg(\'spd\')"><b style="color:purple">Speed</b>';}
 	grade = EVO.combat.splG*10;
-	if (EVO.three.boost == 'Roaming'){grade += 5;}
+	if (EVO.stage > 2 && EVO.three.boost == 'Roaming'){grade += 5;}
 	if (grade*10 > EVO.combat.spl){splCode = '<p title="Special effects health, stamina, and dexterity." onclick="cbtupg(\'spl\')"><b style="color:purple">Special</b>';}
 	var cbtcost = '<br>Experience: <span id="exp"></span><br>Combat Cost: <span id="cbtCost"></span></p>';
 	if (offCode !== '' || defCode !== '' || spdCode !== '' || splCode !== ''){
@@ -204,12 +204,15 @@ function stat(){
 	var time = fun.mul.balance();
 	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*time));}
 	function heal(){
+		var stg;
+		if (EVO.stage == 2){stg = 'nutrient';}
+		if (EVO.stage == 3){stg = 'mineral';}
 		if (EVO.combat.hp < EVO.combat.mhp){
-			EVO.nutrient -= EVO.cellT;
+			EVO[stg] -= EVO.stage * 100;
 			EVO.combat.hp += 1;
 			doc('hp', EVO.combat.hp);
 		} else if (EVO.combat.sp < EVO.combat.msp){
-			EVO.nutrient -= EVO.cellT;
+			EVO[stg] -= EVO.stage * 100;
 			EVO.combat.sp += 1;
 			doc('sp', EVO.combat.sp);
 		}
@@ -219,6 +222,9 @@ function stat(){
 
 function cbt(a,b,c){
 	cost.fight = 'on';
+	var food;
+	if (EVO.stage == 2){food = 'nutrient';}
+	if (EVO.stage == 3){food = 'mineral';}
 	var size;
 	var one = {
 		"off": EVO.combat.off,
@@ -235,7 +241,9 @@ function cbt(a,b,c){
 		"sp": EVO.combat.sp,
 		"size": EVO.size.max,
 		"arm": 0,
-		"cbtevo": EVO.combat.cbtevo,
+		"combat": {
+			"cbtevo": EVO.combat.cbtevo,
+		},
 		"run": EVO.combat.run,
 		"line": 0,
 		"elec": 'off',
@@ -268,7 +276,9 @@ function cbt(a,b,c){
 		"msp": 0,
 		"sp": 0,
 		"arm": 0,
-		"cbtevo": [],
+		"combat": {
+			"cbtevo": [],
+		},
 		"run": 0,
 		"line": 0,
 		"elec": 'off',
@@ -503,8 +513,7 @@ function cbt(a,b,c){
 	function flee(x){
 		exp /= 2;
 		EVO.combat.exp += exp;
-		if (EVO.stage == 2){EVO.nutrient += a;}
-		if (EVO.stage == 3){EVO.mineral += a;}
+		EVO[food] += a;
 		if (x == one){
 			doc('event1HTML','You successfully ran away.  You have run to a new area.');
 			doc('event2HTML','You gained ' + exp + ' experince.');
@@ -530,8 +539,7 @@ function cbt(a,b,c){
 		doc('event2HTML',reward);
 		EVO.combat.exp += exp;
 		if (EVO.stage == 2 || EVO.three.diet !== 'Herbivore'){EVO.food += eat;}
-		if (EVO.stage == 2){EVO.nutrient += a;}
-		if (EVO.stage == 3){EVO.mineral += a;}
+		EVO[food] += a;
 		EVO.combat.won += 1;
 		stat();
 		if (b == 'event'){event();}
@@ -540,10 +548,9 @@ function cbt(a,b,c){
 	function lose(){
 		doc('event1HTML','Your opponent defeated you.');
 		EVO.combat.exp += exp/2;
-		if (EVO.stage == 2){EVO.nutrient += a;}
-		if (EVO.stage == 3){EVO.mineral += a;}
+		EVO[food] += a;
 		move();
-		EVO.nutrient = 0;
+		EVO[food] = 0;
 		EVO.combat.lost += 1;
 		if (check(one,'Regeneration') == -1){EVO.combat.scar += 1;}
 		stat();

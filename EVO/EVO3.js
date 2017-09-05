@@ -116,6 +116,7 @@ function start(){
 			EVO.radial = checksave.radial;
 			EVO.eps = checksave.eps;
 			EVO.phd = checksave.phd;
+			EVO.osmoregulation = checksave.osmoregulation;
 			EVO.date = Date.now();
 			localStorage.setItem("EVO", JSON.stringify(EVO));
 			localStorage.removeItem("EVOE");
@@ -142,7 +143,7 @@ function start(){
 		speedUp[0] += 1;
 	}
 	EVO.date = Date.now();
-	//save(Date.now());
+	save(Date.now());
 	doc('metabolismType',EVO.one.metabolismType);
 	updateFood();
 	updateMineral();
@@ -157,7 +158,7 @@ function start(){
 	light();
 	setTimeout(environment, 60000);
 	setTimeout(timer, 1000);
-	// setTimeout(events, 300000);
+	//setTimeout(events, 300000);
 	setTimeout(swirly, 30, 'on', 'on', Math.floor(Math.random()*window.innerWidth)-50, Math.floor(Math.random()*window.innerHeight)-50, 0);
 }
 
@@ -356,7 +357,7 @@ function updateMineral(){
 }
 
 function autoClick(){
-	var feed = Math.floor((EVO.one.cilia/4 + fun.add.digestive()) * fun.mul.digestive());
+	var feed = Math.floor((EVO.one.cilia/3 + fun.add.digestive()) * fun.mul.digestive());
 	if (EVO.food >= feed){
 		EVO.food -= feed;
 		var a = 0;
@@ -535,7 +536,7 @@ function evos(x){
 		EVO.evolved += cost.skeleton;
 	}
 	if (EVO.three.skeleton !== null){
-		doc('skeletonHTML',EVO.three.skeleton);
+		doc('skeletonHTML','<br>' + EVO.three.skeleton);
 	}
 	if (x == 'camo'){
 		EVO.three.boost = 'Camoflauge';
@@ -622,12 +623,18 @@ function mouseOff(x){
 	specializeNext();
 }
 
-function epsMath(){return Math.floor(10*Math.pow(1.01,EVO.eps));}
+function epsMath(x){
+	if (x == undefined){x = 1;}
+	var cnt = 0;
+	for (var i = 0; i < x; i++){cnt += Math.floor(10*Math.pow(1.01,EVO.eps+i));}
+	return cnt;
+}
 
-function eps(){
-	if(EVO.mineral >= epsMath()){
-		EVO.mineral -= epsMath();
-		EVO.eps += 1;
+function eps(x){
+	if (x == undefined){x = 1;}
+	if(EVO.mineral >= epsMath(x)){
+		EVO.mineral -= epsMath(x);
+		EVO.eps += x;
 		doc('eps',EVO.eps);
 		updateMineral();
 	}
@@ -651,7 +658,7 @@ function salinityDebuff(){
 	if (Math.floor(Math.random()*100)+1 > EVO.osmoregulation){
 		EVO.salinityCurse = ((Math.abs(EVO.salinity-35))*200)-EVO.osmoregulation;
 		if (EVO.osmoregulation >= 0){
-			EVO.osmisisLearn += fun.mul.nerve();
+			EVO.osmisisLearn += fun.mul.nerve()/2;
 			if (EVO.osmisisLearn > EVO.osmoregulation){
 				EVO.osmisisLearn -= (EVO.osmoregulation + 1);
 				EVO.osmoregulation += 1;	
@@ -711,7 +718,12 @@ function light(){
 function color(x){
 	var color = document.getElementById(x + 'Button');
 	if (x == 'evolution' && EVO.mineral >= evolutionMath()){color.style.color = 'red';}
-	else if (x == 'eps' && EVO.mineral >= epsMath()){color.style.color = 'red';}
+	else if (x == 'eps' && EVO.mineral >= epsMath()){
+		color.style.color = 'red';
+		var mod = 10-(EVO.eps%10);
+		if (EVO.mineral >= epsMath(mod)){doc('eps10','<b style="color:violet" onmouseover="doc(\'epsCost\',epsMath('+mod+'))" onmouseout="doc(\'epsCost\',epsMath())" onclick="eps('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
+		else {doc('eps10','');}
+	}
 	else if (x == 'move' && EVO.mineral >= 4000-EVO.peristalsis-(fun.add.muscle()*10)){color.style.color = 'red';}
 	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/) && EVO.mineral >= specializeMath(x)){color.style.color = 'red';}
 	else {color.style.color = 'green';}

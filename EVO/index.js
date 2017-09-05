@@ -92,3 +92,7 @@ function hard(){
 function donate(){
 	window.open("https://www.paypal.me/tygari");
 }
+
+function reddit(){
+	window.open("https://www.reddit.com/user/Tygari/");
+}
