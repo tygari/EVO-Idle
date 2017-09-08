@@ -112,6 +112,11 @@ var fun = {
 	},
 	"failtimer": function(){setTimeout(eventEnd, (Math.floor((Math.random()*240000)+1)));},
 	"move": function(){setTimeout(move, 3600000);},
+	"moveCost": function(){
+		var mem = 1;
+		if (EVO.one.membraneScore == 3){mem = 1.5;}
+		return Math.floor((2000-EVO.motility-(fun.add.muscle()*10))*(1+(EVO.size.max/100))*mem);
+	},
 };
 
 function start(){
@@ -139,8 +144,8 @@ function start(){
 			localStorage.removeItem("EVOE");
 		}
 	}
-	evos();
 	if (EVO.specialized > 1){specialized();}
+	evos();
 	var offline = Date.now() - EVO.date;
 	var speedUp = [0, 0, 0, 0, 0];
 	while (offline >= speedUp[0]){
@@ -169,7 +174,7 @@ function start(){
 	updateFood();
 	updateNutrient();
 	doc('evolutionCost',evolutionMath());
-	doc('moveHTML',2000-EVO.motility-EVO.two.muscle*10);
+	doc('moveHTML',fun.moveCost());
 	doc('current',(EVO.current/10));
 	doc('ph',(EVO.ph/10));
 	doc('salinity',EVO.salinity);
@@ -192,6 +197,11 @@ function events(){
 		updateNutrient();
 		doc('event1HTML','An aggressive colony of cells has entered your area.  They are attacking you.');
 		cbt(res,Math.floor(Math.random()*3));
+		setTimeout(busy,1000);
+		function busy(){
+			if (cost.fight == 'on'){setTimeout(busy,1000);}
+			else {setTimeout(eventEnd, 60000)}
+		}
 	}
 	if (10 < random && 20 >= random){
 		swch = 'on';
@@ -259,9 +269,8 @@ function updateFood(){
 }
 
 function move(x){
-	var moveCost = (2000 - EVO.motility - (EVO.two.muscle*10))*(1+(EVO.size.max/100));
-	if (EVO.nutrient >= moveCost){
-		EVO.nutrient -= moveCost;
+	if (EVO.nutrient >= fun.moveCost()){
+		EVO.nutrient -= fun.moveCost();
 		EVO.food = Math.floor(((Math.random()*((fun.food.max()-fun.food.min())*200)*fun.mul.muscle())+(fun.food.min()*200))*fun.mul.sight());
 		EVO.current = Math.floor(Math.random()*100)+1;
 		currentMath();
@@ -317,7 +326,7 @@ function timer(){
 }
 
 function photosynth(){
-	EVO.sun.photosynthesis += (1+(EVO.sun/100)) * fun.mul.metabolism() * fun.mul.respiratory() * fun.mul.eps();
+	EVO.sun.photosynthesis += (1+(EVO.sun.position/100)) * (1+(EVO.size.max/100)) * fun.mul.metabolism() * fun.mul.respiratory() * fun.mul.eps();
 	while (EVO.sun.photosynthesis >= 100){
 		EVO.sun.photosynthesis -= 100;
 		EVO.nutrient += 1;
@@ -587,14 +596,13 @@ function specialized(x){
 	if (EVO.radial == 'radial'){doc('symetryHTML','Radial Symetry');}
 	if (x == 'dependency'){EVO.dependency = x; x = undefined;}
 	if (EVO.dependency == 'dependency'){doc('dependencyHTML','Dependency');}
-	doc('moveHTML',2000-EVO.motility-EVO.two.muscle*10);
+	doc('moveHTML',fun.moveCost());
 	doc('specializeHTML','<p>Specilization Cost: <span id="specializeCost"></span></p>');
 	doc('stat','<div style="color:white; border-style: hidden; text-align:center"><p>Off: <span id="off"></span> &nbsp; &nbsp; Def: <span id="def"></span> &nbsp; &nbsp; Spd: <span id="spd"></span> &nbsp; &nbsp; Spl: <span id="spl"></span><br>Health: <span id="hp">0</span> / <span id="mhp"></span> &nbsp; &nbsp; &nbsp; Stats &nbsp; &nbsp; &nbsp; Stamina: <span id="sp">0</span> / <span id="msp"></span><br>Str: <span id="str"></span> &nbsp; &nbsp; Dex: <span id="dex"></span> &nbsp; &nbsp; Con: <span id="con"></span> &nbsp; &nbsp; Agl: <span id="agl"></span></p></div>');
 	doc('retreat','Retreat: <span onclick="run(\'+\')"> << </span><span id="run"></span><span onclick="run(\'-\')">% >> </span>');
 	doc('run',EVO.combat.run);
 	specializeNext(x);
-	updateNutrient();
-	updateEvolution();
+	if (x !== undefined){updateNutrient(); updateEvolution();}
 	evolutionCombat();
 	stat();
 }
@@ -657,6 +665,8 @@ function phDmg(){
 	}
 	EVO.combat.hp -= EVO.phd;
 	if(EVO.combat.hp < 0){EVO.combat.hp = 0;}
+	doc('eps',EVO.eps);
+	doc('epsCost',epsMath());
 }
 
 function salinityDebuff(){
@@ -679,7 +689,7 @@ function swarmingMotility(){
 		EVO.motilityLearn -= (EVO.motility + 1);
 		EVO.motility += 1;
 		doc('motility',EVO.motility);
-		doc('moveHTML',2000-EVO.motility-EVO.two.muscle*10);
+		doc('moveHTML',fun.moveCost());
 	}
 }
 
@@ -712,7 +722,7 @@ function specialize(x){
 		cellUpdate();
 		specializeNext(x);
 		stat();
-		if (x == 'muscle'){doc('moveHTML',2000-EVO.motility-EVO.two.muscle*10);}
+		if (x == 'muscle'){doc('moveHTML',fun.moveCost());}
 		if (x == 'sight') {light();}
 	}
 }

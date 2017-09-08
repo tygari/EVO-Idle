@@ -122,7 +122,7 @@ function evolutionCombat(){
 	var cbtcost = '<br>Experience: <span id="exp"></span><br>Combat Cost: <span id="cbtCost"></span></p>';
 	if (offCode !== '' || defCode !== '' || spdCode !== '' || splCode !== ''){
 		doc('cbt', offCode + defCode + spdCode + splCode + cbtcost);
-		doc('exp',EVO.combat.exp);
+		doc('exp',Math.floor(EVO.combat.exp));
 		doc('cbtCost',cbtMath());
 	} else {doc('cbt','');}
 	if (EVO.combat.cbtevo.length > 0){
@@ -166,7 +166,9 @@ function cbtupg(x){
 		doc(x,EVO[x]);
 		stat();
 		evolutionCombat();
+		doc('exp',Math.floor(EVO.combat.exp));
 	}
+	doc('cbtCost',cbtMath());
 }
 
 function stat(){
@@ -185,8 +187,7 @@ function stat(){
 	EVO.combat.msp = EVO.combat.off + EVO.combat.def + EVO.combat.spd + EVO.combat.spl + 10;
 	doc('msp',EVO.combat.msp);
 	doc('sp', EVO.combat.sp);
-	var time = fun.mul.balance();
-	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*time));}
+	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*fun.mul.balance()));}
 }
 
 function heal(){
@@ -202,7 +203,7 @@ function heal(){
 		EVO.combat.sp += 1;
 		doc('sp', EVO.combat.sp);
 	}
-	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*time));}
+	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*fun.mul.balance()));}
 }
 
 function cbt(a,c){
@@ -240,9 +241,10 @@ function cbt(a,c){
 	one.dex = Math.floor((EVO.combat.spl+(fun.add.respiratory()+fun.add.sight())/10)*(1+(size/10)));
 	one.con = Math.floor((EVO.combat.def+(fun.add.vascular()+fun.add.excretion())/10)*(1-(size/10)));
 	one.agl = Math.floor((EVO.combat.spd+(fun.add.balance()+fun.add.nerve())/10)*(1-(size/10)));
-	one.arm = Math.floor(EVO.two.celladhesion/50);
+	if (EVO.one.membraneScore == 3){one.arm += Math.floor(EVO.size.max/10)+1;}
+	one.arm += Math.floor(EVO.two.celladhesion/50);
 	if (check(one,'Shell') > -1){one.arm += EVO.combat.def;}
-	if (EVO.three.skeleton == 'ExoSkeleton'){
+	if (EVO.stage >= 3 && EVO.three.skeleton == 'ExoSkeleton'){
 		one.arm += 1;
 		if (EVO.stage > 3){Math.floor(fun.add.skeleton()/100);}
 	}
@@ -498,6 +500,7 @@ function cbt(a,c){
 	function flee(x){
 		exp /= 2;
 		EVO.combat.exp += exp;
+		doc('exp',Math.floor(EVO.combat.exp));
 		EVO[food] += a;
 		if (x == one){
 			doc('event1HTML','You successfully ran away.  You have run to a new area.');
@@ -522,6 +525,7 @@ function cbt(a,c){
 		if (EVO.stage == 2 || EVO.three.diet !== 'Herbivore'){reward = 'You gained ' + exp + ' experince and ' + eat + ' food.';}
 		doc('event2HTML',reward);
 		EVO.combat.exp += exp;
+		doc('exp',Math.floor(EVO.combat.exp));
 		if (EVO.stage == 2 || EVO.three.diet !== 'Herbivore'){EVO.food += eat;}
 		EVO[food] += a;
 		EVO.combat.won += 1;
@@ -531,6 +535,7 @@ function cbt(a,c){
 	function lose(){
 		doc('event1HTML','Your opponent defeated you.');
 		EVO.combat.exp += exp/2;
+		doc('exp',Math.floor(EVO.combat.exp));
 		EVO[food] += a;
 		move();
 		EVO[food] = 0;

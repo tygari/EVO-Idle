@@ -77,6 +77,11 @@ var fun = {
 	},
 	"failtimer": function(){setTimeout(eventEnd, (Math.floor((Math.random()*240000)+1)));},
 	"move": function(y){setTimeout(move, 3600000-y);},
+	"moveCost": function(){
+		var mem = 1;
+		if (EVO.one.membraneScore == 3){mem = 1.5;}
+		return Math.floor((4000-EVO.peristalsis-(fun.add.muscle()*10))*(1+(EVO.size.max/100))*mem);
+	},
 	"hunt": function(x){setTimeout(hunt, 150000-x);},
 };
 
@@ -183,7 +188,7 @@ function start(){
 	updateFood();
 	updateMineral();
 	doc('evolutionCost',evolutionMath());
-	doc('moveHTML',4000-EVO.peristalsis-(fun.add.muscle()*10));
+	doc('moveHTML',fun.moveCost());
 	doc('current',(EVO.current/10));
 	doc('ph',(EVO.ph/10));
 	doc('salinity',EVO.salinity);
@@ -271,9 +276,8 @@ function updateFood(){
 }
 
 function move(x){
-	var moveCost = (4000-EVO.peristalsis-(fun.add.muscle()*10))*(1+(EVO.size.max/100));
-	if (EVO.mineral >= moveCost){
-		EVO.mineral -= moveCost;
+	if (EVO.mineral >= fun.moveCost()){
+		EVO.mineral -= fun.moveCost();
 		if (EVO.three.diet == null){EVO.food = Math.floor((Math.random()*((fun.food.max()-fun.food.min())*300)*fun.mul.muscle())+(fun.food.min()*300)*fun.mul.sight());}
 		if (EVO.three.diet !== null){
 			huntAuto('move');
@@ -438,7 +442,7 @@ function timer(){
 function photosynth(){
 	var a = 0;
 	if (EVO.three.boost == 'Hyper Metabolic' && EVO.hp < EVO.mhp){a = EVO.spl;}
-	EVO.sun.photosynthesis += (1+(EVO.sun.position/100)) * fun.mul.metabolism() * fun.mul.respiratory() * (1+(a/100)) * fun.mul.eps();
+	EVO.sun.photosynthesis += (1+(EVO.sun.position/100)) * (1+(EVO.size.max/100)) * fun.mul.metabolism() * fun.mul.respiratory() * (1+(a/100)) * fun.mul.eps();
 	while (EVO.sun.photosynthesis >= 100){
 		EVO.sun.photosynthesis -= 100;
 		EVO.mineral += 1;
@@ -659,7 +663,7 @@ function specialized(x){
 	if (EVO.radial == 'radial'){doc('symetryHTML','Radial Symetry');}
 	if (x == 'bilateral'){EVO.bilateral = x; x = undefined;}
 	if (EVO.bilateral == 'bilateral'){doc('symetryHTML','Bilateral Symetry');}
-	doc('moveHTML',4000-EVO.peristalsis-(EVO.two.muscle+EVO.three.muscle)*10);
+	doc('moveHTML',fun.moveCost());
 	doc('specializeHTML','<p>Specilization Cost: <span id="specializeCost"></span></p>');
 	doc('retreat','Retreat: <span onclick="gage(\'run\',1)"> << </span><span id="run"></span><span onclick="gage(\'run\',-1)">% >> </span>');
 	doc('run',EVO.combat.run);
@@ -731,7 +735,7 @@ function peristalsis(){
 		EVO.peristalsisLearn -= (EVO.peristalsis + 1);
 		EVO.peristalsis += 1;
 		doc('peristalsis',EVO.peristalsis);
-		doc('moveHTML',4000-EVO.peristalsis-(fun.add.muscle()*10));
+		doc('moveHTML',fun.moveCost());
 	}
 }
 
@@ -761,7 +765,7 @@ function specialize(x){
 		updateMineral();
 		specializeNext(x);
 		stat();
-		if (x == 'muscle'){doc('moveHTML',4000-EVO.peristalsis-(fun.add.muscle()*10));}
+		if (x == 'muscle'){doc('moveHTML',fun.moveCost());}
 		if (x == 'sight'){light();}
 	}
 }

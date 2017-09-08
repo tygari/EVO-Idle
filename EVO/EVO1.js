@@ -53,6 +53,11 @@ var fun = {
 	"virus": [1 ,0, 0, 0],
 	"failtimer": function(){setTimeout(eventEnd, (Math.floor((Math.random()*240000)+1)));},
 	"move": function(){setTimeout(move, 3600000);},
+	"moveCost": function(){
+		var mem = 1;
+		if (EVO.one.membraneScore == 3){mem = 1.5;}
+		return Math.floor((1000 - EVO.one.flagellum)*(1+(EVO.size.max/100))*mem);
+	},
 };
 	
 function start(){
@@ -160,9 +165,8 @@ function updateFood(){
 }
 
 function move(x){
-	var moveCost = (1000 - EVO.one.flagellum)*(1+(EVO.size.max/100));
-	if (EVO.atp >= moveCost){
-		EVO.atp -= moveCost;
+	if (EVO.atp >= fun.moveCost()){
+		EVO.atp -= fun.moveCost();
 		EVO.food = Math.floor((Math.random()*((fun.food.max()-fun.food.min())*100)*(1+(EVO.one.flagellum/1000)))+(fun.food.min()*100));
 		if (x !== 'start'){
 			updateATP();
@@ -225,7 +229,7 @@ function timer(){
 }
 
 function photosynth(){
-	EVO.sun.photosynthesis += (1+(EVO.sun.position/100)) * fun.metabolism();
+	EVO.sun.photosynthesis += (1+(EVO.sun.position/100)) * (1+(EVO.size.max/100)) * fun.metabolism();
 	while (EVO.sun.photosynthesis >= 100){
 		EVO.sun.photosynthesis -= 100;
 		EVO.atp += 1 / fun.virus[0];
@@ -402,7 +406,7 @@ function evos(x){
 		doc('flagellumHTML','<div onmouseover="tip(\'flagellumTip\')" onmouseout="tap(\'flagellumTip\')" onclick="cilfla(\'flagellum\')"><p"><b id="flagellumButton">Grow Flagellum</b><span id="flagellum10"></span><br>Flagellum: <span id="flagellum"></span></p></div><span id="flagellumTip"></span>');
 		doc('flagellum',EVO.one.flagellum);
 	}
-	doc('moveHTML',1000-EVO.one.flagellum);
+	doc('moveHTML',fun.moveCost());
 	if (EVO.ciliaSwitch == 'on' || EVO.flagellumSwitch == 'on'){
 		doc('cilflaHTML','<p>Cost: <span id="cilflaCost"></span></p>');
 		doc('cilflaCost',cilflaMath());
@@ -530,7 +534,7 @@ function cilfla(x,y){
 		updateATP();
 	}
 	doc('cilflaCost',cilflaMath());
-	doc('moveHTML',1000-EVO.one.flagellum);
+	doc('moveHTML',fun.moveCost());
 }
 
 function metabolismMath(x){return Math.floor(fun.cytoplasm()*(10*Math.pow(2,EVO.one[x]))/100);}

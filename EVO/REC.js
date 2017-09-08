@@ -195,86 +195,22 @@ function reincarnate(){
 
 function upgrade(x,y){
 	if (x == 'food'){
-		if (y == 'min'){
-			REC.bonus -= foodMath();
-			REC[x].min += 1;
-		}
-		if (y == 'max'){
-			REC.bonus -= foodMath();
-			REC[x].max += 1;
-		}
+		REC.bonus -= foodMath();
+		REC.food[y] += 1;
 	}
 	if (x == 'cytoplasm'){
 		REC.bonus -= stageMath(x);
 		REC[x] += 1;
 	}
-	if (x == 'balance'){
+	if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/)){
 		if (y == 'cost'){
 			REC.bonus -= statMath(x);
 			REC[x].cost += 1;
 		}
 	}
-	if (x == 'nerve'){
-		if (y == 'cost'){
-			REC.bonus -= statMath(x);
-			REC[x].cost += 1;
-		}
-	}
-	if (x == 'vascular'){
-		if (y == 'cost'){
-			REC.bonus -= statMath(x);
-			REC[x].cost += 1;
-		}
-	}
-	if (x == 'muscle'){
-		if (y == 'cost'){
-			REC.bonus -= statMath(x);
-			REC[x].cost += 1;
-		}
-	}
-	if (x == 'respiratory'){
-		if (y == 'cost'){
-			REC.bonus -= statMath(x);
-			REC[x].cost += 1;
-		}
-	}
-	if (x == 'digestive'){
-		if (y == 'cost'){
-			REC.bonus -= statMath(x);
-			REC[x].cost += 1;
-		}
-	}
-	if (x == 'excretion'){
-		if (y == 'cost'){
-			REC.bonus -= statMath(x);
-			REC[x].cost += 1;
-		}
-	}
-	if (x == 'sight'){
-		if (y == 'cost'){
-			REC.bonus -= statMath(x);
-			REC[x].cost += 1;
-		}
-	}
-	if (x == 'off'){
+	if (x.match(/^(off|def|spd|spl|cbt)$/)){
 		REC.bonus -= gradeMath();
-		REC.off += 1;
-	}
-	if (x == 'def'){
-		REC.bonus -= gradeMath();
-		REC.def += 1;
-	}
-	if (x == 'spd'){
-		REC.bonus -= gradeMath();
-		REC.spd += 1;
-	}
-	if (x == 'spl'){
-		REC.bonus -= gradeMath();
-		REC.spl += 1;
-	}
-	if (x == 'cbt'){
-		REC.bonus -= gradeMath();
-		REC.cbt += 1;
+		REC[x] += 1;
 	}
 	clears();
 	resave();

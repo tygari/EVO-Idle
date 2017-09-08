@@ -3,10 +3,13 @@ function start(){
 	bcolors();
 	var EVO;
 	var REC;
+	if (localStorage.getItem("REC") !== null){
+		REC = JSON.parse(localStorage.getItem("REC"));
+	}
 	if (localStorage.getItem("EVO") !== null){
 		EVO = JSON.parse(localStorage.getItem("EVO"));
 		if (EVO.version < 0){soft();}
-		if (EVO.stage == 1){
+		if (EVO.stage >= 1){
 			if (EVO.one.metabolism > 100){hard();}
 			if (EVO.one.mitochondria > 100){hard();}
 			if (EVO.one.cytoplasm > 1000){hard();}
@@ -14,7 +17,7 @@ function start(){
 			if (EVO.flagellum > 1000){hard();}
 			if (EVO.size.max > 1){hard();}
 		}
-		if (EVO.stage == 2){
+		if (EVO.stage >= 2){
 			if (EVO.two.balance > REC.balance.max + 100){hard();}
 			if (EVO.two.nerve > REC.nerve.max + 100){hard();}
 			if (EVO.two.vascular > REC.vascular.max + 100){hard();}
@@ -25,7 +28,7 @@ function start(){
 			if (EVO.two.sight > REC.sight.max + 100){hard();}
 			if (EVO.size.max > 3){hard();}
 		}
-		if (EVO.stage == 3){
+		if (EVO.stage >= 3){
 			if (EVO.three.balance > REC.balance.max + 100){hard();}
 			if (EVO.three.nerve > REC.nerve.max + 100){hard();}
 			if (EVO.three.vascular > REC.vascular.max + 100){hard();}
@@ -36,9 +39,6 @@ function start(){
 			if (EVO.three.sight > REC.sight.max + 100){hard();}
 			if (EVO.size.max > 7){hard();}
 		}
-	}
-	if (localStorage.getItem("REC") !== null){
-		var REC = JSON.parse(localStorage.getItem("REC"));
 	}
 }
 
