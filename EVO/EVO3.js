@@ -125,7 +125,15 @@ function start(){
 	evos();
 	specialized();
 	var offline = Date.now() - EVO.date;
-	var speedUp = [0, 0, 0, 0];
+	var speedUp = [0, 0, 0, 0, 0, 0];
+	if (EVO.three.diet !== null){
+		var kill = 0;
+		if (EVO.three.boost == 'Territorial'){kill = EVO.def*6000;}
+		kill = 600000+kill-(EVO.predator*60000);
+		var graze = 0;
+		if (EVO.three.boost == 'Territorial'){graze = EVO.def*6000;}
+		graze = 600000+graze-(EVO.grazer*6000);
+	}
 	while (offline >= speedUp[0]){
 		if (speedUp[0] >= speedUp[1] + (2001-((fun.add.vascular()*10)+EVO.salinityCurse))){
 			autoClick();
@@ -136,9 +144,36 @@ function start(){
 			move('start');
 			speedUp[2] = speedUp[0];
 		}
-		if (speedUp[0] >= speedUp[3] + 60000){
+		if (EVO.three.diet !== null){
+			if (speedUp[0] >= speedUp[3] + kill){
+				huntAuto('kill');
+				speedUp[3] = speedUp[0];
+			}
+			if (speedUp[0] >= speedUp[4] + graze){
+				huntAuto('graze');
+				speedUp[4] = speedUp[0];
+			}
+			if (EVO.three.diet == 'Carnivore'){var hnt = EVO.grazer*1000;}
+			if (EVO.three.diet == 'Herbivore'){var hnt = EVO.field*100;}
+			if (speedUp[0] >= speedUp[5] + 150000-hnt){
+				if (EVO.three.diet == 'Carnivore' && (fun.add.balance()+fun.add.nerve()+fun.add.vascular()+fun.add.muscle()+fun.add.respiratory()+fun.add.digestive()+fun.add.excretion()+fun.add.sight())/8 > Math.random() * EVO.stage * 100){
+					if (EVO.grazer > 0){
+						EVO.grazer -= 1;
+						EVO.food = Math.floor((Math.random()*((fun.food.max()-fun.food.min())*100)*fun.mul.muscle())+(fun.food.min()*10)*fun.mul.sight());
+					}
+				}
+				if (EVO.three.diet == 'Herbivore'){
+					if (EVO.field > 0){
+						EVO.field -= 1;
+						EVO.food = Math.floor((Math.random()*((fun.food.max()-fun.food.min())*10)*fun.mul.muscle())+(fun.food.min()*10)*fun.mul.sight());
+					}
+				}
+				speedUp[5] = speedUp[0];
+			}
+		}
+		if (speedUp[0] >= speedUp[6] + 60000){
 			environment('start');
-			speedUp[3] = speedUp[0];
+			speedUp[6] = speedUp[0];
 		}
 		speedUp[0] += 1;
 	}
@@ -147,7 +182,6 @@ function start(){
 	doc('metabolismType',EVO.one.metabolismType);
 	updateFood();
 	updateMineral();
-	if (EVO.three.diet !== null){huntAuto('start');}
 	doc('evolutionCost',evolutionMath());
 	doc('moveHTML',4000-EVO.peristalsis-(fun.add.muscle()*10));
 	doc('current',(EVO.current/10));
@@ -156,6 +190,10 @@ function start(){
 	doc('eps',EVO.eps);
 	doc('epsCost',epsMath());
 	light();
+	if (EVO.three.diet !== null){
+		huntAuto();
+		hunt();
+	}
 	setTimeout(environment, 60000);
 	setTimeout(timer, 1000);
 	//setTimeout(events, 300000);
@@ -237,6 +275,14 @@ function move(x){
 	if (EVO.mineral >= moveCost){
 		EVO.mineral -= moveCost;
 		if (EVO.three.diet == null){EVO.food = Math.floor((Math.random()*((fun.food.max()-fun.food.min())*300)*fun.mul.muscle())+(fun.food.min()*300)*fun.mul.sight());}
+		if (EVO.three.diet !== null){
+			huntAuto('move');
+			if (x !== 'start'){
+				huntAuto();
+				clearTimeout(fun.hunt());
+				fun.hunt();
+			}
+		}
 		if (x !== 'start'){
 			updateMineral();
 			EVO.current = Math.floor(Math.random()*100)+1;
@@ -250,25 +296,24 @@ function move(x){
 			if (EVO.three.boost == 'Roaming'){y = EVO.spd*30000;}
 			clearTimeout(fun.move(y));
 			fun.move(y);
-			if (EVO.three.diet !== null){
-				huntAuto();
-				clearTimeout(fun.hunt());
-				fun.hunt();
-			}
 		}
 	}
 }
 
 function huntAuto(x){
-	if (x !== 'start'){
+	if (x == 'move'){
 		EVO.predator = Math.floor(Math.random()*10)+1;
 		EVO.grazer = Math.floor(Math.random()*(100-(EVO.predator*5))+(EVO.predator*5)+1);
 		EVO.field = Math.floor(Math.random()*(1000-(EVO.grazer*5))+(EVO.grazer*5)+1);
 	}
-	var a = 0;
-	if (EVO.three.boost == 'Territorial'){a = EVO.def*6000;}
-	setTimeout(pred,600000+a-(EVO.predator*60000));
-	setTimeout(graze,600000+a-(EVO.grazer*6000));
+	if (x == 'kill'){pred();}
+	if (x == 'graze'){graze();}
+	if (x == undefined){
+		var a = 0;
+		if (EVO.three.boost == 'Territorial'){a = EVO.def*6000;}
+		setTimeout(pred,600000+a-(EVO.predator*60000));
+		setTimeout(graze,600000+a-(EVO.grazer*6000);
+	}
 	function pred(){
 		if (EVO.predator + (EVO.grazer*4) > Math.floor(Math.random()*100)+1){
 			var fight = Math.floor(Math.random()*100)+1;
@@ -277,8 +322,10 @@ function huntAuto(x){
 			if (fight < 61 && EVO.grazer > 0){EVO.grazer -= 1;}
 			if ((EVO.predator+1)*10 < EVO.grazer){EVO.predator += 1;}
 		}
-		updateFood();
-		setTimeout(pred,600000+a-(EVO.predator*60000));
+		if (x == undefined){
+			updateFood();
+			setTimeout(pred,600000+a-(EVO.predator*60000));
+		}
 	}
 	function graze(){
 		if (((EVO.predator*4) + Math.floor(EVO.grazer/4)) > Math.floor(Math.random()*100)+1){
@@ -289,14 +336,16 @@ function huntAuto(x){
 			if (EVO.field > 0){EVO.field -= 1;}
 			if ((EVO.grazer+1)*10 < EVO.field){EVO.grazer += 1;}
 		}
-		updateFood();
-		setTimeout(graze,600000+a-(EVO.grazer*6000));
+		if (x == undefined){
+			updateFood();
+			setTimeout(graze,600000+a-(EVO.grazer*6000));
+		}
 	}
 }
 
 function hunt(){
 	if (cost.fight == 'off'){
-		if (EVO.food < 1 && EVO.three.diet !== null && EVO.hp >= Math.floor(EVO.combat.hlth*EVO.mhp/100) && EVO.sp >= Math.floor(EVO.combat.spcl*EVO.msp/100)){
+		if (EVO.food < 1 && EVO.three.diet !== null && EVO.combat.hp >= Math.floor(EVO.combat.hlth*EVO.combat.mhp/100) && EVO.combat.sp >= Math.floor(EVO.combat.spcl*EVO.combat.msp/100)){
 			doc('eventHTML','<div style="color:white; border-style: hidden; text-align:center"><p><span id="event1HTML"></span><br><span id="event2HTML"></span></p></div>');
 			var res = 4000-EVO.peristalsis-((EVO.two.muscle+EVO.three.muscle)*10);
 			var run = function (){EVO.mineral -= res; updateMineral();}
@@ -307,24 +356,24 @@ function hunt(){
 				if (EVO.predator > fight && EVO.predator > 0){
 					doc('event1HTML','You meet an aggressive predatore.  You are being attacked.');
 					run;
-					cbt(res,'hunt',Math.floor(Math.random()*3)+3);
+					cbt(res,Math.floor(Math.random()*3)+3);
 				}
 				else if (EVO.predator+(EVO.grazer*4)+a > fight && EVO.grazer > 0){
 					doc('event1HTML','You meet a unattentive grazer.  You are attacking.');
 					run;
-					cbt(res,'hunt',Math.floor(Math.random()*3));
+					cbt(res,Math.floor(Math.random()*3));
 				}
 			}
 			if (EVO.three.diet == 'Herbivore'){
 				if (EVO.predator*4-a > fight && EVO.predator > 0){
 					doc('event1HTML','You meet an aggressive predatore.  You are being attacked.');
 					run;
-					cbt(res,'hunt',Math.floor(Math.random()*3)+3);
+					cbt(res,Math.floor(Math.random()*3)+3);
 				}
 				else if (EVO.predator*4+(EVO.grazer/4)-a > fight && EVO.grazer > 0){
 					doc('event1HTML','You meet a territorial grazer.  You are being attacked.');
 					run;
-					cbt(res,'hunt',Math.floor(Math.random()*3));
+					cbt(res,Math.floor(Math.random()*3));
 				}
 				if (EVO.field > 0){
 					EVO.field -= 1;
@@ -332,13 +381,19 @@ function hunt(){
 				}
 			}
 		}
-		if (cost.fight == 'off'){
-			if (EVO.three.diet == 'Carnivore'){var x = EVO.grazer*1000;}
-			if (EVO.three.diet == 'Herbivore'){var x = EVO.field*100;}
-			fun.hunt(x);
-		}
+		if (cost.fight == 'off'){rehunt();}
+		if (cost.fight == 'off'){doc('eventHTML','');}
 	}
-	if (cost.fight == 'off'){doc('eventHTML','');}
+	if (cost.fight == 'on'){setTimeout(busy,1000);}
+	function busy(){
+		if (cost.fight == 'on'){setTimeout(busy,1000);}
+		else {rehunt();}
+	}
+	function rehunt(){
+		if (EVO.three.diet == 'Carnivore'){var x = EVO.grazer*1000;}
+		if (EVO.three.diet == 'Herbivore'){var x = EVO.field*100;}
+		fun.hunt(x);
+	}
 }
 
 function updateMineral(){
@@ -505,6 +560,7 @@ function evos(x){
 	if (x == 'carn'){
 		EVO.three.diet = 'Carnivore';
 		EVO.evolved += cost.diet;
+		huntAuto('move');
 		huntAuto();
 		fun.hunt();
 	}
@@ -514,6 +570,7 @@ function evos(x){
 	if (x == 'herb'){
 		EVO.three.diet = 'Herbivore';
 		EVO.evolved += cost.diet;
+		huntAuto('move');
 		huntAuto();
 		fun.hunt();
 	}
@@ -522,9 +579,9 @@ function evos(x){
 	}
 	if (EVO.three.diet !== null){
 		doc('dietHTML','<br>Diet: ' + EVO.three.diet);
-		doc('health','Health: <span onclick="hlth(\'+\')"> << </span><span id="hlth"></span><span onclick="hlth(\'-\')">% >> </span>');
+		doc('health','Health: <span onclick="gage(\'hlth\',1)"> << </span><span id="hlth"></span><span onclick="gage(\'hlth\',-1)">% >> </span>');
 		doc('hlth',EVO.combat.hlth);
-		doc('special','Special: <span onclick="spcl(\'+\')"> << </span><span id="spcl"></span><span onclick="spcl(\'-\')">% >> </span>');
+		doc('special','Special: <span onclick="gage(\'spcl\',1)"> << </span><span id="spcl"></span><span onclick="gage(\'spcl\',-1)">% >> </span>');
 		doc('spcl',EVO.combat.spcl);
 	}
 	if (x == 'inn'){
@@ -604,7 +661,7 @@ function specialized(x){
 	if (EVO.bilateral == 'bilateral'){doc('symetryHTML','Bilateral Symetry');}
 	doc('moveHTML',4000-EVO.peristalsis-(EVO.two.muscle+EVO.three.muscle)*10);
 	doc('specializeHTML','<p>Specilization Cost: <span id="specializeCost"></span></p>');
-	doc('retreat','Retreat: <span onclick="run(\'+\')"> << </span><span id="run"></span><span onclick="run(\'-\')">% >> </span>');
+	doc('retreat','Retreat: <span onclick="gage(\'run\',1)"> << </span><span id="run"></span><span onclick="gage(\'run\',-1)">% >> </span>');
 	doc('run',EVO.combat.run);
 	specializeNext(x);
 	updateMineral();
@@ -721,12 +778,15 @@ function color(x){
 	else if (x == 'eps' && EVO.mineral >= epsMath()){
 		color.style.color = 'red';
 		var mod = 10-(EVO.eps%10);
-		if (EVO.mineral >= epsMath(mod)){doc('eps10','<b style="color:violet" onmouseover="doc(\'epsCost\',epsMath('+mod+'))" onmouseout="doc(\'epsCost\',epsMath())" onclick="eps('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc('eps10','');}
+		if (EVO.mineral >= epsMath(mod)){doc(x+'10','<b style="color:violet" onmouseover="doc(\'epsCost\',epsMath('+mod+'))" onmouseout="doc(\'epsCost\',epsMath())" onclick="eps('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
+		else {doc(x+'10','');}
 	}
 	else if (x == 'move' && EVO.mineral >= 4000-EVO.peristalsis-(fun.add.muscle()*10)){color.style.color = 'red';}
 	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/) && EVO.mineral >= specializeMath(x)){color.style.color = 'red';}
-	else {color.style.color = 'green';}
+	else {
+		color.style.color = 'green';
+		if (x.match(/^(eps)$/)){doc(x+'10','');}
+	}
 }
 
 function tip(x){

@@ -191,8 +191,7 @@ function events(){
 		EVO.nutrient -= res;
 		updateNutrient();
 		doc('event1HTML','An aggressive colony of cells has entered your area.  They are attacking you.');
-		cost.fight = 'on';
-		cbt(res,'event',Math.floor(Math.random()*3));
+		cbt(res,Math.floor(Math.random()*3));
 	}
 	if (10 < random && 20 >= random){
 		swch = 'on';
@@ -734,19 +733,22 @@ function color(x){
 			mod = 10-((EVO.cellB-EVO.cellL)%10);
 			y = ' onmouseover="doc(\'cellCost\',cellMath('+mod+'))" onmouseout="doc(\'cellCost\',cellMath())" ';
 		}
-		if (EVO.nutrient >= cellMath(mod) && mod > 1){doc('cell10','<b style="color:violet"' + y + 'onclick="buyCell('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc('cell10','');}
+		if (EVO.nutrient >= cellMath(mod) && mod > 1){doc(x+'10','<b style="color:violet"' + y + 'onclick="buyCell('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
+		else {doc(x+'10','');}
 	}
 	else if (x == 'eps' && EVO.nutrient >= epsMath()){
 		color.style.color = 'red';
 		mod = 10-(EVO.eps%10);
-		if (EVO.nutrient >= epsMath(mod) && mod > 1){doc('eps10','<b style="color:violet" onmouseover="doc(\'epsCost\',epsMath('+mod+'))" onmouseout="doc(\'epsCost\',epsMath())" onclick="eps('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc('eps10','');}
+		if (EVO.nutrient >= epsMath(mod) && mod > 1){doc(x+'10','<b style="color:violet" onmouseover="doc(\'epsCost\',epsMath('+mod+'))" onmouseout="doc(\'epsCost\',epsMath())" onclick="eps('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
+		else {doc(x+'10','');}
 	}
 	else if (x == 'evolution' && EVO.nutrient >= evolutionMath()){color.style.color = 'red';}
 	else if (x == 'move' && EVO.nutrient >= 2000 - EVO.motility - (EVO.two.muscle*10)){color.style.color = 'red';}
 	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/) && EVO.nutrient >= specializeMath(x) && EVO.cellB-EVO.cellL > EVO.two[x]){color.style.color = 'red';}
-	else {color.style.color = 'green';}
+	else {
+		color.style.color = 'green';
+		if (x.match(/^(cell|eps)$/)){doc(x+'10','');}
+	}
 }
 
 function worm(){

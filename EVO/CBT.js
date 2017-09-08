@@ -1,31 +1,15 @@
-function hlth(x){
-	var hlth = EVO.combat.hlth;
-	if (x == '+'){hlth++;}
-	if (x == '-'){hlth--;}
-	if (hlth < 0){hlth = 0;}
-	if (hlth > 100){hlth = 100;}
-	EVO.combat.hlth = hlth;
-	doc('hlth',EVO.combat.hlth);
-}
+/*document.getElementById('hlth').addEventListener("wheel",function(e){
+	if (e.deltaY > 0){gage('hlth',1);}
+	else {gage('hlth',-1);}
+});*/
 
-function spcl(x){
-	var spcl = EVO.combat.spcl;
-	if (x == '+'){spcl++;}
-	if (x == '-'){spcl--;}
-	if (spcl < 0){spcl = 0;}
-	if (spcl > 100){spcl = 100;}
-	EVO.combat.spcl = spcl;
-	doc('spcl',EVO.combat.spcl);
-}
-
-function run(x){
-	var run = EVO.combat.run;
-	if (x == '+'){run++;}
-	if (x == '-'){run--;}
-	if (run < 0){run = 0;}
-	if (run > 100){run = 100;}
-	EVO.combat.run = run;
-	doc('run',EVO.combat.run);
+function gage(x,y){
+	var gage = EVO.combat[x];
+	gage += y;
+	if (gage < 0){gage = 0;}
+	if (gage > 100){gage = 100;}
+	EVO.combat[x] = gage;
+	doc(x,gage);
 }
 
 function check(x,y){return x.combat.cbtevo.indexOf(y);}
@@ -203,24 +187,25 @@ function stat(){
 	doc('sp', EVO.combat.sp);
 	var time = fun.mul.balance();
 	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*time));}
-	function heal(){
-		var stg;
-		if (EVO.stage == 2){stg = 'nutrient';}
-		if (EVO.stage == 3){stg = 'mineral';}
-		if (EVO.combat.hp < EVO.combat.mhp){
-			EVO[stg] -= EVO.stage * 100;
-			EVO.combat.hp += 1;
-			doc('hp', EVO.combat.hp);
-		} else if (EVO.combat.sp < EVO.combat.msp){
-			EVO[stg] -= EVO.stage * 100;
-			EVO.combat.sp += 1;
-			doc('sp', EVO.combat.sp);
-		}
-		if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*time));}
-	}
 }
 
-function cbt(a,b,c){
+function heal(){
+	var stg;
+	if (EVO.stage == 2){stg = 'nutrient';}
+	if (EVO.stage == 3){stg = 'mineral';}
+	if (EVO.combat.hp < EVO.combat.mhp){
+		EVO[stg] -= EVO.stage * 100;
+		EVO.combat.hp += 1;
+		doc('hp', EVO.combat.hp);
+	} else if (EVO.combat.sp < EVO.combat.msp){
+		EVO[stg] -= EVO.stage * 100;
+		EVO.combat.sp += 1;
+		doc('sp', EVO.combat.sp);
+	}
+	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*time));}
+}
+
+function cbt(a,c){
 	cost.fight = 'on';
 	var food;
 	if (EVO.stage == 2){food = 'nutrient';}
@@ -526,8 +511,7 @@ function cbt(a,b,c){
 			EVO.combat.won += 1;
 		}
 		stat();
-		if (b == 'event'){event();}
-		if (b == 'hunt'){hunts();}
+		cost.fight = 'off';
 	}
 	function win(){
 		var eat = eat += fun.add.digestive()*10;
@@ -542,8 +526,7 @@ function cbt(a,b,c){
 		EVO[food] += a;
 		EVO.combat.won += 1;
 		stat();
-		if (b == 'event'){event();}
-		if (b == 'hunt'){hunts();}
+		cost.fight = 'off';
 	}
 	function lose(){
 		doc('event1HTML','Your opponent defeated you.');
@@ -556,12 +539,5 @@ function cbt(a,b,c){
 		stat();
 		setTimeout(carnate,10000,c);
 	}
-	function event(){
-		cost.fight = 'off';
-		setTimeout(eventEnd,10000);
-	}
-	function hunts(){
-		cost.fight = 'off';
-		fun.hunt();
-	}
+
 }

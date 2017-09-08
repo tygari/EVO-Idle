@@ -101,10 +101,8 @@ function laySwitch(){
 
 function nocarnate(x){
 	doc('eventHTML','');
-	cost.fight = 'off';
 	laySwitch();
-	if (x == 'event'){setTimeout(eventEnd, 5000);}
-	if (c == 'hunt'){fun.hunt();}
+	cost.fight = 'off';
 }
 
 function recarnate(){

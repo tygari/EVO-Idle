@@ -94,5 +94,9 @@ function donate(){
 }
 
 function reddit(){
-	window.open("https://www.reddit.com/user/Tygari/");
+	window.open("https://www.reddit.com/user/Tygari");
+}
+
+function github(){
+	window.open("https://github.com/tygari/EVO-Idle");
 }

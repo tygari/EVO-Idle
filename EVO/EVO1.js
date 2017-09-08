@@ -9,6 +9,7 @@ var EVO = {
 		"cilia": 0,
 		"flagellum": 0,
 		"cytoplasm": -1,
+		"membraneScore": 0,
 	},
 	"sun":{
 		"photosynthesis": 0,
@@ -25,7 +26,6 @@ var EVO = {
 	"evolved": 0,
 	"bonus": 0,
 	"evolutionSwitch": 'off',
-	"membraneScore": 0,
 	"mitosis": 0,
 	"mitosisSwitch": 'off',
 	"mitosisLimit": 5,
@@ -54,7 +54,7 @@ var fun = {
 	"failtimer": function(){setTimeout(eventEnd, (Math.floor((Math.random()*240000)+1)));},
 	"move": function(){setTimeout(move, 3600000);},
 };
-// window.onload = function(){;}	
+	
 function start(){
 	if (localStorage.getItem("REC") !== null){REC = JSON.parse(localStorage.getItem("REC"));}
 	if (localStorage.getItem("EVO") !== null){EVO = JSON.parse(localStorage.getItem("EVO"));}
@@ -87,8 +87,6 @@ function start(){
 	else {setTimeout(timer, 6000);}
 	setTimeout(events, 300000);
 	setTimeout(swirly, 30, 'on', 'on', Math.floor(Math.random()*window.innerWidth)-50, Math.floor(Math.random()*window.innerHeight)-50, 0);
-	EVO.bonus = 1000;
-	EVO.atp = 100000000000000;
 }
 
 function events(){
@@ -120,7 +118,7 @@ function events(){
 
 function horizontal(){
 	clearTimeout(fun.failtimer());
-	if ((15-(EVO.membraneScore*5))+((EVO.rnaB-EVO.rnaS)/100) > Math.floor((Math.random() * 100)+1)) {EVO.bonus += 1;}
+	if ((15-(EVO.one.membraneScore*5))+((EVO.rnaB-EVO.rnaS)/100) > Math.floor((Math.random() * 100)+1)) {EVO.bonus += 1;}
 	eventEnd();
 }
 	
@@ -217,7 +215,7 @@ function timer(){
 	var time;
 	if (EVO.ciliaSwitch == 'on' && EVO.one.cilia > 0){time = 1001-EVO.one.cytoplasm;}
 	else {
-		var a = EVO.membraneScore;
+		var a = EVO.one.membraneScore;
 		if (a > 2){a = 2;}
 		time = 6000-(a*2000);
 	}
@@ -280,27 +278,27 @@ function updateEvolution(){
 	var naCode = '';
 	var multicelluarCode = '';
 	var sizeCode = '';
-	if (EVO.membraneScore == 0 && creation >= cost.doublebubble){
+	if (EVO.one.membraneScore == 0 && creation >= cost.doublebubble){
 		EVO.evolutionSwitch = 'on';
 		membraneCode = '<p title="Your first evolution.  Double wall bubbles were the first evolution of cells." onclick="evos(\'membrane\')"><b style="color:blue">Double Bubble</b></p>';
 	}
-	if (EVO.membraneScore == 1 && creation >= cost.phospholipid){
+	if (EVO.one.membraneScore == 1 && creation >= cost.phospholipid){
 		EVO.evolutionSwitch = 'on';
 		membraneCode = '<p title="Phospholipid membranes are aligned amphipathic molecule chains.  All modern cells carry this pivitol characteristic." onclick="evos(\'membrane\')"><b style="color:blue">Phospholipid</b></p>';
 	}
-	if (EVO.membraneScore == 2 && EVO.cytoskeleton == 'cytoskeleton' && creation >= cost.cellwall){
+	if (EVO.one.membraneScore == 2 && EVO.cytoskeleton == 'cytoskeleton' && creation >= cost.cellwall){
 		EVO.evolutionSwitch = 'on';
 		membraneCode = '<p title="Cell Wall is a thick hard shell around a cells Phospholipid membrane.  It greatly enahnces a cells durability but drasticly reduces a cells mobility."  onclick="evos(\'membrane\')"><b style="color:blue">Cell Wall</b></p>';
 	}
-	if (EVO.rnaSwitch == 'on' && EVO.membraneScore >= 2 && EVO.mitosisSwitch == 'off' && creation >= cost.mitosis){
+	if (EVO.rnaSwitch == 'on' && EVO.one.membraneScore >= 2 && EVO.mitosisSwitch == 'off' && creation >= cost.mitosis){
 		EVO.evolutionSwitch = 'on';
 		mitosisCode = '<p title="Your cell has evolved basic reproduction." onclick="evos(\'reproduce\')"><b style="color:blue">Mitosis</b></p>';
 	}
-	if (EVO.membraneScore > 0 && EVO.one.cytoplasm == -1 && creation >= cost.cytoplasm){
+	if (EVO.one.membraneScore > 0 && EVO.one.cytoplasm == -1 && creation >= cost.cytoplasm){
 		EVO.evolutionSwitch = 'on';
 		cytoplasmCode = '<p title="Cytoplasm is the liquid inside cells which all organelles float." onclick="evos(\'cytoplasm\')"><b style="color:blue">Cytoplasm</b></p>';
 	}		
-	if (EVO.membraneScore >= 2 && EVO.cytoskeleton === null && creation >= cost.cytoskeleton){
+	if (EVO.one.membraneScore >= 2 && EVO.cytoskeleton === null && creation >= cost.cytoskeleton){
 		EVO.evolutionSwitch = 'on';
 		cytoskeletonCode = '<p title="The innernal and external structure of a cell is skeletally held together via microfilaments, intermediate filaments, and microtubules." onclick="evos(\'cytoskeleton\')"><b style="color:blue">Cytoskeleton</b></p>';
 	}
@@ -351,14 +349,14 @@ function updateEvolution(){
 
 function evos(x){
 	if (x == 'membrane'){
-		if (EVO.membraneScore == 0){EVO.evolved += cost.doublebubble;}
-		if (EVO.membraneScore == 1){EVO.evolved += cost.phospholipid;}
-		if (EVO.membraneScore == 2){EVO.evolved += cost.cellwall;}
-		EVO.membraneScore += 1;
+		if (EVO.one.membraneScore == 0){EVO.evolved += cost.doublebubble;}
+		if (EVO.one.membraneScore == 1){EVO.evolved += cost.phospholipid;}
+		if (EVO.one.membraneScore == 2){EVO.evolved += cost.cellwall;}
+		EVO.one.membraneScore += 1;
 	}
-	if (EVO.membraneScore == 1){doc('membrane','Double Bubble');}
-	if (EVO.membraneScore == 2){doc('membrane','Phospholipid');}
-	if (EVO.membraneScore == 3){doc('membrane','Cell Wall');}
+	if (EVO.one.membraneScore == 1){doc('membrane','Double Bubble');}
+	if (EVO.one.membraneScore == 2){doc('membrane','Phospholipid');}
+	if (EVO.one.membraneScore == 3){doc('membrane','Cell Wall');}
 	if (x == 'reproduce'){
 		EVO.mitosisSwitch = 'on';
 		EVO.evolved += cost.mitosis;
@@ -606,8 +604,8 @@ function color(x){
 	else if (x == 'cytoplasm' && EVO.atp >= cytoplasmMath()) {
 		color.style.color = 'red';
 		mod = 10-(EVO.one.cytoplasm%10);
-		if (EVO.atp >= cytoplasmMath(mod) && mod > 1){doc('cytoplasm10','<b style="color:violet" onmouseover="doc(\'cytoplasmCost\',cytoplasmMath('+mod+'))" onmouseout="doc(\'cytoplasmCost\',cytoplasmMath())" onclick="buyCytoplasm('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc('cytoplasm10','');}
+		if (EVO.atp >= cytoplasmMath(mod) && mod > 1){doc(x+'10','<b style="color:violet" onmouseover="doc(\'cytoplasmCost\',cytoplasmMath('+mod+'))" onmouseout="doc(\'cytoplasmCost\',cytoplasmMath())" onclick="buyCytoplasm('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
+		else {doc(x+'10','');}
 	}
 	else if (x.match(/^(cilia|flagellum)$/) && EVO.atp >= cilflaMath()){
 		color.style.color = 'red';
@@ -618,18 +616,21 @@ function color(x){
 	else if (x == 'rna' && EVO.atp >= naMath('rnaB')){
 		color.style.color = 'red';
 		mod = 10-((EVO.rnaB-EVO.rnaS)%10);
-		if (EVO.atp >= naMath('rnaB',mod) && mod > 1){doc('rna10','<b style="color:violet" onmouseover="doc(\'rnaCost\',naMath(\'rnaB\','+mod+'))" onmouseout="doc(\'rnaCost\',naMath(\'rnaB\'))" onclick="buyRNA('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc('rna10','');}
+		if (EVO.atp >= naMath('rnaB',mod) && mod > 1){doc(x+'10','<b style="color:violet" onmouseover="doc(\'rnaCost\',naMath(\'rnaB\','+mod+'))" onmouseout="doc(\'rnaCost\',naMath(\'rnaB\'))" onclick="buyRNA('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
+		else {doc(x+'10','');}
 	}
 	else if (x == 'dna' && EVO.rnaB-EVO.rnaS >= naMath('dnaB')){
 		color.style.color = 'red';
 		mod = 10-((EVO.dnaB-EVO.dnaS)%10);
-		if (EVO.rnaB-EVO.rnaS >= naMath('dnaB',mod) && mod > 1){doc('dna10','<b style="color:violet" onmouseover="doc(\'dnaCost\',naMath(\'dnaB\','+mod+'))" onmouseout="doc(\'dnaCost\',naMath(\'dnaB\'))" onclick="buyDNA('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc('dna10','');}
+		if (EVO.rnaB-EVO.rnaS >= naMath('dnaB',mod) && mod > 1){doc(x+'10','<b style="color:violet" onmouseover="doc(\'dnaCost\',naMath(\'dnaB\','+mod+'))" onmouseout="doc(\'dnaCost\',naMath(\'dnaB\'))" onclick="buyDNA('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
+		else {doc(x+'10','');}
 	}
 	else if (x == 'metabolism' && EVO.rnaB-EVO.rnaS >= metabolismMath('metabolism')){color.style.color = 'red';}
 	else if (x == 'mitochondria' && EVO.dnaB-EVO.dnaS >= metabolismMath('mitochondria')){color.style.color = 'red';}
-	else {color.style.color = 'green';}
+	else {
+		color.style.color = 'green';
+		if (x.match(/^(cytoplasm|cilia|flagellum|rna|dna)$/)){doc(x+'10','');}
+	}
 }
 
 function multicelluar(){
