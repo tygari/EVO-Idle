@@ -316,7 +316,7 @@ function huntAuto(x){
 		var a = 0;
 		if (EVO.three.boost == 'Territorial'){a = EVO.def*6000;}
 		setTimeout(pred,600000+a-(EVO.predator*60000));
-		setTimeout(graze,600000+a-(EVO.grazer*6000);
+		setTimeout(graze,600000+a-(EVO.grazer*6000));
 	}
 	function pred(){
 		if (EVO.predator + (EVO.grazer*4) > Math.floor(Math.random()*100)+1){
