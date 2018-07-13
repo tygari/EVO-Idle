@@ -432,7 +432,7 @@ function updateEvolution(){
 	}
 	if (cell >= 30 && EVO.organization == 'organization' && EVO.specialization == null && creation >= cost.specialization){
 		evos('specialization');
-	}//EVO.specialized.match(/^(1|2)$/)
+	}
 	if (cell >= cells && (EVO.specialized == 1 || EVO.specialized == 2) && creation >= special && EVO.specialization == 'specialization'){specializationSwitch();}
 	if (cell >= cells && (EVO.specialized == 3 || EVO.specialized == 4) && creation >= special && EVO.symmetry == 'circular'){specializationSwitch();}
 	if (cell >= cells && (EVO.specialized == 5 || EVO.specialized == 6) && creation >= special && EVO.dependency == 'dependency'){specializationSwitch();}
