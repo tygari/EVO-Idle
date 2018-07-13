@@ -1,192 +1,186 @@
-/*document.getElementById('hlth').addEventListener("wheel",function(e){
-	if (e.deltaY > 0){gage('hlth',1);}
-	else {gage('hlth',-1);}
-});*/
-
 function gage(x,y){
 	var gage = EVO.combat[x];
 	gage += y;
 	if (gage < 0){gage = 0;}
 	if (gage > 100){gage = 100;}
 	EVO.combat[x] = gage;
-	doc(x,gage);
+	css(x,gage);
 }
 
 function check(x,y){return x.combat.cbtevo.indexOf(y);}
 
 function evolutionCombat(){
-	var creation = EVO.evolution - EVO.evolved + EVO.bonus + REC.bonus;
-	var swt = 'off';
-	var offCode = '';
-	var defCode = '';
-	var spdCode = '';
-	var splCode = '';
-	var combatCode = '';
-	var mth = (1+EVO.combat.cbtevo.length)*10;
-	var chk;
-	var stg;
-	var cnt;
-	var max = EVO.combat.cbtMax + REC.cbt;
-	if (EVO.specialized > 1 && Math.floor(EVO.stage/2) > EVO.combat.offG + EVO.combat.defG + EVO.combat.spdG + EVO.combat.splG && creation >= (EVO.combat.offG + EVO.combat.defG + EVO.combat.spdG + EVO.combat.splG + 1)*10){
-		swt = 'on';
-		if (EVO.muscleSwitch == 'on' || EVO.digestiveSwitch == 'on' || EVO.stage > 3) {offCode = '<p title="Offensive evolutions are the embodiment of those who strike first strike last." onclick="combat(\'off\')"><b style="color:purple">Offensive</b></p>';}
-		if (EVO.respiratorySwitch == 'on' || EVO.sightSwitch == 'on' || EVO.stage > 3) {defCode = '<p title="Defensive evolutions are the embodiment of not having to last forever just last long enough." onclick="combat(\'def\')"><b style="color:purple">Defensive</b></p>';}
-		if (EVO.vascularSwitch == 'on' || EVO.excretionSwitch == 'on' || EVO.stage > 3) {spdCode = '<p title="Speed evolutions are the embodiment if they can\'t be caught they can\'t be hurt." onclick="combat(\'spd\')"><b style="color:purple">Speed</b></p>';}
-		if (EVO.balanceSwitch == 'on' || EVO.nerveSwitch == 'on' || EVO.stage > 3) {splCode = '<p title="Special evolutions are the embodiment of being able to do something amazing and terrifying." onclick="combat(\'spl\')"><b style="color:purple">Special</b></p>';}
+	let combat = document.getElementById('combatnavevo');
+	combat.classList.replace('taboff','gold');
+	let com = EVO.combat;
+	let creation = creations();
+	let offCode = '';
+	let defCode = '';
+	let spdCode = '';
+	let splCode = '';
+	let mth = (1+com.cbtevo.length)*10;
+	let chk,stg,cnt;
+	let max = com.cbtMax + REC.ability;
+	let cbt = function(y){return '<p id="'+y+'" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="combat(this.id)"></p>'};
+	if (EVO.specialized > 1 && Math.floor(EVO.stage/2) > com.offG + com.defG + com.spdG + com.splG && creation >= (com.offG + com.defG + com.spdG + com.splG + 1)*10){
+		if (EVO.muscleSwitch == 'on' || EVO.digestiveSwitch == 'on' || EVO.stage > 3) {offCode = cbt('offense');}
+		if (EVO.respiratorySwitch == 'on' || EVO.sightSwitch == 'on' || EVO.stage > 3) {defCode = cbt('defense');}
+		if (EVO.vascularSwitch == 'on' || EVO.excretionSwitch == 'on' || EVO.stage > 3) {spdCode = cbt('speed');}
+		if (EVO.balanceSwitch == 'on' || EVO.nerveSwitch == 'on' || EVO.stage > 3) {splCode = cbt('special');}
 	}
-	if (EVO.combat.offG > 0){
+	if (com.offG > 0){
 		chk = 0;
-		if (check(EVO,'Extra Limbs') > -1){chk += 1;}
-		if (check(EVO,'Fierce') > -1){chk += 1;}
-		if (check(EVO,'Critical') > -1){chk += 1;}
-		//if (check(EVO,'Gluttonous') > -1){chk += 1;}
-		if (EVO.combat.offG + REC.off > chk && max > EVO.combat.cbtevo.length && creation >= mth){
-			swt = 'on';
+		if (check(EVO,'limb') > -1){chk += 1;}
+		if (check(EVO,'frce') > -1){chk += 1;}
+		if (check(EVO,'crit') > -1){chk += 1;}
+		if (com.offG + REC.offensive > chk && max > com.cbtevo.length && creation >= mth){
 			stg = '';
 			cnt = 0;
-			var off = [];
-			if (check(EVO,'Extra Limbs') == -1 && EVO.stage == 2){stg = '<p title="Extra Limbs are special limbs that do more than normal limbs." onclick="combat(\'limb\')"><b style="color:purple">Extra Limbs</b></p>';}
-			if (check(EVO,'Fierce') == -1 && cnt < 2){off[cnt] = '<p title="Fierce creatures fight harder if not smarter." onclick="combat(\'frce\')"><b style="color:purple">Fierce</b></p>'; cnt++;}
-			if (check(EVO,'Critical') == -1 && cnt < 2){off[cnt] = '<p title="Wild attacks sometimes hit vunerable spots." onclick="combat(\'crit\')"><b style="color:purple">Critical</b></p>'; cnt++;}
-			//if (check(EVO,'Gluttonous') == -1 && cnt < 2){off[cnt] = '<p title="Gluttonous sinfully over eatting large amounts of food from your bigger kills." onclick="combat(\'glut\')"><b style="color:purple">Gluttonous</b></p>'; cnt++;}
+			let off = [];
+			if (check(EVO,'limb') == -1 && EVO.stage == 2){stg = cbt('limb');}
+			if (check(EVO,'frce') == -1 && cnt < 2){off[cnt] = cbt('frce'); cnt++;}
+			if (check(EVO,'crit') == -1 && cnt < 2){off[cnt] = cbt('crit'); cnt++;}
 			offCode = stg + off[0] + off[1];
 		}
 	}
-	if (EVO.combat.defG > 0){
+	if (com.defG > 0){
 		chk = 0;
-		if (check(EVO,'Shell') > -1){chk += 1;}
-		if (check(EVO,'Anti-Venom') > -1){chk += 1;}
-		if (check(EVO,'Regeneration') > -1){chk += 1;}
-		if (EVO.combat.defG + REC.def > chk && max > EVO.combat.cbtevo.length && creation >= mth){
-			swt = 'on';
+		if (check(EVO,'shell') > -1){chk += 1;}
+		if (check(EVO,'anti') > -1){chk += 1;}
+		if (check(EVO,'regen') > -1){chk += 1;}
+		if (com.defG + REC.defensive > chk && max > com.cbtevo.length && creation >= mth){
 			stg = '';
 			cnt = 0;
-			var def = [];
-			if (check(EVO,'Shell') == -1 && EVO.stage == 2){stg = '<p title="Shells are a protective coating of extracellular polymeric substance." onclick="combat(\'shell\')"><b style="color:purple">Shell</b></p>';}
-			if (check(EVO,'Anti-Venom') == -1 && cnt < 2){def[cnt] = '<p title="AntiVenom neutralizes the powerful effects of venom." onclick="combat(\'anti\')"><b style="color:purple">Anti-Venom</b></p>'; cnt++;}
-			if (check(EVO,'Regeneration') == -1 && cnt < 2){def[cnt] = '<p title="Regeneration heals wounds completely after battle." onclick="combat(\'regen\')"><b style="color:purple">Regeneration</b></p>'; cnt++;}
+			let def = [];
+			if (check(EVO,'shell') == -1 && EVO.stage == 2){stg = cbt('shell');}
+			if (check(EVO,'anti') == -1 && cnt < 2){def[cnt] = cbt('anti'); cnt++;}
+			if (check(EVO,'regen') == -1 && cnt < 2){def[cnt] = cbt('regen'); cnt++;}
 			defCode = stg + def[0] + def[1];
 		}
 	}
-	if (EVO.combat.spdG > 0){
+	if (com.spdG > 0){
 		chk = 0;
-		if (check(EVO,'Burst') > -1){chk += 1;}
-		if (check(EVO,'Run') > -1){chk += 1;}
-		if (check(EVO,'Streamline') > -1){chk += 1;}
-		if (EVO.combat.spdG + REC.spd > chk && max > EVO.combat.cbtevo.length && creation >= mth){
-			swt = 'on';
+		if (check(EVO,'burst') > -1){chk += 1;}
+		if (check(EVO,'run') > -1){chk += 1;}
+		if (check(EVO,'line') > -1){chk += 1;}
+		if (com.spdG + REC.speed > chk && max > com.cbtevo.length && creation >= mth){
 			stg = '';
 			cnt = 0;
-			var spd = [];
-			if (check(EVO,'Burst') == -1 && EVO.stage == 2){stg = '<p title="Burst is a sudden surge of speed." onclick="combat(\'burst\')"><b style="color:purple">Burst</b></p>';}
-			if (check(EVO,'Run') == -1 && cnt < 2){spd[cnt] = '<p title="Run how quickly one can flee a battle." onclick="combat(\'run\')"><b style="color:purple">Run</b></p>'; cnt++;}
-			if (check(EVO,'Streamline') == -1 && cnt < 2){spd[cnt] = '<p title="Streamline refines the efficiency of the body in combat." onclick="combat(\'line\')"><b style="color:purple">Streamline</b></p>'; cnt++;}
+			let spd = [];
+			if (check(EVO,'burst') == -1 && EVO.stage == 2){stg = cbt('burst');}
+			if (check(EVO,'run') == -1 && cnt < 2){spd[cnt] = cbt('run'); cnt++;}
+			if (check(EVO,'line') == -1 && cnt < 2){spd[cnt] = cbt('line'); cnt++;}
 			spdCode = stg + spd[0] + spd[1];
 		}
 	}
-	if (EVO.combat.splG > 0){
+	if (com.splG > 0){
 		chk = 0;
-		if (check(EVO,'Electrogenesis') > -1){chk += 1;}
-		if (check(EVO,'Venom') > -1){chk += 1;}
-		if (check(EVO,'Luminesence') > -1){chk += 1;}
-		if (EVO.combat.splG + REC.spl > chk && max > EVO.combat.cbtevo.length && creation >= mth){
-			swt = 'on';
+		if (check(EVO,'elec') > -1){chk += 1;}
+		if (check(EVO,'venom') > -1){chk += 1;}
+		if (check(EVO,'lumin') > -1){chk += 1;}
+		if (com.splG + REC.special > chk && max > com.cbtevo.length && creation >= mth){
 			stg = '';
 			cnt = 0;
-			var spl = [];
-			if (check(EVO,'Electrogenesis') == -1 && EVO.stage == 2){stg = '<p title="Electrogenesis is the ability to create an electric field for both prey and predators." onclick="combat(\'elec\')"><b style="color:purple">Electrogenesis</b></p>';}
-			if (check(EVO,'Venom') == -1 && cnt < 2){spl[cnt] = '<p title="Venom is the use of poisons for both prey and predators." onclick="combat(\'venom\')"><b style="color:purple">Venom</b></p>'; cnt++;}
-			if (check(EVO,'Luminesence') == -1 && cnt < 2){spl[cnt] = '<p title="Luminesence is the ability to attract prey and blind predators." onclick="combat(\'lumin\')"><b style="color:purple">Luminesence</b></p>'; cnt++;}
+			let spl = [];
+			if (check(EVO,'elec') == -1 && EVO.stage == 2){stg = cbt('elec');}
+			if (check(EVO,'venom') == -1 && cnt < 2){spl[cnt] = cbt('venom'); cnt++;}
+			if (check(EVO,'lumin') == -1 && cnt < 2){spl[cnt] = cbt('lumin'); cnt++;}
 			splCode = stg + spl[0] + spl[1];
 		}
 	}
-	if (swt == 'on'){combatCode = '<p style="color:white" title="Choose your combat evolution carefully.">Combat Evolutions</p>';}
-	doc('evolutionCombat',combatCode + offCode + defCode + spdCode + splCode);
+	let combatCode = '<p class="combats gold"></p>';
+	let code = combatCode + offCode + defCode + spdCode + splCode;
+	doc('combatUpgrade',code);
+	if (code == combatCode){
+		combat.classList.replace('gold','taboff');
+	}
+	if((com.offG > 0 || com.defG > 0 || com.spdG > 0 || com.splG > 0) && !document.getElementById('experience')){
+		copy('combat','experience');
+		document.getElementById('experience').removeAttribute("onclick");
+	}
+	css('experience',Math.floor(com.exp));
 	offCode = '';
 	defCode = '';
 	spdCode = '';
 	splCode = '';
-	var grade = 0;
-	grade = EVO.combat.offG*10;
+	let grade = 0;
+	let html = function(z){
+		if (grade > com[z] && !document.getElementById(z)){copy('combat',z);}
+		if (0 < com[z] && grade <= com[z] && document.getElementById(z)){document.getElementById(z).remove();}
+	}
+	grade = com.offG*10;
 	if (EVO.stage > 2 && EVO.three.boost == 'Camoflauge'){grade += 5;}
-	if (grade > EVO.combat.off){offCode = '<p title="Offense effects health, stamina, and strength." onclick="cbtupg(\'off\')"><b style="color:purple">Offensive</b>';}
-	grade = EVO.combat.defG*10;
+	html('offense');
+	grade = com.defG*10;
 	if (EVO.stage > 2 && EVO.three.boost == 'Territorial'){grade += 5;}
-	if (grade > EVO.combat.def){defCode = '<p title="Defense effects health, stamina, and constituion." onclick="cbtupg(\'def\')"><b style="color:purple">Defense</b>';}
-	grade = EVO.combat.spdG*10;
+	html('defense');
+	grade = com.spdG*10;
 	if (EVO.stage > 2 && EVO.three.boost == 'Roaming'){grade += 5;}
-	if (grade > EVO.combat.spd){spdCode = '<p title="Speed effects health, stamina, and agility." onclick="cbtupg(\'spd\')"><b style="color:purple">Speed</b>';}
-	grade = EVO.combat.splG*10;
+	html('speed');
+	grade = com.splG*10;
 	if (EVO.stage > 2 && EVO.three.boost == 'Roaming'){grade += 5;}
-	if (grade*10 > EVO.combat.spl){splCode = '<p title="Special effects health, stamina, and dexterity." onclick="cbtupg(\'spl\')"><b style="color:purple">Special</b>';}
-	var cbtcost = '<br>Experience: <span id="exp"></span><br>Combat Cost: <span id="cbtCost"></span></p>';
-	if (offCode !== '' || defCode !== '' || spdCode !== '' || splCode !== ''){
-		doc('cbt', offCode + defCode + spdCode + splCode + cbtcost);
-		doc('exp',Math.floor(EVO.combat.exp));
-		doc('cbtCost',cbtMath());
-	} else {doc('cbt','');}
-	if (EVO.combat.cbtevo.length > 0){
-		var cbtevo = '';
-		for (i = 0; i < EVO.combat.cbtevo.length; i++){
-			cbtevo = cbtevo + '<br>' + EVO.combat.cbtevo[i];
+	html('special');
+	if (com.cbtevo.length > 0){
+		let cbtevo = '';
+		for (let i = 0; i < com.cbtevo.length; i++){
+			cbtevo += '<span id="'+com.cbtevo[i]+'" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></span>';
 		}
-		doc('cbtevoHTML','<p>Combat Evolutions<br>' + cbtevo + '</p>');
+		doc('cbtevoHTML','<br><p>Combat Evolutions<br><br>' + cbtevo + '</p>');
 	}
 }
 
 function combat(x){
-	if (x == 'off'){EVO.combat.offG += 1; EVO.combat.cbtMax += 1;}
-	if (x == 'def'){EVO.combat.defG += 1; EVO.combat.cbtMax += 1;}
-	if (x == 'spd'){EVO.combat.spdG += 1; EVO.combat.cbtMax += 1;}
-	if (x == 'spl'){EVO.combat.splG += 1; EVO.combat.cbtMax += 1;}
-	if (x == 'limb'){EVO.combat.cbtevo.push("Extra Limbs");}
-	if (x == 'frce'){EVO.combat.cbtevo.push("Fierce");}
-	if (x == 'crit'){EVO.combat.cbtevo.push("Critical");}
-	//if (x == 'glut'){EVO.combat.cbtevo.push("Gluttonous");}
-	if (x == 'shell'){EVO.combat.cbtevo.push("Shell");}
-	if (x == 'anti'){EVO.combat.cbtevo.push("Anti-Venom");}
-	if (x == 'regen'){EVO.combat.cbtevo.push("Regeneration");}
-	if (x == 'burst'){EVO.combat.cbtevo.push("Burst");}
-	if (x == 'run'){EVO.combat.cbtevo.push("Run");}
-	if (x == 'line'){EVO.combat.cbtevo.push("Streamline");}
-	if (x == 'elec'){EVO.combat.cbtevo.push("Electrogenesis");}
-	if (x == 'venom'){EVO.combat.cbtevo.push("Venom");}
-	if (x == 'lumin'){EVO.combat.cbtevo.push("Luminesence");}
-	if (x.match(/^(off|def|spd|spl)$/)) {EVO.evolved += (EVO.combat.offG + EVO.combat.defG + EVO.combat.spdG + EVO.combat.splG)*10;}
-	else {EVO.evolved += (1+EVO.combat.cbtevo.length)*10;}
+	let cbt = EVO.combat.cbtevo;
+	if (x == 'offense'){EVO.combat.offG += 1; EVO.combat.cbtMax += 1;}
+	else if (x == 'defense'){EVO.combat.defG += 1; EVO.combat.cbtMax += 1;}
+	else if (x == 'speed'){EVO.combat.spdG += 1; EVO.combat.cbtMax += 1;}
+	else if (x == 'special'){EVO.combat.splG += 1; EVO.combat.cbtMax += 1;}
+	else if (x == 'limb'){cbt.push(x);}
+	else if (x == 'frce'){cbt.push(x);}
+	else if (x == 'crit'){cbt.push(x);}
+	else if (x == 'shell'){cbt.push(x);}
+	else if (x == 'anti'){cbt.push(x);}
+	else if (x == 'regen'){cbt.push(x);}
+	else if (x == 'burst'){cbt.push(x);}
+	else if (x == 'run'){cbt.push(x);}
+	else if (x == 'line'){cbt.push(x);}
+	else if (x == 'elec'){cbt.push(x);}
+	else if (x == 'venom'){cbt.push(x);}
+	else if (x == 'lumin'){cbt.push(x);}
+	if (x.match(/^(offense|defense|speed|special)$/)) {EVO.evolved += (EVO.combat.offG + EVO.combat.defG + EVO.combat.spdG + EVO.combat.splG)*10;}
+	else {EVO.evolved += (1+cbt.length)*10;}
 	evolutionCombat();
 }
 
-function cbtMath(){return Math.floor(10*Math.pow(2,EVO.combat.off + EVO.combat.def + EVO.combat.spd + EVO.combat.spl));}
+function cbtMath(){return Math.floor(10*Math.pow(2,EVO.combat.offense + EVO.combat.defense + EVO.combat.speed + EVO.combat.special));}
 
 function cbtupg(x){
 	if(EVO.combat.exp >= cbtMath()){
 		EVO.combat.exp -= cbtMath();
-		EVO[x] += 1;
-		doc(x,EVO[x]);
+		EVO.combat[x] += 1;
+		css(x,EVO.combat[x]);
 		stat();
 		evolutionCombat();
-		doc('exp',Math.floor(EVO.combat.exp));
+		css('experience',Math.floor(EVO.combat.exp));
 	}
-	doc('cbtCost',cbtMath());
 }
 
 function stat(){
-	doc('off',EVO.combat.off);
-	doc('def',EVO.combat.def);
-	doc('spd',EVO.combat.spd);
-	doc('spl',EVO.combat.spl);
-	doc('str',Math.floor(EVO.combat.off+(fun.add.muscle()+fun.add.digestive())/10));
-	doc('dex',Math.floor(EVO.combat.spl+(fun.add.respiratory()+fun.add.sight())/10));
-	doc('con',Math.floor(EVO.combat.def+(fun.add.vascular()+fun.add.excretion())/10));
-	doc('agl',Math.floor(EVO.combat.spd+(fun.add.balance()+fun.add.nerve())/10));
-	EVO.combat.mhp = Math.floor((EVO.combat.def+(fun.add.vascular()+fun.add.excretion())/10) * (1+(EVO.combat.off+EVO.combat.def+EVO.combat.spd+EVO.combat.spl)/100) * (1-(EVO.combat.scar/100)));
+	css('off',EVO.combat.offense);
+	css('def',EVO.combat.defense);
+	css('spd',EVO.combat.speed);
+	css('spl',EVO.combat.special);
+	css('str',Math.floor(EVO.combat.offense+(fun.add.muscle()+fun.add.digestive())/10));
+	css('dex',Math.floor(EVO.combat.special+(fun.add.respiratory()+fun.add.sight())/10));
+	css('con',Math.floor(EVO.combat.defense+(fun.add.vascular()+fun.add.excretion())/10));
+	css('agl',Math.floor(EVO.combat.speed+(fun.add.balance()+fun.add.nerve())/10));
+	EVO.combat.mhp = Math.floor((EVO.combat.defense+(fun.add.vascular()+fun.add.excretion())/10) * (1+(EVO.combat.offense+EVO.combat.defense+EVO.combat.speed+EVO.combat.special)/100)*(1-(EVO.combat.scar/100)));
 	if (EVO.combat.mhp < 10){EVO.combat.mhp = 10;}
-	doc('mhp',EVO.combat.mhp);
-	doc('hp', EVO.combat.hp);
-	EVO.combat.msp = EVO.combat.off + EVO.combat.def + EVO.combat.spd + EVO.combat.spl + 10;
-	doc('msp',EVO.combat.msp);
-	doc('sp', EVO.combat.sp);
+	css('mhp',EVO.combat.mhp);
+	css('hp', EVO.combat.hp);
+	EVO.combat.msp = EVO.combat.offense + EVO.combat.defense + EVO.combat.speed + EVO.combat.special + 10;
+	css('msp',EVO.combat.msp);
+	css('sp', EVO.combat.sp);
 	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*fun.mul.balance()));}
 }
 
@@ -194,29 +188,45 @@ function heal(){
 	var stg;
 	if (EVO.stage == 2){stg = 'nutrient';}
 	if (EVO.stage == 3){stg = 'mineral';}
-	if (EVO.combat.hp < EVO.combat.mhp){
-		EVO[stg] -= EVO.stage * 100;
+	var cost = 100-(EVO.one.mitosis/10);
+	if (EVO.combat.hp < EVO.combat.mhp && EVO[stg] >= EVO.stage*cost){
+		EVO[stg] -= EVO.stage*cost;
 		EVO.combat.hp += 1;
-		doc('hp', EVO.combat.hp);
-	} else if (EVO.combat.sp < EVO.combat.msp){
-		EVO[stg] -= EVO.stage * 100;
+		css('hp', EVO.combat.hp);
+	} else if (EVO.combat.sp < EVO.combat.msp && EVO[stg] >= EVO.stage*cost){
+		EVO[stg] -= EVO.stage*cost;
 		EVO.combat.sp += 1;
-		doc('sp', EVO.combat.sp);
+		css('sp', EVO.combat.sp);
 	}
 	if (EVO.combat.hp < EVO.combat.mhp || EVO.combat.sp < EVO.combat.msp){setTimeout(heal, Math.ceil(60000*fun.mul.balance()));}
 }
 
-function cbt(a,c){
+var abilityCost = {
+	'limb': 3,
+	'frce': 1,
+	'crit': 0,
+	'shell': 3,
+	'anti': 1,
+	'regen': 0,
+	'burst': 3,
+	'run': 1,
+	'line': 0,
+	'elec': 3,
+	'venom': 3,
+	'lumin': 3,
+};
+
+function cbt(moveCost,npcSizeMod){
 	cost.fight = 'on';
 	var food;
 	if (EVO.stage == 2){food = 'nutrient';}
 	if (EVO.stage == 3){food = 'mineral';}
 	var size;
 	var one = {
-		"off": EVO.combat.off,
-		"def": EVO.combat.def,
-		"spd": EVO.combat.spd,
-		"spl": EVO.combat.spl,
+		"off": EVO.combat.offense,
+		"def": EVO.combat.defense,
+		"spd": EVO.combat.speed,
+		"spl": EVO.combat.special,
 		"str": 0,
 		"dex": 0,
 		"con": 0,
@@ -225,30 +235,30 @@ function cbt(a,c){
 		"hp": EVO.combat.hp,
 		"msp": EVO.combat.msp,
 		"sp": EVO.combat.sp,
-		"size": EVO.size.max,
+		"size": EVO.size.game,
 		"arm": 0,
 		"combat": {
 			"cbtevo": EVO.combat.cbtevo,
 		},
-		"run": EVO.combat.run,
+		"retreat": EVO.combat.retreat,
 		"line": 0,
 		"elec": 'off',
 		"venom": 'off',
 		"vendur": 0,
 	};
-	size = one.size - c;
-	one.str = Math.floor((EVO.combat.off+(fun.add.muscle()+fun.add.digestive())/10)*(1+(size/10)));
-	one.dex = Math.floor((EVO.combat.spl+(fun.add.respiratory()+fun.add.sight())/10)*(1+(size/10)));
-	one.con = Math.floor((EVO.combat.def+(fun.add.vascular()+fun.add.excretion())/10)*(1-(size/10)));
-	one.agl = Math.floor((EVO.combat.spd+(fun.add.balance()+fun.add.nerve())/10)*(1-(size/10)));
-	if (EVO.one.membraneScore == 3){one.arm += Math.floor(EVO.size.max/10)+1;}
+	size = one.size - npcSizeMod;
+	one.str = Math.floor((EVO.combat.offense+(fun.add.muscle()+fun.add.digestive())/10)*(1+(size/10)));
+	one.con = Math.floor((EVO.combat.defense+(fun.add.vascular()+fun.add.excretion())/10)*(1+(size/10)));
+	one.dex = Math.floor((EVO.combat.special+(fun.add.respiratory()+fun.add.sight())/10)*(1-(size/10)));
+	one.agl = Math.floor((EVO.combat.speed+(fun.add.balance()+fun.add.nerve())/10)*(1-(size/10)));
+	if (EVO.one.membraneScore == 3){one.arm += Math.floor(EVO.size.game/10)+1;}
 	one.arm += Math.floor(EVO.two.celladhesion/50);
-	if (check(one,'Shell') > -1){one.arm += EVO.combat.def;}
+	if (check(one,'shell') > -1){one.arm += EVO.combat.defense;}
 	if (EVO.stage >= 3 && EVO.three.skeleton == 'ExoSkeleton'){
 		one.arm += 1;
 		if (EVO.stage > 3){Math.floor(fun.add.skeleton()/100);}
 	}
-	if (check(one,'Streamline') > -1){one.line = Math.floor(one.spd/10);}
+	if (check(one,'line') > -1){one.line = Math.floor(one.spd/10);}
 	var two = {
 		"off": 0,
 		"def": 0,
@@ -266,7 +276,7 @@ function cbt(a,c){
 		"combat": {
 			"cbtevo": [],
 		},
-		"run": 0,
+		"retreat": 0,
 		"line": 0,
 		"elec": 'off',
 		"venom": 'off',
@@ -274,10 +284,10 @@ function cbt(a,c){
 	};
 	npc();
 	function npc(){
-		size = c - one.size;
-		var points = Math.floor((EVO.combat.off+EVO.combat.def+EVO.combat.spd+EVO.combat.spl)+(fun.add.muscle()+fun.add.digestive()+fun.add.vascular()+fun.add.excretion()+fun.add.balance()+fun.add.nerve()+fun.add.respiratory()+fun.add.sight())/10);
-		for (i = 0; i < points; i++){
-			rnd = Math.floor(Math.random()*4);
+		size = npcSizeMod - one.size;
+		var points = Math.floor((EVO.combat.offense+EVO.combat.defense+EVO.combat.speed+EVO.combat.special)+(fun.add.muscle()+fun.add.digestive()+fun.add.vascular()+fun.add.excretion()+fun.add.balance()+fun.add.nerve()+fun.add.respiratory()+fun.add.sight())/10);
+		for (let i = 0; i < points; i++){
+			let rnd = Math.floor(Math.random()*4);
 			if (rnd == 0){two.str++;}
 			else if (rnd == 1){two.con++;}
 			else if (rnd == 2){two.dex++;}
@@ -290,13 +300,13 @@ function cbt(a,c){
 		two.mhp = Math.floor(two.con*(1+(two.off+two.def+two.spd+two.spl)/100));
 		two.msp = two.off+two.def+two.spd+two.spl+10;
 		two.arm = EVO.combat.cbtevo.length;
-		two.run = 20;
+		two.retreat = 20;
+		if (two.mhp < 10){two.mhp = 10;}
+		two.hp = two.mhp;
+		if (two.msp < 10){two.msp = 10;}
+		two.sp = two.msp;
 	}
-	if (two.mhp < 10){two.mhp = 10;}
-	two.hp = two.mhp;
-	if (two.msp < 10){two.msp = 10;}
-	two.sp = two.msp;
-	if (check(two,'Streamline') > -1){two.line = Math.floor(two.spd/10);}
+	if (check(two,'line') > -1){two.line = Math.floor(two.spd/10);}
 	function sp(x,y){
 		var spc = y - x.line;
 		if (spc < 0){spc = 0;}
@@ -305,15 +315,15 @@ function cbt(a,c){
 	function electro(x,y){
 		if (y.spl >= Math.floor((Math.random()*100)+1)){
 			y.elec = 'on';
-			if (x == one){elec = '<p>Your opponent has been stunned.</p>';}
-			if (x == two){elec = '<p>Your opponent has stunned you.</p>';}
+			if (x == one){elec = '<br>Your opponent has been stunned.';}
+			if (x == two){elec = '<br>Your opponent has stunned you.';}
 		}
 	}
 	function venom(x,y){
 		y.venom = 'on';
 		y.vendur = Math.floor(x.spl/5);
-		if (x == one){veno = '<p>Your opponent has been poisoned.</p>';}
-		if (x == two){veno = '<p>Your opponent has poisoned you.</p>';}
+		if (x == one){veno = '<br>Your opponent has been poisoned.';}
+		if (x == two){veno = '<br>Your opponent has poisoned you.';}
 	}
 	var fled = 'off';
 	var exp = two.off + two.def + two.spd + two.spl + two.str + two.dex + two.con + two.agl;
@@ -334,174 +344,171 @@ function cbt(a,c){
 	var vdmg;
 	var elec;
 	var veno;
-	var limb;
-	var crit;
-	var act1;
-	var act2;
-	function fight(x,y){
+	var attNum;
+	var text;
+	function fight(attacker,defender){
 		vdmg = '';
 		elec = '';
 		veno = '';
-		limb = '';
-		crit = '';
-		act1 = '';
-		act2 = '';
-		var spcx = 0;
-		var spcy = 0;
-		if (x.venom == 'on'){
-			var ven = Math.floor(y.spl/5);
-			if (check(x,'Anti-Venom') > -1 && x.sp - sp(x,spcx) > 0){
-				ven -= Math.floor(x.def/5);
-				spcx += 1;
+		attNum = 1;
+		text = '';
+		var spcAtt = 0;
+		var spcDef = 0;
+		if (attacker.venom == 'on'){
+			let ven = Math.floor(defender.spl/5);
+			if (check(attacker,'anti') > -1 && attacker.sp - sp(attacker,spcAtt) > 0){
+				ven -= Math.floor(attacker.defender/5);
+				spcAtt += abilityCost.anti;
 			}
-			x.hp -= ven;
-			x.vendur -= 1;
-			if (x.vendur <= 0){x.venom = 'off';}
-			if (x == one){vdmg = '<p>You recieved ' + ven + ' points of venom damage.</p>';}
-			if (x == two){vdmg = '<p>Your opponent recieved ' + ven + ' points of venom damage.</p>';}
+			attacker.hp -= ven;
+			attacker.vendur -= 1;
+			if (attacker == one){vdmg = '<br>You recieved ' + ven + ' points of venom damage.';}
+			if (attacker == two){vdmg = '<br>Your opponent recieved ' + ven + ' points of venom damage.';}
+			if (attacker.vendur < 1){
+				attacker.venom = 'off';
+				if (attacker == one){vdmg += '<br>You are no longer poisoned.';}
+				if (attacker == two){vdmg += '<br>Your opponent is no longer poisoned.';}
+			}
 		}
-		if (x.elec == 'off' && x.hp > 0 && y.hp > 0){
+		if (attacker.elec == 'off' && attacker.hp > 0 && defender.hp > 0){
 			var action = 'on';
-			var exh = 1;
-			if (x.sp < 1){exh = 2;}
-			var oexh = 1;
-			if (y.sp < 1){oexh = 2;}
-			var run = x.mhp*x.run/100;
+			var attExh = 1;
+			if (attacker.sp < 1){attExh = 2;}
+			var defExh = 1;
+			if (defender.sp < 1){defExh = 2;}
+			var retreat = attacker.mhp*attacker.retreat/100;
 			var lumin = 'off';
-			if (x.hp > run){
-				if (check(x,'Extra Limbs') > -1 && x.sp - sp(x,spcx) > 0){
-					limb = 'first';
-					spcx += 3;
-				}
-				var hit = x.dex;
-				if (check(y,'Luminesence') > -1 && y.sp - sp(y,spcy) > 0){
-					hit -= Math.floor(y.spl/2);
+			if (attacker.hp > retreat){
+				var hit = attacker.dex;
+				if (check(defender,'lumin') > -1 && defender.sp - sp(defender,spcDef) > 0){
+					hit -= Math.floor(defender.spl/2);
 					lumin = 'on';
-					spcy += 3;
-				}
-				var dge = y.agl/2;
-				if (check(y,'Burst') > -1 && y.sp - sp(y,spcy) > 0){
-					dge *= Math.floor(y.spd/3);
-					spcy += 3;
+					spcDef += abilityCost.lumin;
 				}
 				if (hit < 1){hit = 1;}
-				if (dge < 1){dge = 1;}
-				if (hit/exh > Math.random()*((hit/exh)+(dge/oexh))){
-					if (y.elec == 'off' && check(x,'Electrogenesis') > -1 && x.sp - sp(x,spcx) > 0){electro(x,y); spcx += 3;}
-					if (y.venom == 'off' && check(x,'Venom') > -1 && x.sp - sp(x,spcx) > 0){venom(x,y); spcx += 3;}
-					var dex = x.dex;
-					if (lumin == 'on') {dex -= y.spl/2;}
-					if (dex < 0){dex = 0;}
-					dex = Math.floor(dex);
-					var dmg = (Math.random()*x.str-dex)+dex;
-					if (limb == 'first '){
-						dmg = dmg/2;
-						dmg += (dmg*x.off/100);
-					}
-					if (check(x,'Fierce') > -1 && x.sp - sp(x,spcx) > 0){
-						dmg += (dmg*(x.off*2)/100);
-						spcx += 1;
-					}
-					if (check(x,'Critical') > -1 && (x.off*0.5).toFixed(1) > (Math.random()*100)+1){
-						crit = 'critical '
-						dmg *= ((x.off*2.5).toFixed(1)+100)/100;
-					}
-					dmg = ((dmg/exh)-y.arm);
-					if (dmg < 1){dmg = 1;}
-					dmg = Math.floor(dmg);
-					y.hp -= dmg;
-					if (x == one){act1 = '<p>Your ' + limb + crit + 'hit dealt ' + dmg + ' damage.</p>';}
-					if (x == two){act1 = '<p>Your opponents ' + limb + crit + 'hit dealt ' + dmg + ' damage.</p>';}
-				} else {
-					if (x == one){act1 = '<p>Your ' + limb + 'hit missed.</p>';}
-					if (x == two){act1 = '<p>Your opponents ' + limb + 'hit missed.</p>';}
+				var dge = defender.agl/2;
+				if (check(defender,'burst') > -1 && defender.sp - sp(defender,spcDef) > 0){
+					dge *= Math.floor(defender.spd/3);
+					spcDef += abilityCost.burst;
 				}
-				if (limb == 'first'){
-					crit = 'hit';
-					if (hit/exh > Math.random()*((hit/exh)+(dge/oexh))){
-						if (y.elec == 'off' && check(x,'Electrogenesis') > -1 && x.sp - sp(x,spcx) > 0){electro(x,y); spcx += 3;}
-						if (y.venom == 'off' && check(x,'Venom') > -1 && x.sp - sp(x,spcx) > 0){venom(x,y); spcx += 3;}
-						var dex = x.dex;
-						if (lumin == 'on') {dex -= y.spl/2;}
-						if (dex < 0){dex = 0;}
+				if (dge < 1){dge = 1;}
+				if (check(attacker,'limb') > -1 && attacker.sp - sp(attacker,spcAtt) > 0){
+					attNum++;
+					spcAtt += abilityCost.limb;
+				}
+				for (let i = 0; i < attNum; i++){
+					attack(i);
+					action = 'off';
+				}
+				function attack(i){
+					let number = '';
+					let damage = 'miss';
+					let critical = '';
+					if (hit/attExh > Math.random()*((hit/attExh)+(dge/defExh))){
+						if (defender.elec == 'off' && check(attacker,'elec') > -1 && attacker.sp - sp(attacker,spcAtt) > 0){
+							electro(attacker,defender);
+							spcAtt += abilityCost.elec;
+						}
+						if (defender.venom == 'off' && check(attacker,'venom') > -1 && attacker.sp - sp(attacker,spcAtt) > 0){
+							venom(attacker,defender);
+							spcAtt += abilityCost.venom;
+						}
+						var str = attacker.str;
+						var dex = attacker.dex;
+						if (lumin == 'on') {dex -= defender.spl/2;}
+						if (str < dex){dex = str;}
+						str = Math.floor(str);
 						dex = Math.floor(dex);
-						var dmg = ((Math.random()*x.str-dex)+dex)/2 + (dmg*x.off/100);
-						if (check(x,'Fierce') > -1 && x.sp  - sp(x,spcx) > 0){
-							dmg += (dmg*(x.off*2)/100);
-							spcx += 1;
+						var dmg = (Math.random()*(str-dex))+dex;
+						if (check(attacker,'limb') > -1){
+							dmg = dmg/2;
+							dmg += (dmg*attacker.off/100);
 						}
-						if (check(x,'Critical') > -1 && (x.off*0.5).toFixed(1) > (Math.random()*100)+1){
-							dmg *= ((x.off*2.5).toFixed(1)+100)/100;
+						if (check(attacker,'frce') > -1 && attacker.sp - sp(attacker,spcAtt) > 0){
+							dmg += (dmg*(attacker.off*2)/100);
+							spcAtt += abilityCost.frce;
 						}
-						dmg = ((dmg/exh)-y.arm);
+						if (check(attacker,'crit') > -1 && (attacker.off*0.5).toFixed(1) > (Math.random()*100)+1){
+							critical = 'crit';
+							dmg *= ((attacker.off*2.5).toFixed(1)+100)/100;
+						}
+						dmg = ((dmg/attExh)-defender.arm);
 						if (dmg < 1){dmg = 1;}
 						dmg = Math.floor(dmg);
-						y.hp -= dmg;
-						if (x == one){act2 = '<p>Your second ' + crit + 'hit dealt ' + dmg + ' damage.</p>';}
-						if (x == two){act2 = '<p>Your opponents second ' + crit + 'hit dealt ' + dmg + ' damage.</p>';}
+						defender.hp -= dmg;
+						damage = dmg;
+					}
+					if (i == 0 && attNum > 1){number = 'first ';}
+					if (i == 1){number = 'second ';}
+					if (i == 2){number = 'third ';}
+					if (i == 3){number = 'fourth ';}
+					if (i == 4){number = 'fifth ';}
+					if (critical == 'crit'){critical = 'was a critical and ';}
+					if (damage == 'miss'){
+						if (attacker == one){text += '<br>Your ' + number + 'hit missed.';}
+						if (attacker == two){text += '<br>Your opponents ' + number + 'hit missed.';}
 					} else {
-						if (x == one){act2 = '<p>Your second hit missed.</p>';}
-						if (x == two){act2 = '<p>Your opponents second hit missed.</p>';}
+						if (attacker == one){text += '<br>Your ' + number + 'hit ' + critical + 'dealt ' + damage + ' damage.';}
+						if (attacker == two){text += '<br>Your opponents ' + number + 'hit ' + critical + 'dealt ' + damage + ' damage.';}
 					}
 				}
-				action = 'off';
 			}
-			if (x.hp <= run && action == 'on'){
-				var rtr = x.agl/2;
-				if (check(x,'Burst') > -1 && x.sp - sp(x,spcx) > 0){
-					rtr *= Math.floor(x.spd/3);
-					spcx += 3;
+			if (attacker.hp <= retreat && action == 'on'){
+				var retreat = attacker.agl/2;
+				if (check(attacker,'burst') > -1 && attacker.sp - sp(attacker,spcAtt) > 0){
+					retreat *= Math.floor(attacker.spd/3);
+					spcAtt += abilityCost.burst;
 				}
-				if (check(x,'Run') > -1 && x.sp - sp(x,spcx) > 0){
-					rtr *= Math.floor(x.spd/5);
-					spcx += 1;
+				if (check(attacker,'run') > -1 && attacker.sp - sp(attacker,spcAtt) > 0){
+					retreat *= Math.floor(attacker.spd/5);
+					spcAtt += abilityCost.run;
 				}
-				var chs = y.agl/2;
-				if (check(y,'Burst') > -1 && y.sp - sp(y,spcy) > 0){
-					chs *= Math.floor(y.spd/3);
-					spcy += 3;
+				var chase = defender.agl/2;
+				if (check(defender,'burst') > -1 && defender.sp - sp(defender,spcDef) > 0){
+					chase *= Math.floor(defender.spd/3);
+					spcDef += abilityCost.burst;
 				}
-				if (check(y,'Run') > -1 && y.sp - sp(y,spcy) > 0){
-					chs *= Math.floor(y.spd/5);
-					spcy += 1;
+				if (check(defender,'run') > -1 && defender.sp - sp(defender,spcDef) > 0){
+					chase *= Math.floor(defender.spd/5);
+					spcDef += abilityCost.run;
 				}
-				if (rtr < 1){rtr = 1;}
-				if (chs < 1){chs = 1;}
-				if (rtr/exh > Math.random()*((rtr/exh)+(chs/oexh))){
+				if (retreat < 1){retreat = 1;}
+				if (chase < 1){chase = 1;}
+				if (retreat/attExh > Math.random()*((retreat/attExh)+(chase/defExh))){
 					fled = 'on';
-					if (x == one){act1 = '<p>You managed to run away.</p>';}
-					if (x == two){act1 = '<p>Your opponent managed to run away.</p>';}
-					setTimeout(flee(x), 3000);
+					if (attacker == one){text = '<br>You managed to run away.';}
+					if (attacker == two){text = '<br>Your opponent managed to run away.';}
+					setTimeout(flee(attacker), 3000);
 				} else {
-					if (x == one){act1 = '<p>You failed to run away.</p>';}
-					if (x == two){act1 = '<p>Your opponent failed to run away.</p>';}
+					if (attacker == one){text = '<br>You failed to run away.';}
+					if (attacker == two){text = '<br>Your opponent failed to run away.';}
 				}
 			}
 		}
-		if (x.elec == 'on'){
-			x.elec = 'off';
-			if (x == one){elec = '<p>You are no longer stunned.</p>';}
-			if (x == two){elec = '<p>Your opponent is no longer stunned.</p>';}
+		if (attacker.elec == 'on'){
+			attacker.elec = 'off';
+			if (attacker == one){elec = '<br>You are no longer stunned.';}
+			if (attacker == two){elec = '<br>Your opponent is no longer stunned.';}
 		}
-		if (fled == 'off'){doc('event2HTML',vdmg + elec + veno + act1 + act2);}
+		if (fled == 'off'){doc('event2HTML',vdmg + elec + veno + text);}
 		if (one.hp < 1 && fled == 'off'){setTimeout(lose, 3000);}
 		if (two.hp < 1 && fled == 'off'){setTimeout(win, 3000);}
-		spcx = spcx - x.line;
-		if (spcx < 0){spcx = 0;}
-		x.sp -= spcx;
-		spcy = spcy - y.line;
-		if (spcy < 0){spcy = 0;}
-		y.sp -= spcy;
+		spcAtt = spcAtt - attacker.line;
+		if (spcAtt < 0){spcAtt = 0;}
+		attacker.sp -= spcAtt;
+		spcDef = spcDef - defender.line;
+		if (spcDef < 0){spcDef = 0;}
+		defender.sp -= spcDef;
 		EVO.combat.hp = one.hp;
 		EVO.combat.sp = one.sp;
-		doc('hp', EVO.combat.hp);
-		doc('sp', EVO.combat.sp);
+		css('hp', EVO.combat.hp);
+		css('sp', EVO.combat.sp);
 	}
 	function flee(x){
 		exp /= 2;
 		EVO.combat.exp += exp;
-		doc('exp',Math.floor(EVO.combat.exp));
-		EVO[food] += a;
+		css('experience',Math.floor(EVO.combat.exp));
+		EVO[food] += moveCost;
 		if (x == one){
 			doc('event1HTML','You successfully ran away.  You have run to a new area.');
 			doc('event2HTML','You gained ' + exp + ' experince.');
@@ -513,36 +520,34 @@ function cbt(a,c){
 			doc('event2HTML','You gained ' + exp + ' experince.');
 			EVO.combat.won += 1;
 		}
-		stat();
 		cost.fight = 'off';
 	}
 	function win(){
-		var eat = eat += fun.add.digestive()*10;
+		var eat = fun.add.digestive()*10;
 		if (two.mhp < eat){eat = two.mhp;}
-		if (EVO.three.diet == 'Carnivore'){eat *= 10;}
+		if (EVO.stage > 2 && EVO.three.diet == 'Carnivore'){eat *= 10;}
 		doc('event1HTML','You defeated your opponent.');
 		var reward = 'You gained ' + exp + ' experince.';
 		if (EVO.stage == 2 || EVO.three.diet !== 'Herbivore'){reward = 'You gained ' + exp + ' experince and ' + eat + ' food.';}
 		doc('event2HTML',reward);
 		EVO.combat.exp += exp;
-		doc('exp',Math.floor(EVO.combat.exp));
+		css('experience',Math.floor(EVO.combat.exp));
 		if (EVO.stage == 2 || EVO.three.diet !== 'Herbivore'){EVO.food += eat;}
-		EVO[food] += a;
+		EVO[food] += moveCost;
 		EVO.combat.won += 1;
-		stat();
 		cost.fight = 'off';
 	}
 	function lose(){
 		doc('event1HTML','Your opponent defeated you.');
+		doc('event2HTML','');
 		EVO.combat.exp += exp/2;
-		doc('exp',Math.floor(EVO.combat.exp));
-		EVO[food] += a;
+		css('experience',Math.floor(EVO.combat.exp));
+		EVO[food] += moveCost;
 		move();
 		EVO[food] = 0;
 		EVO.combat.lost += 1;
-		if (check(one,'Regeneration') == -1){EVO.combat.scar += 1;}
-		stat();
-		setTimeout(carnate,10000,c);
+		if (check(one,'regen') == -1){EVO.combat.scar += 1;}
+		document.getElementById('lay').classList.replace('layoff','layon');
+		setTimeout(carnate,10000);
 	}
-
 }

@@ -1,0 +1,463 @@
+:root {
+	--bg-color: rgb(0%,0%,0%);
+}
+html {
+	height: 96%;
+	width: 99%;
+}
+#mouse {
+	background-color: black;
+	border-color: silver;
+	border-style: double;
+	position: absolute;
+	z-index: 5;
+	width: auto;
+	height: auto;
+	left: var(--mouseX);
+	top: var(--mouseY);
+	display: var(--mouse);
+}
+#tip {
+	color: white;
+	border-style: hidden;
+	text-align: center;
+	white-space: pre-wrap;
+}
+title::before {
+	content: 'EVO Idle';
+}
+body {
+	background-color: var(--bg-color);
+	user-select: none;
+	cursor: crosshair;
+	height: 100%;
+	width: 100%;
+}
+box {
+	border-style: hidden;
+	width: 24%;
+}
+.box {
+	height: 100%;
+}
+.stage {
+	float: left;
+}
+.game {
+	float: right;
+}
+.ltr {
+	direction: ltr;
+}
+.rtl {
+	direction: rtl;
+}
+.txtL {
+	text-align: left;
+}
+.txtR {
+	text-align: right;
+}
+.txtC {
+	text-align: center;
+}
+.orange {
+	color: orange;
+}
+.red {
+	color: red;
+}
+.button:not(#stage):not(#game):not(#combat) {
+	border-radius: 50px;
+	white-space: pre-wrap;
+	border-style: double;
+}
+.button::before {
+	font-weight: bold;
+}
+.button::after {
+	content: '\a'' ';
+}
+.button c::before {
+	color: white;
+}
+.button b::before {
+	color: violet;
+}
+.butcol {
+	border-color: var(--bg-color);
+}
+.butcol:hover {
+	border-color: inherit;
+}
+.gold {
+	color: gold;
+}
+.blue {
+	color: blue;
+}
+.white {
+	color: white;
+}
+.purple {
+	color: purple;
+}
+.growon {
+	color: green;
+}
+.growoff {
+	color: red;
+}
+.yellow {
+	color: yellow;
+}
+.rainbow {
+	animation: rainbow 1s infinite;
+}
+@keyframes rainbow {
+	0% {color: red}
+	16.66% {color: orange}
+	33.33% {color: yellow}
+	50% {color: green}
+	66.66% {color: blue}
+	83.33% {color: purple}
+	100% {color: red}
+}
+.schism {
+	animation: schism 1s infinite;
+}
+@keyframes schism {
+	0% {color: white}
+	50% {color: black}
+	100% {color: white}
+}
+#event {
+	color: white;
+	border-style: hidden;
+	height: 100px;
+	text-align: center
+}
+#swirl {
+	content: url(swirl.png);
+	position: absolute;
+	z-index: 2;
+	width: 50px;
+	height: 50px;
+	left: var(--swirl-left);
+	top: var(--swirl-top);
+	transform: rotate(var(--swirl-transform));
+}
+tab {
+	z-index: 3;
+	border-style: hidden;
+	width: 2%;
+}
+.taboff {
+	color: var(--bg-color);
+}
+nav {
+	position: fixed;
+	overflow: hidden;
+	z-index: 4;
+	transition: 1s;
+	top: 0px;
+	height: 100%;
+	width: 0%;
+	background-color: var(--bg-color);
+}
+#stagenavevo:not(.taboff):hover > #stageUpgrade {
+	width: 25%;
+}
+#gamenavevo:not(.taboff):hover > #gameUpgrade {
+	width: 25%;
+}
+#combatnavevo:not(.taboff):hover > #combatUpgrade {
+	width: 25%;
+}
+nav:hover {
+	width: 25%;
+}
+#structure,#devevo,#boost {
+	white-space: pre;
+}
+#devevo::before {
+	content: 'Developmental Evolutions''\a';
+}
+.evolutions::before {
+	content: 'Evolutions';
+	font-weight: bold;
+}
+.tabevo::before {
+	white-space: pre-wrap;
+	content: '\a''E''\a''v''\a''o''\a''l''\a''u''\a''t''\a''i''\a''o''\a''n';
+}
+.combats::before {
+	content: 'Combat Evolutions';
+	font-weight: bold;
+}
+.tabcbt::before {
+	white-space: pre-wrap;
+	content: '\a''C''\a''o''\a''m''\a''b''\a''a''\a''t';
+}
+#environment::before {
+	white-space: pre-wrap;
+	content: '\a''Environment''\a''Current: 'var(--current)'\a''    pH:    'var(--ph)'\a''Salinity: 'var(--salinity);
+}
+#food::before {
+	content: 'Food: ';
+}
+#food.bountiful::after {
+	content: 'Bountiful';
+}
+#food.abundant::after {
+	content: 'Abundant';
+}
+#food.plentiful::after {
+	content: 'Plentiful';
+}
+#food.sparse::after {
+	content: 'Sparse';
+}
+#food.scarce::after {
+	content: 'Scarce';
+}
+#food.none::after {
+	content: 'None';
+}
+.food::before {
+	content: 'Food is the basic building block to grow and evolve.';
+}
+#gift::before {
+	content: 'Gift';
+}
+.gift::before {
+	content: 'A divine gift of 'var(--gift)' food for emergency use.';
+}
+.swirl::before {
+	content: 'Cost: ' var(--cost-swirl) '\a''Move to a new area to find more resources.';
+}
+#evolution::before {
+	content: '\a''Evolution';
+}
+#evolution c::before {
+	content: '  ('var(--evolution)')';
+}
+.evolution::before {
+	content: 'Cost: ' var(--cost-evolution) '\a''Gain an evolution point to evolve your cell.''\a''Evolution points are used to purchase evolutions.';
+}
+#protein::before {
+	content: '\a''Protein';
+}
+#protein c::before {
+	content: '  ('var(--protein)')  ';
+}
+.protein::before {
+	content: 'Long chains of amino acids.''\a''They are an essential part of all living organisms.';
+}
+#metabolize::before {
+	content: '\a''Metabolism: ';
+}
+#aerob::before {
+	content: 'Aerobic Respiration';
+}
+.aerob::after {
+	content: 'Aerobic Respiration uses O''\2082'' and food stuff to create ATP and gives off CO''\2082'' and H''\2082''O as a byproduct.';
+}
+#photo::before {
+	content: 'Photophosphorylation';
+}
+#photo::after {
+	content: ' 'var(--photosynthesis)'/sec';
+}
+.photo::after {
+	content: 'Photophosphorylation uses sunlight, CO''\2082'', and H''\2082''O to create ATP and gives off O''\2082'' as a byproduct.''\a''You are currently making about 'var(--photosynthesis)' ATP per second.';
+}
+#boost::before {
+	content: '\a''Boosted Evolutions''\a';
+}
+#size::before {
+	content: '\a''Size: ';
+}
+p#size::after {
+	content: var(--size1);
+}
+boost#size::after {
+	content: var(--size);
+}
+.size::before {
+	content: 'A creature\'s size effects many factors.  Movement, food, combat, and more.''\a''There are both positives and negatives to evolving to a larger size.';
+}
+#health::before {
+	content: '\a''Health: ';
+}
+#hlth::before {
+	content: var(--hlth);
+}
+#stamina::before {
+	content: '\a''Stamina: ';
+}
+#stmn::before {
+	content: var(--stmn);
+}
+#retreat::before {
+	content: '\a''Retreat: ';
+}
+#rtrt::before {
+	content: var(--rtrt);
+}
+#ii > *::after {
+	white-space: pre-wrap;
+	content: '\a';
+}
+.qq > * > span:first-child::before {
+	content: ' << ';
+}
+.oo > * > span:nth-child(2)::after {
+	content: '%';
+}
+.pp > * > span:last-child::after {
+	content: ' >> ';
+}
+
+/*stats*/
+#balance::before {
+	content: '\a''Balance';
+}
+#balance c::before {
+	content: '  ('var(--balance)')';
+}
+.balance::before {
+	content: 'Cost: 'var(--cost-balance)'\a''Click to improve Balance quality.''\a''Statocyst is your cells evolution of balance.';
+}
+#nerve::before {
+	content: '\a''Nerve';
+}
+#nerve c::before {
+	content: '  ('var(--nerve)')';
+}
+.nerve::before {
+	content: 'Cost: 'var(--cost-nerve)'\a''Click to improve Nerve quality.''\a''Nerves improve your cells ability to learn.';
+}
+#vascular::before {
+	content: '\a''Vascular';
+}
+#vascular c::before {
+	content: '  ('var(--vascular)')';
+}
+.vascular::before {
+	content: 'Cost: 'var(--cost-vascular)'\a''Click to improve Vascular quality.''\a''Vascular improves your cells ability to act.';
+}
+#muscle::before {
+	content: '\a''Muscle';
+}
+#muscle c::before {
+	content: '  ('var(--muscle)')';
+}
+.muscle::before {
+	content: 'Cost: 'var(--cost-muscle)'\a''Click to improve Muscle quality.''\a''Muscle improves your cells ability to move.';
+}
+#respiratory::before {
+	content: '\a''Respiratory';
+}
+#respiratory c::before {
+	content: '  ('var(--respiratory)')';
+}
+.respiratory::before {
+	content: 'Cost: 'var(--cost-respiratory)'\a''Click to improve Respiratory quality.''\a''Respiratory improves your cells metabolism.';
+}
+#digestive::before {
+	content: '\a''Digestive';
+}
+#digestive c::before {
+	content: '  ('var(--digestive)')';
+}
+.digestive::before {
+	content: 'Cost: 'var(--cost-digestive)'\a''Click to improve Digestive quality.''\a''Digestion improves the quanity of food your cells eat.';
+}
+#excretion::before {
+	content: '\a''Excretion';
+}
+#excretion c::before {
+	content: '  ('var(--excretion)')';
+}
+.excretion::before {
+	content: 'Cost: 'var(--cost-excretion)'\a''Click to improve Excretion quality.''\a''Excretion improves your cells ability to expell toxins and waste.';
+}
+#sight::before {
+	content: '\a''Sight';
+}
+#sight c::before {
+	content: '  ('var(--sight)')';
+}
+.sight::before {
+	content: 'Cost: 'var(--cost-sight)'\a''Click to improve Light Sense quality.''\a''Light Sense improves your cells ability to find food.';
+}
+/*lay*/
+#lay {
+	position: absolute;
+	background-color: black;
+	opacity: 0.5;
+	z-index: 9;
+}
+.layoff {
+	height: 0%;
+	width: 0%;
+}
+.layon {
+	height: 100%;
+	width: 100%;
+}
+#carnate {
+	position: absolute;
+	margin: auto;
+	transform: translate(-50%, -50%);
+	background-color: black;
+	color: silver;
+	overflow: hidden;
+	z-index: 10;
+}
+.hidden {
+	top: -100px;
+	left: -100px;
+	width: 0px;
+	height: 0px;
+}
+.shown {
+	top: 50%;
+	left: 50%;
+	width: 300px;
+	height: 200px;
+}
+#box {
+	text-align: center;
+	font-size: x-large;
+	padding-top: 10%;
+}
+#box::before {
+	content: 'Would you like to Reincarnate?';
+}
+carnate {
+	white-space: pre-wrap;
+}
+#nocarnate {
+	width: 48%;
+	float: left;
+	color: green;
+}
+#nocarnate::before {
+	content: '\a''No';
+}
+#nocarnate::after {
+	content: '\a'' ';
+}
+#recarnate {
+	width: 48%;
+	float: right;
+	color: red;
+}
+#recarnate::before {
+	content: '\a''Yes';
+}
+#recarnate::after {
+	content: '\a'' ';
+}

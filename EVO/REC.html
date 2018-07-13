@@ -1,29 +1,33 @@
+<!DOCTYPE html>
 <html>
 <head>
-	<title>EVO Idle</title>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="EVO.css">
+	<link rel="stylesheet" type="text/css" href="REC.css">
 </head>
-<body style="background-color:rgb(0%,0%,0%); user-select: none; cursor:crosshair; overflow: hidden"; oncontextmenu="return false";  onload="recstart()">
-	<div style="color:white; border-style: hidden; text-align:center">
-		<p style="color:white"> You have <span id="bonus"></span> Reincarnation points.</p>
-		<p>Cost: <span id="cost"></span></p>
+<body oncontextmenu="return false"; onload="recstart()">
+	<div>
+		<p class="recpoint"></p>
 	</div>
-	<div style="color:white; border-style: hidden; height: 80%; width: 25%; float: left; text-align:center; overflow-y: auto">
+	<div id="next" class="empty"></div>
+	<stage class="recbox">
 		<span id="stageOne"></span>
-	</div>
-	<div style="color:white; border-style: hidden; height: 80%; width: 25%; float: left; text-align:center; overflow-y: auto">
+	</stage>
+	<world class="recbox">
 		<span id="foodHTML"></span>
-	</div>
-	<div style="color:white; border-style: hidden; height: 80%; width: 25%; float: right; text-align:center; overflow-y: auto">
-		<p>Combat Level Upgrades</p>
+	</world>
+	<level class="recbox">
 		<span id="gradeHTML"></span>
-	</div>
-	<div style="color:white; border-style: hidden; height: 80%; width: 25%; float: right; text-align:center; overflow-y: auto">
-		<p>Combat Stat Upgrades</p>
+	</level>
+	<stat class="recbox">
 		<span id="combatHTML"></span>
+	</stat>
+	<div>
+		<p class="schism reincarnate" onclick="restart()"></p>
 	</div>
-	<div style="color:white; border-style: hidden; text-align:center">
-		<p onclick="restart()"><b id="restart">Reincarnate</b></p>
-	</div>
-	<script type="text/javascript" src="REC.js"></script>
+	<footer>
+		<script type="text/javascript" src="EVO.js"></script>
+		<script type="text/javascript" src="REC.js"></script>
+	</footer>
 </body>
 </html>

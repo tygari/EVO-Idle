@@ -1,0 +1,118 @@
+.marquee {
+  animation: marquee 5s alternate infinite;
+}
+.marquee::before {
+  content: '!!Important!!';
+}
+@keyframes marquee {
+  0% {margin-left: 0%;}
+  50% {margin-left: 95%;}
+  100% {margin-left: 0%;}
+}
+.status::before {
+	content: 'Game Status';
+	font-weight: bold;
+}
+.prototype::before {
+	content: 'Prototype';
+	font-weight: bold;
+}
+.protoStatus::after {
+	white-space: pre-wrap;
+	color: green;
+	content:	'Stage One'
+				'\a''Stage Two'
+				'\a''Save Local'
+				'\a''Offline Progression'
+				'\a''Combat (PvE)'
+				'\a''Reincarnation';
+}
+.alpha::before {
+	content: 'Alpha Release';
+	font-weight: bold;
+}
+.alphaStatus::before {
+	white-space: pre-wrap;
+	color: green;
+	content:	'Stage Three'
+				'\a''Anti Auto Clicker';
+}
+.alphaStatus::after {
+	white-space: pre-wrap;
+	color: red;
+	content:	'\a''Stage Four'
+				'\a''Chat Room'
+				'\a''Save Cloud';
+}
+.beta::before {
+	content: 'Beta Release';
+	font-weight: bold;
+}
+.betaStatus::after {
+	white-space: pre-wrap;
+	color: red;
+	content:	'Stage Five'
+				'\a''Stage Six'
+				'\a''Graphics'
+				'\a''Combat (PvP)'
+				'\a''Game Store';
+}
+.event::before {
+	content: 'First Event';
+}
+.wipe::before {
+	content: 'All Saves Wiped';
+}
+.update::before {
+	content: 'Updated: 'var(--date);
+}
+.version::after {
+	white-space: pre-wrap;
+	content: '\a''Version: 'var(--version);
+}
+.soft::before {
+	content: 'Soft Reset';
+}
+.hard::before {
+	content: 'Hard Reset';
+}
+.link {
+	color: silver;
+	font-size: 20px;
+	text-align: right;
+}
+.paypal::before {
+	content: 'PayPal Donation';
+}
+.reddit::before {
+	content: 'Reddit';
+}
+.github::before {
+	content: 'GitHub';
+}
+.title::before {
+	content: 'EVO Idle';
+	font-size: 80px;
+	font-weight: bold;
+}
+.start::before {
+	content: '!!START!!';
+	font-size: 40px;
+	font-weight: bold;
+}
+.text::before {
+	white-space: pre-wrap;
+	content:	'\a''\a''\a''\a''\a''\a''\a'
+				'\a''EVO Idle is in Alpha Development.'
+				'\a''EVO Idle works perfectly in Chrome and Opera.'
+				'\a''EVO Idle mostly works in FireFox, but not completely.'
+				'\a''Edge or Internet Explorer died after looking at the first line of code.'
+				'\a''The developer will do her best to preserve saves but some times that may not be possible.'
+				'\a''Please report any bugs and balance advice.'
+				'\a''To the left you can see the designers to do list.'
+				'\a''Green means that part is active in the game.'
+				'\a''Red means that part is planned to eventually and hopefully be added to the game.'
+				'\a''The games difficulty is set a bit high due to there being very little content.'
+				'\a''I will develop content as fast as I can, but I don\'t have a computer.'
+				'\a''I am saving for a laptop, till then I am using a community center computer.';
+}

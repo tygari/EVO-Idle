@@ -1,10 +1,22 @@
+Food rank should determine time and amount.
+Then be applied where is needed.
+
+Rank		Time	Amount
+Bountiful	x1/2	x2
+Abundant	x1		x1
+Plentiful	x2		x1/2
+Sparse		x4		x1/4
+Scarce		x8		x1/8
+None		x16		x1/16
+
 Cell > MultiCell > Worm > Fish > Amphibian > Reptile
 
-Stage 1 Cell
-Bubble > Double Bubble > Phospholipid > Cell Wall
-Bubble > RNA > Aerobic Respiration / Photophosphorylation > Nucleus > DNA > Mitochondria
+Stage 1 Cell - Aerobic Respiration vs Photophosphorylation pay Omnicell
+Bubble	> Double Bubble > Phospholipid > Cell Wall
+Bubble	> RNA > Aerobic Respiration / Photophosphorylation > DNA && Phospholipid > Mitochondria > Nucleus
+		> RNA > Ribosome & Nucleus > Endoplasmic Reticulum > Golgi Apparatus
 Phospholipid > Cytoskeleton > Cilia & Flagellum
-RNA & Phospholipid > Mitosis.  Mitosis is cell devide.  Lottery to get more evolution points.
+RNA & Phospholipid > Mitosis.  Mitosis is cell divide.  Lottery to get more evolution points.
 Metabolism & Mitosis >> MultiCellular
 
 Stage 2 MultiCellular
@@ -97,6 +109,11 @@ Hearing
 Scent
 Taste
 
+Equipped Evolutions
+Hyper Metabolism
+
+
+
 Size Evolution
 Str = ???
 Con = ???
@@ -161,6 +178,7 @@ Offensive
 	Fierce			= 1		= Dmg +2% * Off
 		Wrathful	= 1		= Dmg +3% * Off
 	Critical		= 0		= Crit chance +0.5% * Off; dmg +2.5% * Off
+		
 		***Gluttonous	= 0		= Food Reward +Off * 100
 		
 Defensive
@@ -188,23 +206,3 @@ Stage 3 - Worm		- Herbivore vs Carnivore pay Omnivore
 Stage 4 - Fish		- 
 Stage 5 - Amphibian	- 
 Stage 6 - Reptile	- 
-
-
-overflow
-
-
-
-function buyCiliaCond() { return EVO.atp >= cilflaMath() && EVO.flagellum < 1000; }
-function buyFlagellumCond() { return EVO.atp >= cilflaMath(); }
-
-function buy(x) {
-	if(x()){
-		EVO.atp -= cilflaMath();
-		EVO[x] += 1;
-		document.getElementById(x).innerHTML = EVO[x];
-		updateATP();
-	}
-	document.getElementById('cilflaCost').innerHTML = cilflaMath();
-}
-button: buy(buyCiliaCond);
-button: buy(buyFlagellumCond);

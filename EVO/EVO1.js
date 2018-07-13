@@ -6,27 +6,34 @@ var EVO = {
 		"metabolismType": 'basic',
 		"metabolism": -1,
 		"mitochondria": -1,
+		"mitosis": 0,
+		"cytoplasm": -1,
 		"cilia": 0,
 		"flagellum": 0,
-		"cytoplasm": -1,
 		"membraneScore": 0,
+		"ribosome": 0,
+		"ribosomeBonus": 0,
+		"ribosomePartial": 0,
+		"endoplasmic": -1,
+		"golgi": -1,
 	},
-	"sun":{
-		"photosynthesis": 0,
-		"sunSwitch": 'on',
-		"position": 0,
+	"sun": {
+		"sunSwitch": 1,
+		"position": 1,
 	},
 	"size": {
-		"max": 0,
+		"game": 0,
 		"stage": 0,
 	},
 	"food": 10000,
 	"atp": 0,
+	"protein": {
+		"whole": 0,
+		"partial": 0,
+	},
 	"evolution": 0,
 	"evolved": 0,
 	"bonus": 0,
-	"evolutionSwitch": 'off',
-	"mitosis": 0,
 	"mitosisSwitch": 'off',
 	"mitosisLimit": 5,
 	"mitosisChance": 0,
@@ -35,95 +42,135 @@ var EVO = {
 	"nucleus": null,
 	"ciliaSwitch": 'off',
 	"flagellumSwitch": 'off',
-	"rnaSwitch": 'off',
-	"rnaB": 0,
-	"rnaS": 0,
-	"dnaSwitch": 'off',
-	"dnaB": 0,
-	"dnaS": 0,
+	"ribosomeSwitch": 'off',
+	"RNASwitch": 'off',
+	"RNA": 0,
+	"sRNA": 0,
+	"rRNA": 0,
+	"tRNA": 0,
+	"DNASwitch": 'off',
+	"DNA": 0,
+	"sDNA": 0,
 };
 
 var fun = {
-	"metabolism": function(){return (1+(EVO.one.metabolism/100))*(1+(EVO.one.mitochondria/100));},
-	"cytoplasm": function(){return 100-(EVO.one.cytoplasm*((REC.cytoplasm+10)/1000));},
-	"food":{
-		"max": function(){return ((REC.food.max+EVO.size.max)*10)+100;},
-		"min": function(){return (REC.food.min*10)+(EVO.size.max*5);},
-	},
+	"cytoplasm": function(x){return (100-(EVO.one.cytoplasm*((REC.cytoplasm+10)/1000)))*x/100;},
+	"metabolism": function(){return (1+(EVO.one.metabolism/100))*(1+(EVO.one.mitochondria/100))*(1+(creations()/100));},
+	"RNA": function(){return EVO.RNA + EVO.rRNA - EVO.sRNA;},
+	"DNA": function(){return EVO.DNA - EVO.sDNA;},
 	"virus": [1 ,0, 0, 0],
-	"failtimer": function(){setTimeout(eventEnd, (Math.floor((Math.random()*240000)+1)));},
-	"move": function(){setTimeout(move, 3600000);},
+	"failtimer": 0,
+	"move": 0,
 	"moveCost": function(){
-		var mem = 1;
+		let mem = 1;
 		if (EVO.one.membraneScore == 3){mem = 1.5;}
-		return Math.floor((1000 - EVO.one.flagellum)*(1+(EVO.size.max/100))*mem);
+		return Math.floor((1000-EVO.one.flagellum)*(1+(EVO.size.game/100))*mem);
 	},
 };
-	
+
 function start(){
-	if (localStorage.getItem("REC") !== null){REC = JSON.parse(localStorage.getItem("REC"));}
-	if (localStorage.getItem("EVO") !== null){EVO = JSON.parse(localStorage.getItem("EVO"));}
+	/*Save File load*/
+	if (localStorage.getItem('REC') !== null){REC = JSON.parse(localStorage.getItem('REC'));}
+	if (localStorage.getItem('EVO') !== null){EVO = JSON.parse(localStorage.getItem('EVO'));}
+	/*HTML Alterations*/
+	document.getElementById('structure').insertAdjacentHTML('afterbegin','<struc id="struc" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></struc>');
+	document.getElementById('devevo').insertAdjacentHTML('afterbegin','<devevo id="devone"><span id="devtwo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></span></devevo>');
+	document.getElementById('boost').insertAdjacentHTML('afterbegin','<boost id="bstevo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></boost>');
+	let html = function(x){document.getElementById(x+'box').insertAdjacentHTML('afterbegin','<div class="button butcol growoff" id="'+x+'" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="buy(this.id)"><c></c><b onmouseenter="tip(this.parentNode.id,11)" onmouseleave="tip(this.parentNode.id)" onclick="buy(this.parentNode.id,11); event.stopPropagation()"></b></div>');}
+	html('stage');
+	html('game');
+	copy('struc','bubble');
+	copy('devone','metabolize');
+	document.getElementById('metabolize').firstChild.id = 'basic';
+	copy('stage','ATP');
+	copy('stage','evolution','beforebegin');
+	document.getElementById('boost').style.display = 'none';
+	document.getElementById('stat').style.display = 'none';
+	document.getElementById('health').style.display = 'none';
+	document.getElementById('stamina').style.display = 'none';
+	document.getElementById('retreat').style.display = 'none';
 	evos();
-	var offline = Date.now() - EVO.date;
-	var speedUp = [0, 0, 0, 0];
-	while (offline > speedUp[0]){
-		if (speedUp[0] >= speedUp[1] + (1001-EVO.one.cytoplasm)){
-			if (EVO.ciliaSwitch == 'on') {autoClick();}
-			if (EVO.one.metabolismType == 'Photophosphorylation'){photosynth();}
-			speedUp[1] = speedUp[0];
-		}
-		if (speedUp[0] >= speedUp[2] + 60000){
-			sun();
-			speedUp[2] = speedUp[0];
-		}
-		if (speedUp[0] >= speedUp[3] + 3600000){
-			move('start');
-			speedUp[3] = speedUp[0];
-		}
-		speedUp[0] += 1;
-	}
+	/*Initialize Program*/
+	let offline = Date.now() - EVO.date;
+	if (offline > 8.64e+7){offline = 8.64e+7;}
+	speedup(offline);
 	EVO.date = Date.now();
 	save(Date.now());
-	updateFood();
+	foods.update();
 	updateATP();
-	doc('evolutionCost',evolutionMath());
-	setTimeout(environment, 60000);
-	if (EVO.ciliaSwitch == 'on') {setTimeout(timer, 1001-EVO.one.cytoplasm);}
-	else {setTimeout(timer, 6000);}
-	setTimeout(events, 300000);
-	setTimeout(swirly, 30, 'on', 'on', Math.floor(Math.random()*window.innerWidth)-50, Math.floor(Math.random()*window.innerHeight)-50, 0);
+	setTimeout(environment,60000);
+	setTimeout(autoClick, 6001-EVO.one.cytoplasm*6);
+	setTimeout(events,300000);
+	setTimeout(swirly,30,2,2,Math.floor(Math.random()*window.innerWidth)-50,Math.floor(Math.random()*window.innerHeight)-50,0);
+	css('gift',200);
+}
+
+function speedup(x){
+	let speedUp = [0,0,0,0,0,0,0,0];
+	while (x > speedUp[0]){
+		let type = foods.check();
+		if (EVO.ciliaSwitch == 'on' && speedUp[0] >= speedUp[1] + ((1001-EVO.one.cytoplasm)*foods[type].timer)){
+			autoClick('start');
+			speedUp[1] = speedUp[0];
+		}
+		if (EVO.one.metabolismType == 'Photophosphorylation' && speedUp[0] >= speedUp[2] + (1001-EVO.one.cytoplasm)){
+			photosynth('start');
+			speedUp[2] = speedUp[0];
+		}
+		if (speedUp[0] >= speedUp[3] + 60000){
+			sun();
+			speedUp[3] = speedUp[0];
+		}
+		if (speedUp[0] >= speedUp[4] + 3600000){
+			move('start');
+			speedUp[4] = speedUp[0];
+		}
+		if (speedUp[0] >= speedUp[5] + 60000){
+			RNA('start');
+			speedUp[5] = speedUp[0];
+		}
+		if (speedUp[0] >= speedUp[6] + 60000){
+			protein('start');
+			speedUp[6] = speedUp[0];
+		}
+		if (speedUp[0] >= speedUp[7] + 3600000){
+			ribosome('start');
+			speedUp[7] = speedUp[0];
+		}
+		speedUp[0]++;
+	}
 }
 
 function events(){
-	var swch = 'off';
-	doc('eventHTML','<div style="color:white; border-style: hidden; left: 200px; height: 50px; text-align:center"><p><span id="event1HTML"></span><br><span id="event2HTML"></span></p></div>');
-	var random = Math.floor((Math.random() * 100)+1)
+	let swch = 'off';
+	doc('eventHTML','<div id="event"><p><span id="event1HTML"></span><br><span id="event2HTML"></span></p></div>');
+	let random = Math.floor((Math.random()*100)+1)
 	if (0 < random && 10 >= random){
 		swch = 'on';
 		doc('event1HTML','You met a friendly cell.  Would you like to share genes?');
-		doc('event2HTML','<p title="Horizontal Gene Transfer is the two single cell creatures meeting together and sharing genes." onclick="horizontal()"><b style="color:purple">HGT</b></p>');
-		fun.failtimer();
+		doc('event2HTML','<p title="Horizontal Gene Transfer is the two single cell creatures meeting together and sharing genes." onclick="horizontal()"><b class="purple">HGT</b></p>');
+		fun.failtimer = setTimeout(eventEnd, (Math.floor((Math.random()*240000)+1)));
 	}
-	if (10 < random && 20 >= random && EVO.rnaSwitch == 'on'){
+	if (10 < random && 20 >= random && EVO.RNASwitch == 'on'){
 		swch = 'on';
 		fun.virus[0] = 2;
 		doc('event1HTML','You met a virus.  It has infected you.');
-		doc('event2HTML','<p title="Click to fight the virus." onclick="antivirusM()"><b style="color:purple">Fight Virus</b></p>');
-		fun.virus[1] = Math.floor((Math.random() * (EVO.rnaB-EVO.rnaS) * 100)+1);
+		doc('event2HTML','<p title="Click to fight the virus." onclick="antivirusM()"><b class="purple">Fight Virus</b></p>');
+		fun.virus[1] = Math.floor((Math.random()*fun.RNA()*100)+1);
 		antivirusA();
 	}
 	if (20 < random && 30 >= random){
 		swch = 'on';
 		doc('event1HTML','The area has had an influx of food.');
-		EVO.food += Math.floor((Math.random()*5000* (1+(EVO.one.flagellum/100)))+1);
+		EVO.food += Math.floor((Math.random()*5000*(1+(EVO.one.flagellum/100)))+1);
 		setTimeout(eventEnd, 60000);
 	}
 	if (swch == 'off') {doc('eventHTML',''); setTimeout(events, 300000);}
 }
 
 function horizontal(){
-	clearTimeout(fun.failtimer());
-	if ((15-(EVO.one.membraneScore*5))+((EVO.rnaB-EVO.rnaS)/100) > Math.floor((Math.random() * 100)+1)) {EVO.bonus += 1;}
+	clearTimeout(fun.failtimer);
+	if ((15-(EVO.one.membraneScore*5))+(fun.RNA()/100) > Math.floor((Math.random()*100)+1)){EVO.bonus++;}
 	eventEnd();
 }
 	
@@ -137,7 +184,7 @@ function antivirusM(){
 }
 
 function antivirusA(){
-	fun.virus[1] -= 1;
+	fun.virus[1]--;
 	if (fun.virus[1] > 0){setTimeout(antivirusA, 1000);}
 	else {
 		fun.virus[0] = 1;
@@ -147,7 +194,7 @@ function antivirusA(){
 
 function eventEnd(){
 	doc('eventHTML','');
-	setTimeout(events, (Math.floor((Math.random() * 240000)+1)));
+	setTimeout(events, (Math.floor((Math.random()*240000)+1)));
 }
 
 function environment(){
@@ -155,520 +202,558 @@ function environment(){
 	setTimeout(environment, 60000);
 }
 
-function updateFood(){
-	if (EVO.food > 10000){doc('food','Bountiful');}
-	else if (EVO.food > 7500){doc('food','Abundant');}
-	else if (EVO.food > 5000){doc('food','Plentiful');}
-	else if (EVO.food > 2500){doc('food','Sparse');}
-	else if (EVO.food > 0){doc('food','Scarce');}
-	else {doc('food','None');}
-}
-
 function move(x){
 	if (EVO.atp >= fun.moveCost()){
 		EVO.atp -= fun.moveCost();
-		EVO.food = Math.floor((Math.random()*((fun.food.max()-fun.food.min())*100)*(1+(EVO.one.flagellum/1000)))+(fun.food.min()*100));
+		EVO.food = Math.floor((Math.random()*((foods.max()-foods.min())*foods.mod())
+			*(1+(EVO.one.flagellum/1000)))+(foods.min()*foods.mod()));
 		if (x !== 'start'){
 			updateATP();
-			clearTimeout(fun.move());
-			fun.move();
+			clearTimeout(fun.move);
+			fun.move = setTimeout(move, 3600000);
 		}
 	}
 }
 
 function updateATP(){
-	doc('atp',Math.floor(EVO.atp));
+	foods.update();
+	css('ATP',Math.floor(EVO.atp));
 	color('evolution');
-	color('move');
-	if (EVO.mitosisSwitch == 'on'){color('mitosis');}
 	if (EVO.one.cytoplasm > -1){color('cytoplasm');}
-	if (EVO.ciliaSwitch == 'on') {color('cilia');}
-	if (EVO.flagellumSwitch == 'on') {color('flagellum');}
-	if (EVO.rnaSwitch == 'on') {color('rna');}
+	let clr = function(x){if (EVO[x+'Switch'] == 'on'){color(x);};}
+	clr('mitosis');
+	clr('cilia');
+	clr('flagellum');
+	clr('RNA');
+	clr('ribosome');
 }
 
-function manualClick(){
-	if (EVO.food > 0){
-		var click = 1;
-		if (EVO.one.metabolismType == 'Aerobic Respiration'){click *= fun.metabolism();}
-		EVO.atp += click / fun.virus[0];
-		EVO.food -= 1;
-		updateFood();
-		updateATP();
-	}
-}
-
-function autoClick(){
-	var feed = EVO.one.cilia;
+function autoClick(x){
+	let type = foods.check();
+	let feed = EVO.one.cilia*foods[type].multi;
 	if (feed < 1){feed = 1;}
-	if (EVO.food >= feed){
-		if (EVO.one.metabolismType == 'Aerobic Respiration'){feed *= fun.metabolism();}
-		EVO.atp += feed / fun.virus[0];
-		EVO.food -= feed;
-		updateFood();
+	EVO.food -= feed;
+	if (EVO.one.metabolismType == 'Aerobic Respiration'){feed *= fun.metabolism();}
+	EVO.atp += feed/fun.virus[0];
+	if (EVO.food < 0){EVO.food = 0;}
+	if (x !== 'start'){
+		foods.update();
 		updateATP();
-	} else {
-		EVO.atp += EVO.food / fun.virus[0];
-		EVO.food -= EVO.food;
-		updateFood();
-		updateATP();
+		let time;
+		if (EVO.one.cilia > 0){time = 1001-EVO.one.cytoplasm;}
+		else {
+			let a = EVO.one.membraneScore;
+			if (a > 2){a = 2;}
+			time = 6000-(a*2000);
+		}
+		setTimeout(autoClick, time*foods[type].timer);
 	}
 }
 
-function timer(){
-	var time;
-	if (EVO.ciliaSwitch == 'on' && EVO.one.cilia > 0){time = 1001-EVO.one.cytoplasm;}
-	else {
-		var a = EVO.one.membraneScore;
-		if (a > 2){a = 2;}
-		time = 6000-(a*2000);
-	}
-	autoClick();
-	if (EVO.one.metabolismType == 'Photophosphorylation'){photosynth();}
-	setTimeout(timer, time);
-}
-
-function photosynth(){
-	EVO.sun.photosynthesis += (1+(EVO.sun.position/100)) * (1+(EVO.size.max/100)) * fun.metabolism();
-	while (EVO.sun.photosynthesis >= 100){
-		EVO.sun.photosynthesis -= 100;
-		EVO.atp += 1 / fun.virus[0];
-	}
-	doc('photosynthesis',Math.floor(EVO.sun.photosynthesis)+'%');
-	updateATP();
-}
-
-function evolutionMath(){return Math.floor(10*Math.pow(1.5,EVO.evolution));}
-
-function buyEvolution(){
-	if(EVO.atp >= evolutionMath()){
-		EVO.atp -= evolutionMath();
-		EVO.evolution += 1;
-		updateEvolution();
+function photosynth(x){
+	let z = (1+(EVO.sun.position/100))*(1+(EVO.size.game/100))*fun.metabolism();
+	EVO.atp += z / fun.virus[0];
+	if (x !== 'start'){
+		css('photosynthesis',Math.round(z));
 		updateATP();
+		setTimeout(photosynth, 1001-EVO.one.cytoplasm);
 	}
-	doc('evolutionCost',evolutionMath());
 }
 
 var cost = {
 	"doublebubble": 1,
 	"phospholipid": 2,
-	"cellwall": 10,
+	"cellwall": 6,
 	"mitosis": 4,
 	"cytoplasm": 1,
 	"cytoskeleton": 2,
-	"nucleus": 10,
-	"cilfla": 3,
-	"rna": 4,
-	"dna": 15,
+	"cilia": 3,
+	"flagellum": 3,
+	"ribosome": 5,
+	"RNA": 4,
+	"DNA": 6,
 	"metabolism": 5,
-	"mitochondria": 20,
+	"mitochondria": 7,
+	"nucleus": 998,
+	"endoplasmic": 999,
+	"golgi": 999,
 	"multicell": 5,
+	"size": function(){return EVO.size.game+1;},
 }
 
 function updateEvolution(){
-	var creation = EVO.evolution - EVO.evolved + EVO.bonus + REC.bonus;
-	doc('evolution',creation);
-	var membraneCode = '';
-	var mitosisCode = '';
-	var cytoplasmCode = '';
-	var cytoskeletonCode = '';
-	var nucleusCode = '';
-	var ciliaCode = '';
-	var flagellumCode = '';
-	var aerobicrespirationCode = '';
-	var photophosphorylationCode = '';
-	var mitochondriaCode = '';
-	var naCode = '';
-	var multicelluarCode = '';
-	var sizeCode = '';
+	let stage = document.getElementById('stagenavevo');
+	let game = document.getElementById('gamenavevo');
+	stage.classList.replace('taboff','gold');
+	game.classList.replace('taboff','gold');
+	let creation = creations();
+	css('evolution',creation);
+	let code = {
+		"membrane": '',
+		"mitosis": '',
+		"cytoplasm": '',
+		"cytoskeleton": '',
+		"cilia": '',
+		"flagellum": '',
+		"ribosome": '',
+		"metabolism": '',
+		"mitochondria": '',
+		"nucleus": '',
+		"endoplasmic": '',
+		"golgi": '',
+		"na": '',
+		"multicelluar": '',
+		"size": '',
+		"evolution": '<p class="evolutions gold"></p>',
+	}
+	let evos = function (x){return '<p id="'+x+'" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="evos(this.id)"></p>'};
 	if (EVO.one.membraneScore == 0 && creation >= cost.doublebubble){
-		EVO.evolutionSwitch = 'on';
-		membraneCode = '<p title="Your first evolution.  Double wall bubbles were the first evolution of cells." onclick="evos(\'membrane\')"><b style="color:blue">Double Bubble</b></p>';
+		code.membrane = evos('doublebubble');
 	}
 	if (EVO.one.membraneScore == 1 && creation >= cost.phospholipid){
-		EVO.evolutionSwitch = 'on';
-		membraneCode = '<p title="Phospholipid membranes are aligned amphipathic molecule chains.  All modern cells carry this pivitol characteristic." onclick="evos(\'membrane\')"><b style="color:blue">Phospholipid</b></p>';
+		code.membrane = evos('phospholipid');
 	}
 	if (EVO.one.membraneScore == 2 && EVO.cytoskeleton == 'cytoskeleton' && creation >= cost.cellwall){
-		EVO.evolutionSwitch = 'on';
-		membraneCode = '<p title="Cell Wall is a thick hard shell around a cells Phospholipid membrane.  It greatly enahnces a cells durability but drasticly reduces a cells mobility."  onclick="evos(\'membrane\')"><b style="color:blue">Cell Wall</b></p>';
+		code.membrane = evos('cellwall');
 	}
-	if (EVO.rnaSwitch == 'on' && EVO.one.membraneScore >= 2 && EVO.mitosisSwitch == 'off' && creation >= cost.mitosis){
-		EVO.evolutionSwitch = 'on';
-		mitosisCode = '<p title="Your cell has evolved basic reproduction." onclick="evos(\'reproduce\')"><b style="color:blue">Mitosis</b></p>';
+	if (EVO.RNASwitch == 'on' && EVO.one.membraneScore >= 2 && EVO.mitosisSwitch == 'off' && creation >= cost.mitosis){
+		code.mitosis = evos('mitosis');
 	}
 	if (EVO.one.membraneScore > 0 && EVO.one.cytoplasm == -1 && creation >= cost.cytoplasm){
-		EVO.evolutionSwitch = 'on';
-		cytoplasmCode = '<p title="Cytoplasm is the liquid inside cells which all organelles float." onclick="evos(\'cytoplasm\')"><b style="color:blue">Cytoplasm</b></p>';
-	}		
-	if (EVO.one.membraneScore >= 2 && EVO.cytoskeleton === null && creation >= cost.cytoskeleton){
-		EVO.evolutionSwitch = 'on';
-		cytoskeletonCode = '<p title="The innernal and external structure of a cell is skeletally held together via microfilaments, intermediate filaments, and microtubules." onclick="evos(\'cytoskeleton\')"><b style="color:blue">Cytoskeleton</b></p>';
+		code.cytoplasm = evos('cytoplasm');
 	}
-	if (EVO.one.metabolism >= 0 && EVO.cytoskeleton == 'cytoskeleton' && EVO.nucleus === null && creation >= cost.nucleus){
-		EVO.evolutionSwitch = 'on';
-		nucleusCode = '<p title="Evolve a unified cell core." onclick="evos(\'nucleus\')"><b style="color:blue">Nucleus</b></p>';
+	if (EVO.one.membraneScore > 1 && EVO.cytoskeleton === null && creation >= cost.cytoskeleton){
+		code.cytoskeleton = evos('cytoskeleton');
 	}
-	if (EVO.cytoskeleton == 'cytoskeleton' && EVO.ciliaSwitch == 'off' && creation >= cost.cilfla){
-		EVO.evolutionSwitch = 'on';
-		ciliaCode = '<p title="Cilia are used to gather food for the cell." onclick="evos(\'cilia\')"><b style="color:blue">Cilia</b></p>';
+	if (EVO.cytoskeleton == 'cytoskeleton' && EVO.ciliaSwitch == 'off' && creation >= cost.cilia){
+		code.cilia = evos('cilia');
 	}
-	if (EVO.cytoskeleton == 'cytoskeleton' && EVO.flagellumSwitch == 'off' && creation >= cost.cilfla){
-		EVO.evolutionSwitch = 'on';
-		flagellumCode = '<p title="A Flagellum is used to move the cell around as it hunts for food." onclick="evos(\'flagellum\')"><b style="color:blue">Flagellum</b></p>';
+	if (EVO.cytoskeleton == 'cytoskeleton' && EVO.flagellumSwitch == 'off' && creation >= cost.flagellum){
+		code.flagellum = evos('flagellum');
 	}
-	if (EVO.rnaSwitch == 'on' && EVO.one.metabolism == -1 && creation >= cost.metabolism){
-		EVO.evolutionSwitch = 'on';
-		aerobicrespirationCode = '<p title="Evolve a Aerobic Respiration metabolism to improve ATP creation." onclick="evos(\'aero\')"><b style="color:blue">Aerobic Respiration</b></p>';
+	if (fun.RNA() > 199 && EVO.RNASwitch == 'on' && EVO.ribosomeSwitch == 'off' && creation >= cost.ribosome){
+		code.ribosome = evos('ribosome');
 	}
-	if (EVO.rnaSwitch == 'on' && EVO.one.metabolism == -1 && creation >= cost.metabolism){
-		EVO.evolutionSwitch = 'on';
-		photophosphorylationCode = '<p title="Evolve a Photophosphorylation metabolism to improve ATP creation." onclick="evos(\'photo\')"><b style="color:blue">Photophosphorylation</b></p>';
+	if (EVO.RNASwitch == 'on' && EVO.one.metabolism == -1 && creation >= cost.metabolism){
+		code.metabolism = evos('aerob');
+		css('photosynthesis',0);
+		code.metabolism += evos('photo');
 	}
-	if (EVO.dnaSwitch == 'on' && EVO.one.mitochondria == -1 && creation >= cost.mitochondria){
-		EVO.evolutionSwitch = 'on';
-		mitochondriaCode = '<p title="Evolve a centralized metabolic core." onclick="evos(\'mito\')"><b style="color:blue">Mitochondria</b></p>';
+	if (EVO.DNASwitch == 'on' && EVO.one.mitochondria == -1 && creation >= cost.mitochondria){
+		code.mitochondria = evos('mitochondria');
 	}
-	if (EVO.rnaSwitch == 'off' && creation >= cost.rna){
-		EVO.evolutionSwitch = 'on';
-		naCode = '<p title="Ribonucleic Acid, One of the grand building blocks of all life." onclick="evos(\'rna\')"><b style="color:blue">RNA</b></p>';
+	if (EVO.one.mitochondria > -1 && EVO.nucleus === null && creation >= cost.nucleus){
+		code.nucleus = evos('nucleus');
 	}
-	if (EVO.dnaSwitch == 'off' && EVO.nucleus == 'nucleus' && creation >= cost.dna){
-		EVO.evolutionSwitch = 'on';
-		naCode = '<p title="Deoxyribonucleic Acid, One of the grand building blocks of all life." onclick="evos(\'dna\')"><b style="color:blue">DNA</b></p>';
+	if (EVO.one.ribosome > -1 && EVO.nucleus == 'nucleus' && creation >= cost.endoplasmic){
+		code.endoplasmic = evos('endoplasmic');
 	}
-	if (EVO.stage > EVO.size.stage && EVO.one.metabolism >= 0 && creation >= EVO.size.max+1){
-		EVO.evolutionSwitch = 'on';
-		sizeCode = '<p title="Growing larger has many effects." onclick="evos(\'size\')"><b style="color:blue">Size ' + (EVO.size.max+1) + '</b></p>';
+	if (EVO.one.endoplasmic > -1 && creation >= cost.golgi){
+		code.golgi = evos('golgi');
 	}
-	if (EVO.one.metabolism >= 0 && EVO.mitosisSwitch == 'on' && creation >= cost.multicell && (EVO.atp/2 + (EVO.rnaB-EVO.rnaS)*100 + (EVO.dnaB-EVO.dnaS)*10000) > 2000){
-		EVO.evolutionSwitch = 'on';
-		multicelluarCode = '<p title="MultiCelluar Evolution" onclick="multicelluar()"><b style="color:blue">MultiCelluar</b></p>';
+	if (EVO.RNASwitch == 'off' && creation >= cost.RNA){
+		code.na = evos('RNA');
 	}
-	var evolutionCode = '<p style="color:gold" title="Choose your evolution carefully."><b>Evolutions</b></p>';
-	if (EVO.evolutionSwitch == 'off') {doc("evolutionUpgrade",'');}
-	if (EVO.evolutionSwitch == 'on') {doc("evolutionUpgrade",evolutionCode + membraneCode + cytoplasmCode + cytoskeletonCode + ciliaCode + flagellumCode + mitosisCode + aerobicrespirationCode + photophosphorylationCode + nucleusCode + mitochondriaCode + naCode + multicelluarCode + sizeCode);}
+	if (EVO.DNASwitch == 'off' && EVO.one.membraneScore > 1 && EVO.one.metabolism > -1 && creation >= cost.DNA){
+		code.na = evos('DNA');
+	}
+	if (EVO.stage > EVO.size.stage && EVO.one.metabolism > -1 && creation >= cost.size() && EVO.one.cytoplasm > 99){
+		css('size1',cost.size());
+		code.size = evos('size');
+	}
+	if (EVO.one.metabolism >= 0 && EVO.mitosisSwitch == 'on' && creation >= cost.multicell && (EVO.atp/2 + fun.RNA()*100 + fun.DNA()*10000) > 2000){
+		code.multicelluar = evos('multicelluar');
+	}
+	let codes = code.evolution + code.membrane + code.cytoskeleton + code.na + code.nucleus + code.multicelluar;
+	doc('stageUpgrade',codes);
+	if (codes == code.evolution){stage.classList.replace('gold','taboff');}
+	codes = code.evolution + code.mitosis + code.cytoplasm + code.cilia + code.flagellum + code.ribosome + code.metabolism + code.mitochondria + code.endoplasmic + code.golgi + code.size;
+	doc('gameUpgrade',codes);
+	if (codes == code.evolution){game.classList.replace('gold','taboff');}
 }
 
 function evos(x){
-	if (x == 'membrane'){
-		if (EVO.one.membraneScore == 0){EVO.evolved += cost.doublebubble;}
-		if (EVO.one.membraneScore == 1){EVO.evolved += cost.phospholipid;}
-		if (EVO.one.membraneScore == 2){EVO.evolved += cost.cellwall;}
-		EVO.one.membraneScore += 1;
+	let a;
+	let b = 'struc';
+	let c = 'stage';
+	let d = 'game';
+	let e = 'Switch';
+	let f = 'Type';
+	let g = 'on';
+	let swtch = function(){return EVO[a+e] == g && !document.getElementById(a);}
+	let great = function(){return EVO.one[a] > -1 && !document.getElementById(a);}
+	let check = function(){return EVO[a] == a && !document.getElementById(a);}
+	let on = function(){return EVO[a+e] = g;}
+	let evo = function(){EVO.evolved += cost[x];}
+	if (x !== undefined){document.getElementById(x).removeAttribute('id');}
+	a = EVO.one.membraneScore;
+	if (x !== undefined && x.match(/^(doublebubble|phospholipid|cellwall)$/)){
+		if (a == 0){EVO.evolved += cost.doublebubble;}
+		if (a == 1){EVO.evolved += cost.phospholipid;}
+		if (a == 2){EVO.evolved += cost.cellwall;}
+		EVO.one.membraneScore++;
+		a++
 	}
-	if (EVO.one.membraneScore == 1){doc('membrane','Double Bubble');}
-	if (EVO.one.membraneScore == 2){doc('membrane','Phospholipid');}
-	if (EVO.one.membraneScore == 3){doc('membrane','Cell Wall');}
-	if (x == 'reproduce'){
-		EVO.mitosisSwitch = 'on';
-		EVO.evolved += cost.mitosis;
+	let membrane = document.getElementById("structure").childNodes[0];
+	if (a == 1){membrane.id = 'doublebubble';}
+	if (a == 2){membrane.id = 'phospholipid';}
+	if (a == 3){membrane.id = 'cellwall';}
+	a = 'mitosis';
+	if (x == a){
+		on();
+		evo();
 	}
-	if (EVO.mitosisSwitch == 'on'){
-		doc('mitosisHTML','Mitosis');
-		doc('reproduceHTML','<div onmouseover="tip(\'mitosisTip\')" onmouseout="tap(\'mitosisTip\')" onclick="buyMitosis()"><p><b id="mitosisButton">Perform Mitosis</b><br>Mitosis Chance: ~<span id="mitosis"></span>%<br>Mitosis Cost: <span id="mitosisCost"></span></p></div><span id="mitosisTip"></span>');
-		doc('mitosis',EVO.mitosisChance);
-		doc('mitosisCost',mitosisMath());
+	if (swtch()){
+		copy(d,a);
+		css(a,EVO[a+'Chance']);
 	}
-	if (x == 'cytoplasm'){
-		EVO.one.cytoplasm = 0;
-		EVO.evolved += cost.cytoplasm;
+	a = 'cytoplasm';
+	if (x == a){
+		EVO.one[x] = 0;
+		evo();
 	}
-	if (EVO.one.cytoplasm > -1){
-		doc('cytoplasmHTML','<div onmouseover="tip(\'cytoplasmTip\')" onmouseout="tap(\'cytoplasmTip\')" onclick="buyCytoplasm()"><p><b id="cytoplasmButton">Buy Cytoplasm</b><span id="cytoplasm10"></span><br>Cytoplasm: <span id="cytoplasm"></span> nano liters<br>Cytoplasm Cost: <span id="cytoplasmCost"></span></p></div><span id="cytoplasmTip"></span>');
-		doc('cytoplasm',EVO.one.cytoplasm);
-		doc('cytoplasmCost',cytoplasmMath());
-		}
-	if (x == 'cytoskeleton'){
-		EVO.cytoskeleton = 'cytoskeleton';
-		EVO.evolved += cost.cytoskeleton;
+	if (great()){
+		copy(d,a);
+		css(a,EVO.one[a]);
 	}
-	if (EVO.cytoskeleton == 'cytoskeleton'){doc('cytoskeletonHTML','Cytoskeleton');}
-	if (x == 'nucleus'){
-		EVO.nucleus = 'nucleus';
-		EVO.evolved += cost.nucleus;
+	a = 'cytoskeleton';
+	if (x == a){
+		EVO[x] = x;
+		evo();
 	}
-	if (EVO.nucleus == 'nucleus'){doc('nucleusHTML','Nucleus');}
-	if (x == 'cilia'){
-		EVO.ciliaSwitch = 'on';
-		EVO.evolved += cost.cilfla;
+	if (check()){
+		copy(b,a);
 	}
-	if (EVO.ciliaSwitch == 'on'){
-		doc('ciliaHTML','<div onmouseover="tip(\'ciliaTip\')" onmouseout="tap(\'ciliaTip\')" onclick="cilfla(\'cilia\')"><p><b id="ciliaButton">Grow Cilia</b><span id="cilia10"></span><br>Cilia: <span id="cilia"></span></p></div><span id="ciliaTip"></span>');
-		doc('cilia',EVO.one.cilia);
+	a = 'cilia';
+	if (x == a){
+		on();
+		evo();
 	}
-	if (x == 'flagellum'){
-		EVO.flagellumSwitch = 'on';
-		EVO.evolved += cost.cilfla;
+	if (swtch()){
+		copy(d,a);
+		css(a,EVO.one[a]);
 	}
-	if (EVO.flagellumSwitch == 'on'){
-		doc('flagellumHTML','<div onmouseover="tip(\'flagellumTip\')" onmouseout="tap(\'flagellumTip\')" onclick="cilfla(\'flagellum\')"><p"><b id="flagellumButton">Grow Flagellum</b><span id="flagellum10"></span><br>Flagellum: <span id="flagellum"></span></p></div><span id="flagellumTip"></span>');
-		doc('flagellum',EVO.one.flagellum);
+	a = 'flagellum';
+	if (x == a){
+		on();
+		evo();
 	}
-	doc('moveHTML',fun.moveCost());
-	if (EVO.ciliaSwitch == 'on' || EVO.flagellumSwitch == 'on'){
-		doc('cilflaHTML','<p>Cost: <span id="cilflaCost"></span></p>');
-		doc('cilflaCost',cilflaMath());
+	if (swtch()){
+		copy(d,a);
+		css(a,EVO.one[a]);
 	}
-	if (x == 'rna'){
-		EVO.rnaSwitch = 'on';
-		EVO.evolved += cost.rna;
+	a = 'ribosome';
+	if (x == a){
+		on();
+		evo();
 	}
-	if (EVO.rnaSwitch == 'on'){
-		doc('rnaHTML','<div onmouseover="tip(\'rnaTip\')" onmouseout="tap(\'rnaTip\')" onclick="buyRNA()"><p><b id="rnaButton">Make RNA</b><span id="rna10"></span><br>RNA: <span id="rna"></span><br>RNA Cost: <span id="rnaCost"></span></p></div><span id="rnaTip"></span>');
-		doc('rnaCost',naMath('rnaB'));
+	if (swtch()){
+		copy(d,a);
+		css(a,EVO.one[a] + EVO.one[a+'Bonus']);
+		a = 'protein';
+		copy(c,a);
+		document.getElementById(a).removeAttribute('onclick');
+		css(a,EVO[a].whole);
+		setTimeout(RNA,60000);
+		setTimeout(protein,60000);
+		setTimeout(ribosome,3600000);
 	}
-	if (x == 'dna'){
-		EVO.dnaSwitch = 'on';
-		EVO.evolved += cost.dna;
+	a = 'RNA';
+	if (x == a){
+		on();
+		evo();
 	}
-	if (EVO.dnaSwitch == 'on'){
-		doc('dnaHTML','<div onmouseover="tip(\'dnaTip\')" onmouseout="tap(\'dnaTip\')" onclick="buyDNA()"><p><b id="dnaButton">Make DNA</b><span id="dna10"></span><br>DNA: <span id="dna"></span><br>DNA Cost: <span id="dnaCost"></span></p></div><span id="dnaTip"></span>');
-		doc('dnaCost',naMath('dnaB'));
+	if (swtch()){
+		copy(c,a);
 	}
-	if (x == 'aero'){
-		EVO.one.metabolismType = 'Aerobic Respiration';
-		EVO.one.metabolism = 0;
-		EVO.evolved += cost.metabolism;
+	a = 'DNA';
+	if (x == a){
+		on();
+		evo();
 	}
-	if (x == 'photo') {
-		EVO.one.metabolismType = 'Photophosphorylation';
-		EVO.one.metabolism = 0;
-		EVO.evolved += cost.metabolism;
+	if (swtch()){
+		copy(c,a);
 	}
-	if (EVO.one.metabolism > -1){doc('metabolismType',EVO.one.metabolismType);
-		doc('metabolismHTML','<div onmouseover="tip(\'metabolismTip\')" onmouseout="tap(\'metabolismTip\')" onclick="buyMetabolism()"><p><b id="metabolismButton">Improve Metabolism</b><br>Metabolism: +<span id="metabolism"></span>%<br>Metabolism Cost: <span id="metabolismCost"></span></p></div><span id="metabolismTip"></span>');
-		doc('metabolism',EVO.one.metabolism);
-		doc('metabolismCost',metabolismMath('metabolism'));
+	a = 'metabolism';
+	if (x !== undefined && x.match(/^(aerob|photo)$/)){
+		let z;
+		if (x == 'aerob'){z = 'Aerobic Respiration';}
+		if (x == 'photo'){z = 'Photophosphorylation';}
+		EVO.one[a+f] = z;
+		EVO.one[a] = 0;
+		EVO.evolved += cost[a];
+		if (x == 'photo'){photosynth();}
 	}
-	if (x == 'mito'){
-		EVO.one.mitochondria = 0;
-		EVO.evolved += cost.mitochondria;
+	if (great()){
+		copy(d,a);
+		css(a,EVO.one[a]);
+		document.getElementById('basic').id = EVO.one[a+f].slice(0,5).toLowerCase();
+		if (EVO.one.metabolismType == 'Photophosphorylation'){photosynth();}
 	}
-	if (EVO.one.mitochondria > -1){
-		doc('mitochondriaHTML','<div onmouseover="tip(\'mitochondriaTip\')" onmouseout="tap(\'mitochondriaTip\')" onclick="buyMitochondria()"><p><b id="mitochondriaButton">Improve Mitochondria</b><br>Mitochondria: +<span id="mitochondria"></span>%<br>Mitochondria Cost: <span id="mitochondriaCost"></span></p></div><span id="mitochondriaTip"></span>');
-		doc('mitochondria',EVO.one.mitochondria);
-		doc('mitochondriaCost',metabolismMath('mitochondria'));
+	a = 'mitochondria';
+	if (x == a){
+		EVO.one[x] = 0;
+		evo();
 	}
-	if (x == 'size'){
-		EVO.size.max += 1;
-		EVO.size.stage += 1;
-		EVO.evolved += EVO.size.max;
+	if (great()){
+		copy(d,a);
+		css(a,EVO.one[a]);
 	}
-	if (EVO.size.max > 0){
-		doc('boostHTML','<p>Boosted Evolutions<br><br>' + 'Size: ' + EVO.size.max + '</p>');
+	a = 'nucleus';
+	if (x == a){
+		EVO[x] = x;
+		evo();
 	}
-	EVO.evolutionSwitch = 'off';
+	if (check()){
+		copy(b,a);
+	}
+	a = 'endoplasmic';
+	if (x == a){
+		EVO.one[x] = 0;
+		evo();
+	}
+	if (great()){
+		copy(d,a);
+	}
+	a = 'golgi';
+	if (x == a){
+		EVO.one[x] = 0;
+		evo();
+	}
+	if (great()){
+		copy(d,a);
+	}
+	a = 'size';
+	if (x == a){
+		EVO[x][d]++;
+		EVO[x][c]++;
+		EVO.evolved += EVO[x][d];
+	}
+	if (EVO[a][d] > 0){
+		document.getElementById('boost').style.display = 'initial';
+		if (!document.getElementById(a)){copy('bstevo',a);}
+		css(a,EVO[a][d]);
+	}
 	updateATP();
-	if (EVO.rnaSwitch == 'on'){updateRNA();}
-	if (EVO.dnaSwitch == 'on'){updateDNA();}
+	if (EVO['RNA'+e] == g){updateNA('RNA');}
+	if (EVO['DNA'+e] == g){updateNA('DNA');}
+	updateEvolution();
+	tap();
+	if (x == 'multicelluar'){multicelluar();}
+}
+
+function evoChance(x){
+	let y = 'mitosisChance';
+	if ((Math.floor(Math.random()*100)+1) > EVO[y]){
+		let z = 'mitosisLearn';
+		EVO[z]++;
+		if (EVO[z] > EVO[y]){
+			EVO[z] -= (EVO[y] + 1);
+			EVO[y]++; 
+		}
+	} else {
+		EVO.bonus++;
+		EVO.mitosisLimit--;
+		if (EVO.mitosisLimit < 1){EVO[y]--;}
+		updateEvolution();
+	}
+	css(x,EVO[y]);
+}
+
+function RNA(x){
+	let y = EVO.one.ribosome + EVO.one.ribosomeBonus;
+	if (EVO.one.endoplasmic > -1){y *= (1+(EVO.one.endoplasmic/100));}
+	if (EVO.one.golgi > -1){y *= (1+(EVO.one.golgi/100));}
+	EVO.tRNA += y;
+	while (EVO.tRNA > 99 && EVO.atp >= math('RNA',xbuy.na)){
+		EVO.atp -= math('RNA',xbuy.na);
+		EVO.tRNA -= 100;
+		EVO.rRNA++;
+		updateNA('RNA');
+	}
+	if (x != 'start'){setTimeout(RNA,60000);}
+}
+
+function math(x,y,z){
+	let evo;
+	if (x.match(/^(cilia|flagellum)$/)){evo = EVO.one.cilia+EVO.one.flagellum;}
+	else if (EVO[x] !== undefined){evo = EVO[x];}
+	else {evo = EVO.one[x];}
+	if (z == undefined){z = 1;}
+	let cnt = 0;
+	for (let i = 0; i < z; i++){
+		let math = 10*Math.pow(y,evo+i);
+		if (!x.match(/^(evolution|cytoplasm)$/)){math = fun.cytoplasm(math);}
+		math = Math.floor(math);
+		cnt += math;
+	}
+	return cnt;
+}
+
+var xbuy = {
+	"evolution": 1.5,
+	"upgrade": 1.1,
+	"meta": 2,
+	"na": 1.01,
+};
+
+function buy(x,y){
+	if (x == 'ATP'){
+		if (EVO.food > 0){
+			EVO.atp++;
+			EVO.food--;
+			foods.update();
+		}
+	}
+	else if (x == 'evolution'){
+		if(EVO.atp >= math(x,xbuy[x])){
+			EVO.atp -= math(x,xbuy[x]);
+			EVO.evolution++;
+		}
+	}
+	else if (x.match(/^(cytoplasm|cilia|flagellum|mitosis)$/)){
+		if (y > 1){y = 10-(EVO.one[x]%10);}
+		else {y = 1;}
+		if (EVO.atp >= math(x,xbuy.upgrade,y) && EVO.one[x] < 1000){
+			EVO.atp -= math(x,xbuy.upgrade,y);
+			EVO.one[x] += y;
+			if (x == 'mitosis'){evoChance(x);}
+			else {css(x,EVO.one[x]);}
+		}
+	}
+	else if (x.match(/^(ribosome)$/)){
+		y = math(x,xbuy.meta);
+		if(EVO.atp >= y && fun.RNA() >= y && EVO.one[x] < 1000){
+			EVO.atp -= y;
+			EVO.sRNA += y;
+			EVO.one[x]++;
+			css(x,EVO.one[x] + EVO.one[x+'Bonus']);
+		}
+	}
+	else if (x.match(/^(metabolism|mitochondria)$/)){
+		if (x == 'metabolism'){y = 'RNA';}
+		if (x == 'mitochondria'){y = 'DNA';}
+		if(fun[y]() >= math(x,xbuy.meta)){
+			EVO['s'+y] += math(x,xbuy.meta);
+			EVO.one[x]++;
+			css(x,EVO.one[x]);
+		}
+	}
+	else if (x.match(/^(RNA|DNA)$/)){
+		let a,b,c;
+		if (x == 'RNA'){a = EVO.atp; b = 'atp'; c = 1;}
+		if (x == 'DNA'){a = fun.RNA(); b = 'sRNA'; c = -1;}
+		if (y > 1){y = 10-(fun[x]()%10);}
+		else {y = 1;}
+		if(a >= math(x,xbuy.na,y)){
+			EVO[b] -= math(x,xbuy.na,y)*c;
+			EVO[x] += y;
+		}
+	}
+	if (x.match(/^(ATP|evolution|cytoplasm|cilia|flagellum|mitosis|ribosome|RNA)$/)){
+		updateATP();
+	}
+	if (x.match(/^(ribosome|metabolism|RNA|DNA)$/)){
+		updateNA('RNA');
+	}
+	if (x.match(/^(mitochondria|DNA)$/)){
+		updateNA('DNA');
+	}
+	if (x.match(/^(evolution|cytoplasm)$/)){
+		updateEvolution();
+	}
+	tip(x,y);
+}
+
+function updateNA(x){
+	css(x,fun[x]());
+	color('RNA');
+	if (EVO.ribosomeSwitch == 'on') {color('ribosome');}
+	if (EVO.DNASwitch == 'on') {color('DNA');}
+	if (EVO.one.metabolism >= 0){color('metabolism');}
+	if (EVO.one.mitochondria >= 0){color('mitochondria');}
 	updateEvolution();
 }
 
-function mitosisMath(){return Math.floor(fun.cytoplasm()*(10*Math.pow(1.1,EVO.mitosis))/100);}
-
-function buyMitosis(){
-	if(EVO.atp >= mitosisMath()){
-		EVO.atp -= mitosisMath();
-		EVO.mitosis += 1;
-		updateATP();
-		evoChance();
-	}
-	doc('mitosisCost',mitosisMath());
-}
-
-function evoChance(){
-	if ((Math.floor(Math.random()*100)+1) > EVO.mitosisChance){
-		EVO.mitosisLearn += 1;
-		if (EVO.mitosisLearn > EVO.mitosisChance){
-			EVO.mitosisLearn -= (EVO.mitosisChance + 1);
-			EVO.mitosisChance += 1; 
-		}
-	} else {
-		EVO.bonus += 1;
-		EVO.mitosisLimit -= 1;
-		if (EVO.mitosisLimit < 1){EVO.mitosisChance -= 1;}
-		updateEvolution();
-	}
-	doc('mitosis',EVO.mitosisChance);
-}
-
-function cytoplasmMath(y){
-	if (y == undefined){y = 1;}
-	var cnt = 0;
-	for (var i = 0; i < y; i++){cnt += Math.floor(10*Math.pow(1.1,EVO.one.cytoplasm+i));}
-	return cnt;
-}
-
-function buyCytoplasm(x){
-	if (x == undefined){x = 1;}
-	if(EVO.atp >= cytoplasmMath(x) && EVO.one.cytoplasm < 1000){
-		EVO.atp -= cytoplasmMath(x);
-		EVO.one.cytoplasm += x;
-		doc('cytoplasm',EVO.one.cytoplasm);
-		updateATP();
-	}
-	doc('cytoplasmCost',cytoplasmMath());
-	if (EVO.mitosisSwitch == 'on'){doc('mitosisCost',mitosisMath());}
-	if (EVO.ciliaSwitch == 'on' || EVO.flagellumSwitch == 'on'){doc('cilflaCost',cilflaMath());}
-	if (EVO.one.metabolism > -1){doc('metabolismCost',metabolismMath('metabolism'));}
-	if (EVO.one.mitochondria > -1){doc('mitochondriaCost',metabolismMath('mitochondria'));}
-	if (EVO.rnaSwitch == 'on'){doc('rnaCost',naMath('rnaB'));}
-	if (EVO.dnaSwitch == 'on'){doc('dnaCost',naMath('dnaB'));}
-}
-
-function cilflaMath(y) {
-	if (y == undefined){y = 1;}
-	var cnt = 0;
-	for (var i = 0; i < y; i++){cnt += Math.floor(fun.cytoplasm()*(10*Math.pow(1.1,(EVO.one.cilia+EVO.one.flagellum+i)))/100);}
-	return cnt;
-}
-
-function cilfla(x,y){
-	if (y == undefined){y = 1;}
-	if (EVO.atp >= cilflaMath(y) && EVO.one[x] < 1000){
-		EVO.atp -= cilflaMath(y);
-		EVO.one[x] += y;
-		doc(x,EVO.one[x]);
-		updateATP();
-	}
-	doc('cilflaCost',cilflaMath());
-	doc('moveHTML',fun.moveCost());
-}
-
-function metabolismMath(x){return Math.floor(fun.cytoplasm()*(10*Math.pow(2,EVO.one[x]))/100);}
-
-function buyMetabolism(){
-	if(EVO.rnaB-EVO.rnaS >= metabolismMath('metabolism')){
-		EVO.rnaS += metabolismMath('metabolism');
-		EVO.one.metabolism += 1;
-		updateRNA();
-		doc('metabolism',EVO.one.metabolism);
-	}
-	doc('metabolismCost',metabolismMath('metabolism'));
-}
-
-function buyMitochondria(){
-	if(EVO.dnaB-EVO.dnaS >= metabolismMath('mitochondria')){
-		EVO.dnaS += metabolismMath('mitochondria');
-		EVO.one.mitochondria += 1;
-		updateDNA();
-		doc('mitochondria',EVO.one.mitochondria);
-	}
-	doc('mitochondriaCost',metabolismMath('mitochondria'));
-}
-
-function naMath(x,y){
-	if (y == undefined){y = 1;}
-	var cnt = 0;
-	for (var i = 0; i < y; i++){cnt += Math.floor(fun.cytoplasm()*(10*Math.pow(1.01,EVO[x]+i))/100);}
-	return cnt;
-}
-
-function buyRNA(x){
-	if (x == undefined){x = 1;}
-	if(EVO.atp >= naMath('rnaB',x)){
-		EVO.atp -= naMath('rnaB',x);
-		EVO.rnaB += x;
-		updateATP();
-		updateRNA();
-	}
-	doc('rnaCost',naMath('rnaB'));
-}
-
-function updateRNA(){
-	doc('rna',EVO.rnaB-EVO.rnaS);
-	if (EVO.one.metabolism >= 0){color('metabolism');}
-	if (EVO.dnaSwitch == 'on') {color('dna');}
-}
-
-function buyDNA(x){
-	if (x == undefined){x = 1;}
-	if(EVO.rnaB-EVO.rnaS >= naMath('dnaB',x)){
-		EVO.rnaS += naMath('dnaB',x);
-		EVO.dnaB += x;
-		updateRNA();
-		updateDNA();
-	}
-	doc('dnaCost',naMath('dnaB'));
-}
-
-function updateDNA(){
-	doc('dna',EVO.dnaB-EVO.dnaS);
-	if (EVO.one.mitochondria >= 0){color('mitochondria');}
-}
-
-function color(x){
-	var color = document.getElementById(x + 'Button');
-	var mod;
-	if (x == 'evolution' && EVO.atp >= evolutionMath()){color.style.color = 'red';}
-	else if (x == 'move' && EVO.atp >= 1000 - EVO.one.flagellum){color.style.color = 'red';}
-	else if (x == 'mitosis' && EVO.atp >= mitosisMath()){color.style.color = 'red';}
-	else if (x == 'cytoplasm' && EVO.atp >= cytoplasmMath()) {
-		color.style.color = 'red';
-		mod = 10-(EVO.one.cytoplasm%10);
-		if (EVO.atp >= cytoplasmMath(mod) && mod > 1){doc(x+'10','<b style="color:violet" onmouseover="doc(\'cytoplasmCost\',cytoplasmMath('+mod+'))" onmouseout="doc(\'cytoplasmCost\',cytoplasmMath())" onclick="buyCytoplasm('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc(x+'10','');}
-	}
-	else if (x.match(/^(cilia|flagellum)$/) && EVO.atp >= cilflaMath()){
-		color.style.color = 'red';
-		mod = 10-(EVO.one[x]%10);
-		if (EVO.atp >= cilflaMath(mod) && mod > 1){doc(x+'10','<b style="color:violet" onmouseover="doc(\'cilflaCost\',cilflaMath('+mod+'))" onmouseout="doc(\'cilflaCost\',cilflaMath())" onclick="cilfla(\'' + x + '\','+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc(x+'10','');}
-	}
-	else if (x == 'rna' && EVO.atp >= naMath('rnaB')){
-		color.style.color = 'red';
-		mod = 10-((EVO.rnaB-EVO.rnaS)%10);
-		if (EVO.atp >= naMath('rnaB',mod) && mod > 1){doc(x+'10','<b style="color:violet" onmouseover="doc(\'rnaCost\',naMath(\'rnaB\','+mod+'))" onmouseout="doc(\'rnaCost\',naMath(\'rnaB\'))" onclick="buyRNA('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc(x+'10','');}
-	}
-	else if (x == 'dna' && EVO.rnaB-EVO.rnaS >= naMath('dnaB')){
-		color.style.color = 'red';
-		mod = 10-((EVO.dnaB-EVO.dnaS)%10);
-		if (EVO.rnaB-EVO.rnaS >= naMath('dnaB',mod) && mod > 1){doc(x+'10','<b style="color:violet" onmouseover="doc(\'dnaCost\',naMath(\'dnaB\','+mod+'))" onmouseout="doc(\'dnaCost\',naMath(\'dnaB\'))" onclick="buyDNA('+mod+'); event.stopPropagation()">  X'+mod+'  </b>');}
-		else {doc(x+'10','');}
-	}
-	else if (x == 'metabolism' && EVO.rnaB-EVO.rnaS >= metabolismMath('metabolism')){color.style.color = 'red';}
-	else if (x == 'mitochondria' && EVO.dnaB-EVO.dnaS >= metabolismMath('mitochondria')){color.style.color = 'red';}
-	else {
-		color.style.color = 'green';
-		if (x.match(/^(cytoplasm|cilia|flagellum|rna|dna)$/)){doc(x+'10','');}
-	}
-}
-
 function multicelluar(){
-	EVO.evolved += cost.multicell;
 	var evolve = {
+		"version": EVO.version,
 		"stage": 2,
 		"date": Date.now(),
 		"one": EVO.one,
 		"sun": EVO.sun,
-		"size": EVO.size.max,
+		"size": {
+			"game": EVO.size.game,
+			"stage": 0,
+		},
 		"food": EVO.food/2,
-		"nutrient": EVO.atp/2 + (EVO.rnaB-EVO.rnaS)*100 + (EVO.dnaB-EVO.dnaS)*10000,
+		"nutrient": EVO.atp/2,
+		"protein": EVO.protein,
 		"evolution": EVO.evolution,
 		"evolved": EVO.evolved,
 		"bonus": EVO.bonus,
 	};
 	if (evolve.mitochondria < 0){evolve.mitochondria = 0;}
-	localStorage.setItem("EVOE", JSON.stringify(evolve));
+	EVO.evolved += cost.multicell;
+	localStorage.setItem('EVOE', JSON.stringify(evolve));
 	clearTimeout(save);
-	localStorage.removeItem("EVO");
-	window.location.assign("EVO2.html");
+	localStorage.removeItem('EVO');
+	window.location.assign('EVO.html');
 }
 
-function tip(x){
-	if (x == 'grow'){doc(x,'<p>Click to grow your Cell.<br>Adenosine Triphosphate is how your cell grows.</p>');}
-	if (x == 'mitosisTip'){doc(x,'<p>Click to under go mitosis and reproduce a copy of your cell.<br>Each upgrade rolls a random chance to gain a Evolution Point.</p>');}
-	if (x == 'cytoplasmTip'){doc(x, '<p>Click to add Cytoplasm to your cell.<br>Cilia processes food faster.<br>All upgrade costs are reduced by a small amount</p>');}
-	if (x == 'ciliaTip'){doc(x, '<p>Click to grow more Cilia for your cell.<br>Cilia gathers food for your metabolism to convert to ATP.</p>');}
-	if (x == 'flagellumTip'){doc(x, '<p>Click to grow a stronger Flagellum for your cell.<br>Flagellum reduces the cost of movement for your cell and makes it easier to find more food.</p>');}
-	if (x == 'rnaTip'){doc(x, '<p>Click to make RNA for your cell.<br>RNA is required in advanced growth and evolution.<br>RNA requires ATP to create.</p>');}
-	if (x == 'dnaTip'){doc(x, '<p>Click to make DNA for your cell.<br>DNA is required in advanced growth and evolution.<br>DNA requires RNA to create.</p>');}
-	if (x == 'metabolismTip'){doc(x, '<p>Click to improve your cell\'s metabolism.<br>Your cells Metabolism costs RNA to improve.</p>');}
-	if (x == 'mitochondriaTip'){doc(x, 'Click to improve your cell\'s mitochondria.<br>Mitochondria costs DNA to improve.<br>Mitochondria further enhances your metabolism.</p>');}
-	if (x == 'evoTip') {doc(x,'<p>Click for a chance to gain evolution points to evolve your cell.<br>Evolution points are used to purchase evolutions.</p>');}
+function color(x){
+	let color = document.getElementById(x);
+	let off = color.classList.replace('growon','growoff');
+	let mod;
+	let mods = function(a,b,c){
+		mod = 10-(a%10);
+		if (b >= math(x,c,mod) && mod > 1){css(x+'-x','x'+mod);}
+		else {css(x+'-x','');}
+	}
+	if (x.match(/^(mitosis|cytoplasm|cilia|flagellum)$/) && EVO.atp >= math(x,xbuy.upgrade)){
+		off;
+		if (x !== 'mitosis'){
+			mods(EVO.one[x],EVO.atp,xbuy.upgrade);
+		}
+	}
+	else if (x == 'ribosome' && EVO.atp >= math(x,xbuy.meta) && fun.RNA() >= math(x,xbuy.meta)){off;}
+	else if (x == 'RNA' && EVO.atp >= math(x,xbuy.na)){
+		off;
+		mods(fun.RNA(),EVO.atp,xbuy.na);
+	}
+	else if (x == 'DNA' && fun.RNA() >= math(x,xbuy.na)){
+		off;
+		mods(fun.DNA(),fun.RNA(),xbuy.na);
+	}
+	else if (x == 'metabolism' && fun.RNA() >= math(x,xbuy.meta)){off;}
+	else if (x == 'mitochondria' && fun.DNA() >= math(x,xbuy.meta)){off;}
+	else if (x == 'evolution' && EVO.atp >= math(x,xbuy[x])){off;}
+	else {
+		color.classList.replace('growoff','growon');
+		if (x.match(/^(cytoplasm|cilia|flagellum|RNA|DNA)$/)){css(x+'-x','');}
+	}
 }
 
-function tap(x){doc(x,'');}
+function tip(x,y){
+	if (x == 'swirl'){css('cost-'+x,fun.moveCost());}
+	else if (x == 'evolution'){css('cost-'+x,math(x,xbuy[x]));}
+	else if (x.match(/^(metabolism|mitochondria)$/)){css('cost-'+x,math(x,xbuy.meta));}
+	else if (x.match(/^(cytoplasm|cilia|flagellum|mitosis)$/)){
+		if (y == 11){y = 10-EVO.one[x]%10;}
+		css('cost-'+x,math(x,xbuy.upgrade,y));
+	}
+	else if (x.match(/^(ribosome)$/)){css('cost-'+x,math(x,xbuy.meta));}
+	else if (x.match(/^(RNA|DNA)$/)){
+		if (y == 11){y = 10-(fun[x]()%10);}
+		css('cost-'+x,math(x,xbuy.na,y));
+	}
+	let z = document.getElementById('tip');
+	z.classList.replace(z.className,x);
+	cssHTML('mouse','initial');
+}
+
+function tap(x){
+	let z = document.getElementById('tip');
+	z.classList.replace(z.className,'empty');
+	cssHTML('mouse','none');
+}
