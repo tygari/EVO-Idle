@@ -226,6 +226,8 @@ function updateATP(){
 	clr('flagellum');
 	clr('RNA');
 	clr('ribosome');
+	clr('endoplasmic');
+	clr('golgi');
 }
 
 function autoClick(x){
@@ -263,7 +265,7 @@ function photosynth(x){
 var cost = {
 	"doublebubble": 1,
 	"phospholipid": 2,
-	"cellwall": 6,
+	"cellwall": 7,
 	"mitosis": 4,
 	"cytoplasm": 1,
 	"cytoskeleton": 2,
@@ -274,9 +276,9 @@ var cost = {
 	"DNA": 6,
 	"metabolism": 5,
 	"mitochondria": 7,
-	"nucleus": 998,
-	"endoplasmic": 999,
-	"golgi": 999,
+	"nucleus": 8,
+	"endoplasmic": 9,
+	"golgi": 9,
 	"multicell": 5,
 	"size": function(){return EVO.size.game+1;},
 }
@@ -345,10 +347,10 @@ function updateEvolution(){
 	if (EVO.one.mitochondria > -1 && EVO.nucleus === null && creation >= cost.nucleus){
 		code.nucleus = evos('nucleus');
 	}
-	if (EVO.one.ribosome > -1 && EVO.nucleus == 'nucleus' && creation >= cost.endoplasmic){
+	if (EVO.one.ribosome > -1 && EVO.one.endoplasmic < 0 && EVO.nucleus == 'nucleus' && creation >= cost.endoplasmic){
 		code.endoplasmic = evos('endoplasmic');
 	}
-	if (EVO.one.endoplasmic > -1 && creation >= cost.golgi){
+	if (EVO.one.endoplasmic > -1 && EVO.one.golgi < 0 && creation >= cost.golgi){
 		code.golgi = evos('golgi');
 	}
 	if (EVO.RNASwitch == 'off' && creation >= cost.RNA){
@@ -514,6 +516,7 @@ function evos(x){
 	}
 	if (great()){
 		copy(d,a);
+		css(a,EVO.one[a]);
 	}
 	a = 'golgi';
 	if (x == a){
@@ -522,6 +525,7 @@ function evos(x){
 	}
 	if (great()){
 		copy(d,a);
+		css(a,EVO.one[a]);
 	}
 	a = 'size';
 	if (x == a){
@@ -627,7 +631,18 @@ function buy(x,y){
 			EVO.atp -= y;
 			EVO.sRNA += y;
 			EVO.one[x]++;
-			css(x,EVO.one[x] + EVO.one[x+'Bonus']);
+			css(x,EVO.one[x]+EVO.one[x+'Bonus']);
+		}
+	}
+	else if (x.match(/^(endoplasmic|golgi)$/)){
+		y = math(x,xbuy.meta);
+		if(EVO.atp >= y && fun.RNA() >= y && EVO.one[x] < 100 & EVO.one.ribosome + EVO.one.ribosomeBonus > EVO.one[x]){
+			EVO.atp -= y;
+			EVO.sRNA += y;
+			EVO.one.ribosomeBonus--;
+			EVO.one[x]++;
+			css(x,EVO.one[x]);
+			css('ribosome',EVO.one.ribosome+EVO.one.ribosomeBonus);
 		}
 	}
 	else if (x.match(/^(metabolism|mitochondria)$/)){
@@ -650,10 +665,10 @@ function buy(x,y){
 			EVO[x] += y;
 		}
 	}
-	if (x.match(/^(ATP|evolution|cytoplasm|cilia|flagellum|mitosis|ribosome|RNA)$/)){
+	if (x.match(/^(ATP|evolution|cytoplasm|cilia|flagellum|mitosis|ribosome|RNA|endoplasmic|golgi)$/)){
 		updateATP();
 	}
-	if (x.match(/^(ribosome|metabolism|RNA|DNA)$/)){
+	if (x.match(/^(ribosome|metabolism|RNA|DNA|endoplasmic|golgi)$/)){
 		updateNA('RNA');
 	}
 	if (x.match(/^(mitochondria|DNA)$/)){
@@ -668,10 +683,12 @@ function buy(x,y){
 function updateNA(x){
 	css(x,fun[x]());
 	color('RNA');
-	if (EVO.ribosomeSwitch == 'on') {color('ribosome');}
-	if (EVO.DNASwitch == 'on') {color('DNA');}
+	if (EVO.ribosomeSwitch == 'on'){color('ribosome');}
 	if (EVO.one.metabolism >= 0){color('metabolism');}
+	if (EVO.DNASwitch == 'on'){color('DNA');}
 	if (EVO.one.mitochondria >= 0){color('mitochondria');}
+	if (EVO.one.endoplasmic >= 0){color('endoplasmic');}
+	if (EVO.one.golgi >= 0){color('golgi');}
 	updateEvolution();
 }
 
@@ -717,6 +734,7 @@ function color(x){
 		}
 	}
 	else if (x == 'ribosome' && EVO.atp >= math(x,xbuy.meta) && fun.RNA() >= math(x,xbuy.meta)){off;}
+	else if (x.match(/^(endoplasmic|golgi)$/) && EVO.atp >= math(x,xbuy.meta) && fun.RNA() >= math(x,xbuy.meta) & EVO.one.ribosome + EVO.one.ribosomeBonus > EVO.one[x]){off;}
 	else if (x == 'RNA' && EVO.atp >= math(x,xbuy.na)){
 		off;
 		mods(fun.RNA(),EVO.atp,xbuy.na);
@@ -742,7 +760,7 @@ function tip(x,y){
 		if (y == 11){y = 10-EVO.one[x]%10;}
 		css('cost-'+x,math(x,xbuy.upgrade,y));
 	}
-	else if (x.match(/^(ribosome)$/)){css('cost-'+x,math(x,xbuy.meta));}
+	else if (x.match(/^(ribosome|endoplasmic|golgi)$/)){css('cost-'+x,math(x,xbuy.meta));}
 	else if (x.match(/^(RNA|DNA)$/)){
 		if (y == 11){y = 10-(fun[x]()%10);}
 		css('cost-'+x,math(x,xbuy.na,y));

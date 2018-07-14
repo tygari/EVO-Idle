@@ -116,7 +116,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: '  ('var(--endoplasmic)')  ';
 }
 .endoplasmic::before {
-	content: '\a''A network of membranous tubules within the cytoplasm.''\a''Assists with the production and transport of proteins.';
+	content: 'Cost: ' var(--cost-endoplasmic) '\a''A network of membranous tubules within the cytoplasm.''\a''Assists with the production and transport of proteins.';
 }
 #golgi::before {
 	content: '\a''Golgi Apparatus';
@@ -125,7 +125,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: '  ('var(--golgi)')  ';
 }
 .golgi::before {
-	content: '\a''A stack of small flat sacs formed by membranes inside a cell’s cytoplasm.''\a''Assists with the production and transport of proteins.';
+	content: 'Cost: ' var(--cost-golgi) '\a''A stack of small flat sacs formed by membranes inside a cell\'s cytoplasm.''\a''Assists with the production and transport of proteins.';
 }
 #RNA::before {
 	content: '\a''RNA';
