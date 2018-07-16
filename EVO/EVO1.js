@@ -267,20 +267,20 @@ function photosynth(x){
 var cost = {
 	"doublebubble": 1,
 	"phospholipid": 2,
-	"cellwall": 7,
-	"mitosis": 4,
+	"cellwall": 6,
+	"mitosis": 3,
 	"cytoplasm": 1,
-	"cytoskeleton": 2,
-	"cilia": 3,
-	"flagellum": 3,
-	"ribosome": 5,
-	"RNA": 4,
-	"DNA": 6,
-	"metabolism": 5,
-	"mitochondria": 7,
-	"nucleus": 8,
-	"endoplasmic": 9,
-	"golgi": 9,
+	"cytoskeleton": 1,
+	"cilia": 2,
+	"flagellum": 2,
+	"ribosome": 4,
+	"RNA": 3,
+	"DNA": 5,
+	"metabolism": 4,
+	"mitochondria": 6,
+	"nucleus": 6,
+	"endoplasmic": 7,
+	"golgi": 7,
 	"multicell": 5,
 	"size": function(){return EVO.size.game+1;},
 }
@@ -567,7 +567,7 @@ function RNA(x){
 	if (EVO.one.endoplasmic > -1){y *= (1+(EVO.one.endoplasmic/100));}
 	if (EVO.one.golgi > -1){y *= (1+(EVO.one.golgi/100));}
 	EVO.tRNA += y;
-	while (EVO.tRNA > 99 && EVO.atp >= math('RNA',xbuy.na)){
+	while (EVO.tRNA > 99 && EVO.atp >= math('RNA',xbuy.na)*(1-(EVO.one.ribosome/1000))){
 		EVO.atp -= math('RNA',xbuy.na);
 		EVO.tRNA -= 100;
 		EVO.rRNA++;

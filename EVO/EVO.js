@@ -1,7 +1,7 @@
 const foods = {/* Random * ((max-min)*mod)*muscle + (min*mod)*sight */
 	"check": function(){
 		let type;
-		let check = function(x){return EVO.food > foods[x].amount;}
+		let check = function(x){return EVO.food > foods[x].amount();}
 		if (check('bountiful')){type = 'bountiful';}
 		else if (check('abundant')){type = 'abundant';}
 		else if (check('plentiful')){type = 'plentiful';}
@@ -27,25 +27,25 @@ const foods = {/* Random * ((max-min)*mod)*muscle + (min*mod)*sight */
 	"Herbivore": 10,
 	"bountiful": {
 		"name": 'bountiful',
-		"amount": function(){foods.amount(10000);},
+		"amount": function(){return foods.amount(10000);},
 		"multi": 1.2,
 		"timer": 0.5,
 	},
 	"abundant": {
 		"name": 'abundant',
-		"amount": function(){foods.amount(7500);},
+		"amount": function(){return foods.amount(7500);},
 		"multi": 1,
 		"timer": 1,
 	},
 	"plentiful": {
 		"name": 'plentiful',
-		"amount": function(){foods.amount(5000);},
+		"amount": function(){return foods.amount(5000);},
 		"multi": 0.8,
 		"timer": 1.5,
 	},
 	"sparse": {
 		"name": 'sparse',
-		"amount": function(){foods.amount(2500);},
+		"amount": function(){return foods.amount(2500);},
 		"multi": 0.6,
 		"timer": 2,
 	},
