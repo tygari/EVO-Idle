@@ -29,7 +29,7 @@ const foods = {/* Random * ((max-min)*mod)*muscle + (min*mod)*sight */
 		"name": 'bountiful',
 		"amount": function(){foods.amount(10000);},
 		"multi": 1.2,
-		"timer": 0.8,
+		"timer": 0.5,
 	},
 	"abundant": {
 		"name": 'abundant',
@@ -41,24 +41,24 @@ const foods = {/* Random * ((max-min)*mod)*muscle + (min*mod)*sight */
 		"name": 'plentiful',
 		"amount": function(){foods.amount(5000);},
 		"multi": 0.8,
-		"timer": 2,
+		"timer": 1.5,
 	},
 	"sparse": {
 		"name": 'sparse',
 		"amount": function(){foods.amount(2500);},
 		"multi": 0.6,
-		"timer": 3,
+		"timer": 2,
 	},
 	"scarce": {
 		"name": 'scarce',
 		"amount": 0,
 		"multi": 0.4,
-		"timer": 4,
+		"timer": 2.5,
 	},
 	"none": {
 		"name": 'none',
 		"multi": 0.2,
-		"timer": 5,
+		"timer": 3,
 	},
 }
 

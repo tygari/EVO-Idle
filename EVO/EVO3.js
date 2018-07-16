@@ -20,8 +20,6 @@ var EVO = {
 	"osmisisLearn": 0,
 	"salinity": 35,
 	"salinityCurse": 0,
-	"food": 0,
-	"mineral": 0,
 	"area": {
 		"predator": 0,
 		"grazer": 0,
