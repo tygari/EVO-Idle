@@ -73,49 +73,49 @@
 #diet::before {
 	content: '\a''Diet: ';
 }
-#carnivore::before {
+#carn::before {
 	content: 'Carnivore';
 }
-.carnivore::before {
+.carn::before {
 	content: 'Your worm\'s diet specializes to break down animal matter.';
 }
-#herbivore::before {
+#herb::before {
 	content: 'Herbivore';
 }
-.herbivore::before {
+.herb::before {
 	content: 'Your worm\'s diet specializes to break down plant matter.';
 }
 #skeleton::before {
 	content: '\a''Skeleton: ';
 }
-#endoskeleton::before {
+#endo::before {
 	content: 'Endoskeleton';
 }
-.endoskeleton::before {
+.endo::before {
 	content: 'Your worm develops an internal skeleton to give structure to its growing size.';
 }
-#exoskeleton::before {
+#exo::before {
 	content: 'Exoskeleton';
 }
-.exoskeleton::before {
+.exo::before {
 	content: 'Your worm develops an external skeleton to give structure to its growing size.';
 }
-#camoflauge::before {
+#camo::before {
 	content: '\a''Camoflauge';
 }
-.camoflauge::before {
+.camo::before {
 	content: 'Camoflauge assists with hiding when hunting or avoiding being hunted.';
 }
-#territorial::before {
+#terri::before {
 	content: '\a''Territorial';
 }
-.territorial::before {
+.terri::before {
 	content: 'Territorial creatures protect their area slowing potential food loss.';
 }
-#roaming::before {
+#roam::before {
 	content: '\a''Roaming';
 }
-.roaming::before {
+.roam::before {
 	content: 'Roaming creatures don\'t stop moving finding new areas faster.';
 }
 #hyper::before {

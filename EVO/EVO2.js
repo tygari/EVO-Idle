@@ -1,8 +1,5 @@
 var EVO = {
-	"version": 0,
 	"stage": 2,
-	"date": Date.now(),
-	"one": {},
 	"two": {
 		"celladhesion": -1,
 		"motility": 0,
@@ -15,8 +12,6 @@ var EVO = {
 		"excretion": 0,
 		"sight": 0,
 	},
-	"sun":{},
-	"size": {},
 	"current": 50,
 	"currentDamage": 0,
 	"adhesionLearn": 0,
@@ -26,16 +21,10 @@ var EVO = {
 	"salinityCurse": 0,
 	"osmisisLearn": 0,
 	"toxin": 0,
-	"food": 0,
-	"nutrient": 0,
-	"protein": {},
-	"evolution": 0,
-	"evolved": 0,
-	"bonus": 0,
 	"colony": 0,
 	"cellL": 0,
 	"cellT": 0,
-	"sex": 0,
+	"sex": 'off',
 	"communication": null,
 	"quorum": null,
 	"biofilm": null,
@@ -127,26 +116,27 @@ function start(){
 		EVO.size = localSave.size;
 		EVO.nutrient = localSave.nutrient;
 		EVO.protein = localSave.protein;
-		EVO.evolution = localSave.evolution;
-		EVO.evolved = localSave.evolved;
-		EVO.bonus = localSave.bonus;
+		EVO.evo = localSave.evo;
 		EVO.date = localSave.date;
 		localStorage.setItem('EVO', JSON.stringify(EVO));
 		localStorage.removeItem('EVOE');
 	}
 	/*HTML Alterations*/
-	document.getElementById('structure').insertAdjacentHTML('afterbegin','<struc id="struc" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></struc>');
-	document.getElementById('devevo').insertAdjacentHTML('afterbegin','<devevo id="devone"><span id="devtwo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></span></devevo>');
-	document.getElementById('boost').insertAdjacentHTML('afterbegin','<boost id="bstevo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></boost>');
 	let html = function(x){document.getElementById(x+'box').insertAdjacentHTML('afterbegin','<div class="button butcol growoff" id="'+x+'" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="buy(this.id)"><c></c><b onmouseenter="tip(this.parentNode.id,11)" onmouseleave="tip(this.parentNode.id)" onclick="buy(this.parentNode.id,11); event.stopPropagation()"></b></div>');}
 	html('stage');
 	html('game');
+	html('loot');
 	copy('devone','metabolize');
-	document.getElementById('metabolize').firstChild.id = EVO.one.metabolismType.slice(0,5).toLowerCase();
+	document.getElementById('metabolize').firstChild.id = EVO.one.metabolismType;
 	copy('stage','nutrient');
 	document.getElementById('nutrient').removeAttribute("onclick");
-	copy('stage','protein');
-	document.getElementById('protein').removeAttribute("onclick");
+	if (EVO.one.ribosome > 0){
+		copy('loot','protein');
+		document.getElementById('protein').removeAttribute("onclick");
+	} else {
+		document.getElementsByTagName('label')[0].style.visibility = 'hidden';
+		document.getElementsByTagName('label')[1].style.visibility = 'hidden';
+	}
 	copy('stage','colony');
 	copy('stage','evolution','beforebegin');
 	copy('evolution','combat','beforebegin');
@@ -176,7 +166,7 @@ function start(){
 	css('protein',EVO.protein.whole);
 	setTimeout(protein,60000);
 	setTimeout(ribosome,3600000);
-	if (EVO.one.metabolismType == 'Photophosphorylation'){setTimeout(photosynth, 1000);}
+	if (EVO.one.metabolismType == 'photo'){setTimeout(photosynth, 1000);}
 	setTimeout(cellTimer,Math.ceil(600000*((100-(EVO.two.balance/2))/100)));
 	setTimeout(events,300000);
 	setTimeout(swirly,30,2,2,Math.floor(Math.random()*window.innerWidth)-50,Math.floor(Math.random()*window.innerHeight)-50,0);
@@ -191,7 +181,7 @@ function speedup(x){
 			autoClick('start');
 			speedUp[1] = speedUp[0];
 		}
-		if (EVO.one.metabolismType == 'Photophosphorylation' && speedUp[0] >= speedUp[2] + ((1000+EVO.salinityCurse)*fun.mul.vascular()+1)){
+		if (EVO.one.metabolismType == 'photo' && speedUp[0] >= speedUp[2] + ((1000+EVO.salinityCurse)*fun.mul.vascular()+1)){
 			photosynth('start');
 			speedUp[2] = speedUp[0];
 		}
@@ -312,7 +302,7 @@ function autoClick(x){
 	let feed = (EVO.one.cilia/EVO.stage+(EVO.colony-EVO.cellL)+EVO.two.digestive)*foods[type].multi*fun.mul.EPS();
 	if (feed < 1){feed = 1;}
 	EVO.food -= feed;
-	if (EVO.one.metabolismType == 'Aerobic Respiration'){feed *= fun.mul.metabolism()*fun.mul.respiratory();}
+	if (EVO.one.metabolismType == 'aerob'){feed *= fun.mul.metabolism()*fun.mul.respiratory();}
 	EVO.nutrient += feed;
 	if (EVO.food < 0){EVO.food = 0;}
 	if (x !== 'start'){
@@ -406,7 +396,7 @@ function updateEvolution(){
 		evo('sight');
 	}
 	let evos = function(x){code[x] = '<p id="'+x+'" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="evos(this.id)"></p>'};
-	if (EVO.sex == 0 && cell >= 1 && creation >= cost.sex){
+	if (EVO.sex == 'off' && cell >= 1 && creation >= cost.sex){
 		evos('sex');
 	}
 	if (EVO.two.celladhesion == -1 && cell >= 1 && creation >= cost.celladhesion){
@@ -470,11 +460,12 @@ function evos(x){
 	let e = 'Switch';
 	let g = 'on';
 	let check = function(){return EVO[a] == a && !document.getElementById(a);}
-	let evo = function(){EVO.evolved += cost[x];}
+	let evo = function(){EVO.evo.evolved += cost[x];}
 	a = 'sex';
 	if (x == a){
-		EVO[x] = 1;
+		EVO[x] = g;
 		evo();
+		EVO.evo.cost = (EVO.evo.cost-0.05).toFixed(2);
 	}
 	if (EVO[a] == 1 && !document.getElementById(a)){
 		copy(b,a);
@@ -552,7 +543,7 @@ function evos(x){
 	if (x == a){
 		EVO[x][d]++;
 		EVO[x][c]++;
-		EVO.evolved += EVO[x][d];
+		EVO.evo.evolved += EVO[x][d];
 	}
 	if (EVO[a][d] > 0){
 		document.getElementById('boost').style.display = 'initial';
@@ -568,7 +559,7 @@ function evos(x){
 function specialized(x){
 	if (x !== undefined){document.getElementById(x).removeAttribute('id');}
 	if (x !== undefined){
-		EVO.evolved += (EVO.specialized * cost.specialized);
+		EVO.evo.evolved += (EVO.specialized * cost.specialized);
 		if (!x.match(/^(circular|dependency|radial)$/)){EVO.specialized++;}
 	}
 	let spec = function(z){
@@ -635,7 +626,8 @@ function cellAdhesion(){
 
 function math(x,y,z){
 	let evo;
-	if (x.match(/^(colony|EPS|evolution)$/)){evo = EVO[x];}
+	if (x == 'evolution'){evo = EVO.evo[x];}
+	else if (x.match(/^(colony|EPS)$/)){evo = EVO[x];}
 	else {
 		let a = function(c){return EVO.two[c]*(100-REC[c].cost/2)/100;}
 		let b = {
@@ -663,14 +655,20 @@ function math(x,y,z){
 }
 
 var xbuy = {
-	"evolution": 1.5,
 	"cell": 1.1,
 	"specialize": 2,
 	"EPS": 1.01,
 };
 
 function buy(x,y){
-	if (x.match(/^(colony|EPS|evolution)$/)){
+	if (x == 'evolution'){
+		if(EVO.nutrient >= math(x,EVO.evo[x])){
+			EVO.nutrient -= math(x,EVO.evo[x]);
+			EVO.evo[x]++;
+			evolutionCombat();
+		}
+	}
+	else if (x.match(/^(colony|EPS)$/)){
 		if (y > 1){
 			if (x == 'colony'){y = 10-((EVO[x]-EVO.cellL)%10);}
 			else {y = 10-(EVO[x]%10);}
@@ -678,13 +676,11 @@ function buy(x,y){
 		else {y = 1;}
 		let z;
 		if (x == 'colony'){z = xbuy.cell;}
-		else if (x == 'EPS'){z = xbuy.EPS;}
-		else {z = xbuy.evolution-(EVO.sex/10);}
+		if (x == 'EPS'){z = xbuy.EPS;}
 		if (EVO.nutrient >= math(x,z,y)){
 			EVO.nutrient -= math(x,z,y);
 			EVO[x] += y;
 			if (x == 'EPS'){css(x,EVO[x]);}
-			if (x == 'evolution' && EVO.specialized > 1){evolutionCombat();}
 		}
 	}
 	else if (x.match(/^(offense|defense|speed|special)$/)){cbtupg(x);}
@@ -711,11 +707,12 @@ function colony(){
 }
 
 function worm(){
-	EVO.evolved += cost.worm;
+	EVO.evo.evolved += cost.worm;
 	var evolve = {
 		"version": EVO.version,
 		"stage": 3,
 		"date": Date.now(),
+		"evo": EVO.evo,
 		"one": EVO.one,
 		"two": EVO.two,
 		"sun": EVO.sun,
@@ -726,9 +723,6 @@ function worm(){
 		"food": EVO.food/2,
 		"mineral": EVO.nutrient/2,
 		"protein": EVO.protein,
-		"evolution": EVO.evolution,
-		"evolved": EVO.evolved,
-		"bonus": EVO.bonus,
 		"combat": EVO.combat,
 		"specialized": EVO.specialized,
 		"balanceSwitch": EVO.balanceSwitch,
@@ -767,7 +761,7 @@ function color(x){
 		else {css(x+'-x','');}
 	}
 	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/) && EVO.nutrient >= math(x,xbuy.specialize) && EVO.colony-EVO.cellL > EVO.two[x]){off;}
-	else if (x == 'evolution' && EVO.nutrient >= math(x,xbuy.evolution-(EVO.sex/10))){off;}
+	else if (x == 'evolution' && EVO.nutrient >= math(x,EVO.evo.cost)){off;}
 	else {
 		color.classList.replace('growoff','growon');
 		if (x.match(/^(colony|EPS)$/)){css(x+'-x','');}
@@ -776,7 +770,7 @@ function color(x){
 
 function tip(x,y){
 	if (x == 'swirl'){css('cost-'+x,fun.moveCost());}
-	else if (x == 'evolution'){css('cost-'+x,math(x,xbuy.evolution-(EVO.sex/10)));}
+	else if (x == 'evolution'){css('cost-'+x,math(x,EVO.evo.cost));}
 	else if (x == 'colony'){
 		if (y == 11){y = 10-((EVO.colony-EVO.cellL)%10);}
 		css('cost-'+x,math(x,xbuy.cell,y));

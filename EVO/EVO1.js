@@ -1,5 +1,4 @@
 var EVO = {
-	"version": 1,
 	"stage": 1,
 	"date": Date.now(),
 	"one": {
@@ -31,9 +30,12 @@ var EVO = {
 		"whole": 0,
 		"partial": 0,
 	},
-	"evolution": 0,
-	"evolved": 0,
-	"bonus": 0,
+	"evo": {
+		"evolution": 0,
+		"evolved": 0,
+		"bonus": 0,
+		"cost": 1.4,
+	},
 	"mitosisSwitch": 'off',
 	"mitosisLimit": 5,
 	"mitosisChance": 0,
@@ -73,17 +75,17 @@ function start(){
 	if (localStorage.getItem('REC') !== null){REC = JSON.parse(localStorage.getItem('REC'));}
 	if (localStorage.getItem('EVO') !== null){EVO = JSON.parse(localStorage.getItem('EVO'));}
 	/*HTML Alterations*/
-	document.getElementById('structure').insertAdjacentHTML('afterbegin','<struc id="struc" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></struc>');
-	document.getElementById('devevo').insertAdjacentHTML('afterbegin','<devevo id="devone"><span id="devtwo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></span></devevo>');
-	document.getElementById('boost').insertAdjacentHTML('afterbegin','<boost id="bstevo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></boost>');
 	let html = function(x){document.getElementById(x+'box').insertAdjacentHTML('afterbegin','<div class="button butcol growoff" id="'+x+'" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="buy(this.id)"><c></c><b onmouseenter="tip(this.parentNode.id,11)" onmouseleave="tip(this.parentNode.id)" onclick="buy(this.parentNode.id,11); event.stopPropagation()"></b></div>');}
 	html('stage');
 	html('game');
+	html('loot');
 	copy('struc','bubble');
 	copy('devone','metabolize');
 	document.getElementById('metabolize').firstChild.id = 'basic';
 	copy('stage','ATP');
 	copy('stage','evolution','beforebegin');
+	document.getElementsByTagName('label')[0].style.visibility = 'hidden';
+	document.getElementsByTagName('label')[1].style.visibility = 'hidden';
 	document.getElementById('boost').style.display = 'none';
 	document.getElementById('stat').style.display = 'none';
 	document.getElementById('health').style.display = 'none';
@@ -113,7 +115,7 @@ function speedup(x){
 			autoClick('start');
 			speedUp[1] = speedUp[0];
 		}
-		if (EVO.one.metabolismType == 'Photophosphorylation' && speedUp[0] >= speedUp[2] + (1001-EVO.one.cytoplasm)){
+		if (EVO.one.metabolismType == 'photo' && speedUp[0] >= speedUp[2] + (1001-EVO.one.cytoplasm)){
 			photosynth('start');
 			speedUp[2] = speedUp[0];
 		}
@@ -170,7 +172,7 @@ function events(){
 
 function horizontal(){
 	clearTimeout(fun.failtimer);
-	if ((15-(EVO.one.membraneScore*5))+(fun.RNA()/100) > Math.floor((Math.random()*100)+1)){EVO.bonus++;}
+	if ((15-(EVO.one.membraneScore*5))+(fun.RNA()/100) > Math.floor((Math.random()*100)+1)){EVO.evo.bonus++;}
 	eventEnd();
 }
 	
@@ -235,7 +237,7 @@ function autoClick(x){
 	let feed = EVO.one.cilia*foods[type].multi;
 	if (feed < 1){feed = 1;}
 	EVO.food -= feed;
-	if (EVO.one.metabolismType == 'Aerobic Respiration'){feed *= fun.metabolism();}
+	if (EVO.one.metabolismType == 'aerob'){feed *= fun.metabolism();}
 	EVO.atp += feed/fun.virus[0];
 	if (EVO.food < 0){EVO.food = 0;}
 	if (x !== 'start'){
@@ -386,16 +388,13 @@ function evos(x){
 	let great = function(){return EVO.one[a] > -1 && !document.getElementById(a);}
 	let check = function(){return EVO[a] == a && !document.getElementById(a);}
 	let on = function(){return EVO[a+e] = g;}
-	let evo = function(){EVO.evolved += cost[x];}
+	let evo = function(){EVO.evo.evolved += cost[x];}
 	if (x !== undefined){document.getElementById(x).removeAttribute('id');}
-	a = EVO.one.membraneScore;
 	if (x !== undefined && x.match(/^(doublebubble|phospholipid|cellwall)$/)){
-		if (a == 0){EVO.evolved += cost.doublebubble;}
-		if (a == 1){EVO.evolved += cost.phospholipid;}
-		if (a == 2){EVO.evolved += cost.cellwall;}
 		EVO.one.membraneScore++;
-		a++
+		evo();
 	}
+	a = EVO.one.membraneScore;
 	let membrane = document.getElementById("structure").childNodes[0];
 	if (a == 1){membrane.id = 'doublebubble';}
 	if (a == 2){membrane.id = 'phospholipid';}
@@ -453,7 +452,9 @@ function evos(x){
 		copy(d,a);
 		css(a,EVO.one[a] + EVO.one[a+'Bonus']);
 		a = 'protein';
-		copy(c,a);
+		document.getElementsByTagName('label')[0].style.visibility = 'initial';
+		document.getElementsByTagName('label')[1].style.visibility = 'initial';
+		copy('loot',a);
 		document.getElementById(a).removeAttribute('onclick');
 		css(a,EVO[a].whole);
 		setTimeout(RNA,60000);
@@ -478,19 +479,16 @@ function evos(x){
 	}
 	a = 'metabolism';
 	if (x !== undefined && x.match(/^(aerob|photo)$/)){
-		let z;
-		if (x == 'aerob'){z = 'Aerobic Respiration';}
-		if (x == 'photo'){z = 'Photophosphorylation';}
-		EVO.one[a+f] = z;
+		EVO.one[a+f] = x;
 		EVO.one[a] = 0;
-		EVO.evolved += cost[a];
+		EVO.evo.evolved += cost[a];
 		if (x == 'photo'){photosynth();}
 	}
 	if (great()){
 		copy(d,a);
 		css(a,EVO.one[a]);
 		document.getElementById('basic').id = EVO.one[a+f].slice(0,5).toLowerCase();
-		if (EVO.one.metabolismType == 'Photophosphorylation'){photosynth();}
+		if (EVO.one.metabolismType == 'photo'){photosynth();}
 	}
 	a = 'mitochondria';
 	if (x == a){
@@ -531,7 +529,7 @@ function evos(x){
 	if (x == a){
 		EVO[x][d]++;
 		EVO[x][c]++;
-		EVO.evolved += EVO[x][d];
+		EVO.evo.evolved += EVO[x][d];
 	}
 	if (EVO[a][d] > 0){
 		document.getElementById('boost').style.display = 'initial';
@@ -556,7 +554,7 @@ function evoChance(x){
 			EVO[y]++; 
 		}
 	} else {
-		EVO.bonus++;
+		EVO.evo.bonus++;
 		EVO.mitosisLimit--;
 		if (EVO.mitosisLimit < 1){EVO[y]--;}
 		updateEvolution();
@@ -580,7 +578,8 @@ function RNA(x){
 
 function math(x,y,z){
 	let evo;
-	if (x.match(/^(cilia|flagellum)$/)){evo = EVO.one.cilia+EVO.one.flagellum;}
+	if (x == 'evolution'){evo = EVO.evo[x];}
+	else if (x.match(/^(cilia|flagellum)$/)){evo = EVO.one.cilia+EVO.one.flagellum;}
 	else if (EVO[x] !== undefined){evo = EVO[x];}
 	else {evo = EVO.one[x];}
 	if (z == undefined){z = 1;}
@@ -595,7 +594,6 @@ function math(x,y,z){
 }
 
 var xbuy = {
-	"evolution": 1.5,
 	"upgrade": 1.1,
 	"meta": 2,
 	"na": 1.01,
@@ -610,9 +608,9 @@ function buy(x,y){
 		}
 	}
 	else if (x == 'evolution'){
-		if(EVO.atp >= math(x,xbuy[x])){
-			EVO.atp -= math(x,xbuy[x]);
-			EVO.evolution++;
+		if(EVO.atp >= math(x,EVO.evo[x])){
+			EVO.atp -= math(x,EVO.evo[x]);
+			EVO.evo[x]++;
 		}
 	}
 	else if (x.match(/^(cytoplasm|cilia|flagellum|mitosis)$/)){
@@ -693,10 +691,12 @@ function updateNA(x){
 }
 
 function multicelluar(){
+	EVO.evo.evolved += cost.multicell;
 	var evolve = {
 		"version": EVO.version,
 		"stage": 2,
 		"date": Date.now(),
+		"evo": EVO.evo,
 		"one": EVO.one,
 		"sun": EVO.sun,
 		"size": {
@@ -706,12 +706,8 @@ function multicelluar(){
 		"food": EVO.food/2,
 		"nutrient": EVO.atp/2,
 		"protein": EVO.protein,
-		"evolution": EVO.evolution,
-		"evolved": EVO.evolved,
-		"bonus": EVO.bonus,
 	};
 	if (evolve.mitochondria < 0){evolve.mitochondria = 0;}
-	EVO.evolved += cost.multicell;
 	localStorage.setItem('EVOE', JSON.stringify(evolve));
 	clearTimeout(save);
 	localStorage.removeItem('EVO');
@@ -745,7 +741,7 @@ function color(x){
 	}
 	else if (x == 'metabolism' && fun.RNA() >= math(x,xbuy.meta)){off;}
 	else if (x == 'mitochondria' && fun.DNA() >= math(x,xbuy.meta)){off;}
-	else if (x == 'evolution' && EVO.atp >= math(x,xbuy[x])){off;}
+	else if (x == 'evolution' && EVO.atp >= math(x,EVO.evo[x])){off;}
 	else {
 		color.classList.replace('growoff','growon');
 		if (x.match(/^(cytoplasm|cilia|flagellum|RNA|DNA)$/)){css(x+'-x','');}
@@ -754,7 +750,7 @@ function color(x){
 
 function tip(x,y){
 	if (x == 'swirl'){css('cost-'+x,fun.moveCost());}
-	else if (x == 'evolution'){css('cost-'+x,math(x,xbuy[x]));}
+	else if (x == 'evolution'){css('cost-'+x,math(x,EVO.evo[x]));}
 	else if (x.match(/^(metabolism|mitochondria)$/)){css('cost-'+x,math(x,xbuy.meta));}
 	else if (x.match(/^(cytoplasm|cilia|flagellum|mitosis)$/)){
 		if (y == 11){y = 10-EVO.one[x]%10;}

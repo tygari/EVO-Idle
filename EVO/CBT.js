@@ -109,16 +109,16 @@ function evolutionCombat(){
 		if (0 < com[z] && grade <= com[z] && document.getElementById(z)){document.getElementById(z).remove();}
 	}
 	grade = com.offG*10;
-	if (EVO.stage > 2 && EVO.three.boost == 'Camoflauge'){grade += 5;}
+	if (EVO.stage > 2 && EVO.three.boost == 'camo'){grade += 5;}
 	html('offense');
 	grade = com.defG*10;
-	if (EVO.stage > 2 && EVO.three.boost == 'Territorial'){grade += 5;}
+	if (EVO.stage > 2 && EVO.three.boost == 'terri'){grade += 5;}
 	html('defense');
 	grade = com.spdG*10;
-	if (EVO.stage > 2 && EVO.three.boost == 'Roaming'){grade += 5;}
+	if (EVO.stage > 2 && EVO.three.boost == 'roam'){grade += 5;}
 	html('speed');
 	grade = com.splG*10;
-	if (EVO.stage > 2 && EVO.three.boost == 'Roaming'){grade += 5;}
+	if (EVO.stage > 2 && EVO.three.boost == 'hyper'){grade += 5;}
 	html('special');
 	if (com.cbtevo.length > 0){
 		let cbtevo = '';
@@ -147,8 +147,8 @@ function combat(x){
 	else if (x == 'elec'){cbt.push(x);}
 	else if (x == 'venom'){cbt.push(x);}
 	else if (x == 'lumin'){cbt.push(x);}
-	if (x.match(/^(offense|defense|speed|special)$/)) {EVO.evolved += (EVO.combat.offG + EVO.combat.defG + EVO.combat.spdG + EVO.combat.splG)*10;}
-	else {EVO.evolved += (1+cbt.length)*10;}
+	if (x.match(/^(offense|defense|speed|special)$/)) {EVO.evo.evolved += (EVO.combat.offG + EVO.combat.defG + EVO.combat.spdG + EVO.combat.splG)*10;}
+	else {EVO.evo.evolved += (1+cbt.length)*10;}
 	evolutionCombat();
 }
 
@@ -254,7 +254,7 @@ function cbt(moveCost,npcSizeMod){
 	if (EVO.one.membraneScore == 3){one.arm += Math.floor(EVO.size.game/10)+1;}
 	one.arm += Math.floor(EVO.two.celladhesion/50);
 	if (check(one,'shell') > -1){one.arm += EVO.combat.defense;}
-	if (EVO.stage >= 3 && EVO.three.skeleton == 'ExoSkeleton'){
+	if (EVO.stage >= 3 && EVO.three.skeleton == 'exo'){
 		one.arm += 1;
 		if (EVO.stage > 3){Math.floor(fun.add.skeleton()/100);}
 	}
@@ -525,14 +525,14 @@ function cbt(moveCost,npcSizeMod){
 	function win(){
 		var eat = fun.add.digestive()*10;
 		if (two.mhp < eat){eat = two.mhp;}
-		if (EVO.stage > 2 && EVO.three.diet == 'Carnivore'){eat *= 10;}
+		if (EVO.stage > 2 && EVO.three.diet == 'carn'){eat *= 10;}
 		doc('event1HTML','You defeated your opponent.');
 		var reward = 'You gained ' + exp + ' experince.';
-		if (EVO.stage == 2 || EVO.three.diet !== 'Herbivore'){reward = 'You gained ' + exp + ' experince and ' + eat + ' food.';}
+		if (EVO.stage == 2 || EVO.three.diet !== 'herb'){reward = 'You gained ' + exp + ' experince and ' + eat + ' food.';}
 		doc('event2HTML',reward);
 		EVO.combat.exp += exp;
 		css('experience',Math.floor(EVO.combat.exp));
-		if (EVO.stage == 2 || EVO.three.diet !== 'Herbivore'){EVO.food += eat;}
+		if (EVO.stage == 2 || EVO.three.diet !== 'herb'){EVO.food += eat;}
 		EVO[food] += moveCost;
 		EVO.combat.won += 1;
 		cost.fight = 'off';

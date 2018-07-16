@@ -34,7 +34,9 @@
 		<box class="box stage txtL orange">
 			<div id="environment" class="white"></div>
 			<p id="food" class="none" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></p>
-			<p id="structure"></p>
+			<p id="structure">
+				<struc id="struc" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></struc>
+			</p>
 			<p id="ii" class="qq oo pp">
 				<span id="health">
 					<span onclick="gage('hlth',-1)"></span>
@@ -57,9 +59,13 @@
 			</div>
 		</box>
 		<box class="box game txtR red">
-			<p id="devevo"></p>
+			<p id="devevo">
+				<devevo id="devone"><span id="devtwo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></span></devevo>
+			</p>
 			<p id="cbtevoHTML"></p>
-			<p id="boost"></p>
+			<p id="boost">
+				<boost id="bstevo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></boost>
+			</p>
 		</box>
 		<span id="eventHTML"></span>
 		<stat id="stat">
@@ -72,8 +78,17 @@
 			</p>
 		</stat>
 		<container>
-			<box id="stagebox" class="stage txtC"></box>
-			<box id="gamebox" class="game txtC"></box>
+			<input id="tab1" type="radio" name="tabs" checked="checked">
+			<label id="upgrade" for="tab1"></label>
+			<input id="tab2" type="radio" name="tabs">
+			<label id="proteins" for="tab2"></label>
+			<content id="tab1-content" class="tab">
+				<box id="stagebox" class="stage txtC"></box>
+				<box id="gamebox" class="game txtC"></box>
+			</content>
+			<content id="tab2-content" class="tab">
+				<box id="lootbox" class="txtC"></box>
+			</content>
 		</container>
 	</body>
 </html>

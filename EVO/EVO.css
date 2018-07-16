@@ -67,7 +67,7 @@ box {
 .red {
 	color: red;
 }
-.button:not(#stage):not(#game):not(#combat) {
+.button:not(#stage):not(#game):not(#combat):not(#loot) {
 	border-radius: 50px;
 	white-space: pre-wrap;
 	border-style: double;
@@ -177,8 +177,38 @@ nav {
 nav:hover {
 	width: 25%;
 }
+input[name=tabs]{
+	display:none;
+}
+input[name=tabs] + label{
+	font-weight:bold;
+	padding:5px;
+	border-radius:5px;
+	color:white;
+}
+input[name=tabs]:checked + label{
+	border:solid 2px white;
+}
+label {
+	margin: 10px;
+}
+.tab{
+	display:none;
+}
+#tab1:checked ~ #tab1-content,#tab2:checked ~ #tab2-content {
+	display:block;
+}
+#tab1-content,#tab2-content {
+	margin-top: 10px;
+}
 #structure,#devevo,#boost {
 	white-space: pre;
+}
+#upgrade::before {
+	content: 'Upgrades';
+}
+#proteins::before {
+	content: 'Proteins';
 }
 #devevo::before {
 	content: 'Developmental Evolutions''\a';
@@ -244,6 +274,10 @@ nav:hover {
 }
 .evolution::before {
 	content: 'Cost: ' var(--cost-evolution) '\a''Gain an evolution point to evolve your cell.''\a''Evolution points are used to purchase evolutions.';
+}
+#protein {
+    margin: auto;
+    width: 50%;
 }
 #protein::before {
 	content: '\a''Protein';

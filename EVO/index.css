@@ -10,7 +10,10 @@
   100% {margin-left: 0%;}
 }
 .status::before {
-	content: 'Game Status';
+	white-space: pre-wrap;
+	content: 'Game Status'
+			 '\a''Version: 'var(--version)
+			 '\a''Updated: 'var(--date);
 	font-weight: bold;
 }
 .prototype::before {
@@ -62,13 +65,6 @@
 }
 .wipe::before {
 	content: 'All Saves Wiped';
-}
-.update::before {
-	content: 'Updated: 'var(--date);
-}
-.version::after {
-	white-space: pre-wrap;
-	content: '\a''Version: 'var(--version);
 }
 .soft::before {
 	content: 'Soft Reset';

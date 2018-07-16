@@ -184,7 +184,7 @@ const hard = function(){
 
 const resave = function(){localStorage.setItem("REC", JSON.stringify(REC));}
 
-const creations = function(){return EVO.evolution - EVO.evolved + EVO.bonus + REC.bonus;}
+const creations = function(){return EVO.evo.evolution - EVO.evo.evolved + EVO.evo.bonus + REC.bonus;}
 
 const css = function(x,y){return document.body.style.setProperty('--'+x,'"'+y+'"');}
 

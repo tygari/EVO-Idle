@@ -6,11 +6,10 @@ function script(){
 	else if (localStorage.getItem('EVOE') !== null){
 		stage = JSON.parse(localStorage.getItem('EVOE')).stage;
 	}
-	[
-		'EVO.css',
+	[	'EVO.css',
 		'EVO'+stage+'.css',
 		'CBT.css'
-	].forEach(function(href) {
+	].forEach(function(href){
 	  let x = document.createElement('link');
 	  x.rel = 'stylesheet';
 	  x.type = 'text/css';
@@ -18,12 +17,11 @@ function script(){
 	  x.async = false;
 	  document.head.appendChild(x);
 	});
-	[
-		'EVO.js',
+	[	'EVO.js',
 		'REC.js',
 		'EVO'+stage+'.js',
 		'CBT.js'
-	].forEach(function(src) {
+	].forEach(function(src){
 	  let x = document.createElement('script');
 	  x.type = 'text/javascript';
 	  x.src = src;
