@@ -662,8 +662,8 @@ var xbuy = {
 
 function buy(x,y){
 	if (x == 'evolution'){
-		if(EVO.nutrient >= math(x,EVO.evo[x])){
-			EVO.nutrient -= math(x,EVO.evo[x]);
+		if(EVO.nutrient >= math(x,EVO.evo.cost)){
+			EVO.nutrient -= math(x,EVO.evo.cost);
 			EVO.evo[x]++;
 			evolutionCombat();
 		}

@@ -608,8 +608,8 @@ function buy(x,y){
 		}
 	}
 	else if (x == 'evolution'){
-		if(EVO.atp >= math(x,EVO.evo[x])){
-			EVO.atp -= math(x,EVO.evo[x]);
+		if(EVO.atp >= math(x,EVO.evo.cost)){
+			EVO.atp -= math(x,EVO.evo.cost);
 			EVO.evo[x]++;
 		}
 	}
@@ -741,7 +741,7 @@ function color(x){
 	}
 	else if (x == 'metabolism' && fun.RNA() >= math(x,xbuy.meta)){off;}
 	else if (x == 'mitochondria' && fun.DNA() >= math(x,xbuy.meta)){off;}
-	else if (x == 'evolution' && EVO.atp >= math(x,EVO.evo[x])){off;}
+	else if (x == 'evolution' && EVO.atp >= math(x,EVO.evo.cost)){off;}
 	else {
 		color.classList.replace('growoff','growon');
 		if (x.match(/^(cytoplasm|cilia|flagellum|RNA|DNA)$/)){css(x+'-x','');}
@@ -750,7 +750,7 @@ function color(x){
 
 function tip(x,y){
 	if (x == 'swirl'){css('cost-'+x,fun.moveCost());}
-	else if (x == 'evolution'){css('cost-'+x,math(x,EVO.evo[x]));}
+	else if (x == 'evolution'){css('cost-'+x,math(x,EVO.evo.cost));}
 	else if (x.match(/^(metabolism|mitochondria)$/)){css('cost-'+x,math(x,xbuy.meta));}
 	else if (x.match(/^(cytoplasm|cilia|flagellum|mitosis)$/)){
 		if (y == 11){y = 10-EVO.one[x]%10;}

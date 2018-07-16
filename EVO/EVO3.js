@@ -658,8 +658,8 @@ var xbuy = {
 
 function buy(x,y){
 	if (x == 'evolution'){
-		if(EVO.mineral >= math(x,EVO.evo[x])){
-			EVO.mineral -= math(x,EVO.evo[x]);
+		if(EVO.mineral >= math(x,EVO.evo.cost)){
+			EVO.mineral -= math(x,EVO.evo.cost);
 			EVO.evo[x]++;
 			evolutionCombat();
 		}
