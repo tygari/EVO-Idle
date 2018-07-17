@@ -239,7 +239,7 @@ const protein = function(x){
 		EVO.protein.whole++;
 	}
 	css('protein',EVO.protein.whole);
-	if (x != 'start'){setTimeout(protein,60000);}
+	if (x !== 'start'){setTimeout(protein,60000);}
 }
 
 const ribosome = function(x){
@@ -250,7 +250,7 @@ const ribosome = function(x){
 		EVO.one.ribosomeBonus++;
 	}
 	css('ribosome',EVO.one.ribosome + EVO.one.ribosomeBonus);
-	if (x != 'start'){setTimeout(ribosome,3600000);}
+	if (x !== 'start'){setTimeout(ribosome,3600000);}
 }
 
 const bgcolor = function(){

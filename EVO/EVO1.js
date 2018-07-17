@@ -573,7 +573,7 @@ function RNA(x){
 		EVO.rRNA++;
 		updateNA('RNA');
 	}
-	if (x != 'start'){setTimeout(RNA,60000);}
+	if (x !== 'start'){setTimeout(RNA,60000);}
 }
 
 function math(x,y,z){
