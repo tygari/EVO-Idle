@@ -45,7 +45,7 @@ Stage 2
      Combat Evolution:  Branch Evolution & Upgrade Evolution
           Carries till Reincarnation.
           
-Stage 3 - In decelopment
+Stage 3
      Diet: Branch Evolution
           Carries till Reincarnation.
           
@@ -81,4 +81,4 @@ Stage 6 - Not planned
 
 
 
-EVO Idle is copyrighted by Tygari Davis ©2017.
+EVO Idle is copyrighted by Tygari Davis ©2018.
