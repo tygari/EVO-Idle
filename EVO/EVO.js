@@ -51,7 +51,7 @@ const foods = {/* Random * ((max-min)*mod)*muscle + (min*mod)*sight */
 	},
 	"scarce": {
 		"name": 'scarce',
-		"amount": 0,
+		"amount": function(){return foods.amount(0);},
 		"multi": 0.4,
 		"timer": 2.5,
 	},

@@ -326,7 +326,7 @@ function updateEvolution(){
 	if (EVO.one.membraneScore > 0 && EVO.one.cytoplasm == -1 && creation >= cost.cytoplasm){
 		code.cytoplasm = evos('cytoplasm');
 	}
-	if (EVO.one.membraneScore > 1 && EVO.cytoskeleton === null && creation >= cost.cytoskeleton){
+	if (EVO.one.membraneScore > 0 && EVO.cytoskeleton === null && creation >= cost.cytoskeleton){
 		code.cytoskeleton = evos('cytoskeleton');
 	}
 	if (EVO.cytoskeleton == 'cytoskeleton' && EVO.ciliaSwitch == 'off' && creation >= cost.cilia){
