@@ -261,22 +261,22 @@ const bgcolor = function(){
 }
 
 const swirly = function(v,w,x,y,z){
-	let a = 800;
-	let b = 600;
-	if (window.innerWidth-50 > a){a = window.innerWidth-50;}
-	if (window.innerHeight-50 > b){b = window.innerHeight-50;}
+	let W = 500;
+	let H = 500;
+	if (window.innerWidth-50 > W){W = window.innerWidth-50;}
+	if (window.innerHeight-50 > H){H = window.innerHeight-50;}
 	x += v;
 	y += w;
 	z += 12;
-	if (x < 2 || x >= a){
+	if (x < 2 || x >= W){
 		v *= -1;
 		if (x < 0){x = 0;}
-		if (x > a){x = a;}
+		if (x > W){x = W;}
 	}
-	if (y < 2 || y >= b){
+	if (y < 2 || y >= H){
 		w *= -1;
 		if (y < 0){y = 0;}
-		if (y > b){y = b;}
+		if (y > H){y = H;}
 	}
 	if (z > 359){z = 0;}
 	cssHTML('swirl-left',x+'px');

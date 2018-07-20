@@ -146,6 +146,7 @@ function start(){
 	document.getElementById('health').style.display = 'none';
 	document.getElementById('stamina').style.display = 'none';
 	document.getElementById('retreat').style.display = 'none';
+	css('foodtype','Nutrient');
 	if (EVO.specialized > 1){specialized();}
 	evos();
 	/*Initialize Program*/
@@ -769,17 +770,18 @@ function color(x){
 }
 
 function tip(x,y){
-	if (x == 'swirl'){css('cost-'+x,fun.moveCost());}
-	else if (x == 'evolution'){css('cost-'+x,math(x,EVO.evo.cost));}
+	let cost = function(z){css('cost-'+x,z);}
+	if (x == 'swirl'){cost(fun.moveCost());}
+	else if (x == 'evolution'){cost(math(x,EVO.evo.cost));}
 	else if (x == 'colony'){
 		if (y == 11){y = 10-((EVO.colony-EVO.cellL)%10);}
-		css('cost-'+x,math(x,xbuy.cell,y));
+		cost(math(x,xbuy.cell,y));
 	}
 	else if (x == 'EPS'){
 		if (y == 11){y = 10-(EVO.EPS%10);}
-		css('cost-'+x,math(x,xbuy.EPS,y));
+		cost(math(x,xbuy.EPS,y));
 	}
-	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/)){css('cost-'+x,math(x,xbuy.specialize));}
+	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/)){cost(math(x,xbuy.specialize));}
 	let z = document.getElementById('tip');
 	z.classList.replace(z.className,x);
 	cssHTML('mouse','initial');

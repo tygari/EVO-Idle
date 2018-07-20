@@ -32,6 +32,16 @@ body {
 	cursor: crosshair;
 	height: 100%;
 	width: 100%;
+	overflow: hidden;
+}
+#load {
+	background-image: url(swirl.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	height: 100%;
+	width: 100%;
+	z-index: 10;
 }
 box {
 	border-style: hidden;
@@ -204,11 +214,11 @@ label {
 #structure,#devevo,#boost {
 	white-space: pre;
 }
-#upgrade::before {
-	content: 'Upgrades';
+#natural::before {
+	content: 'Natural';
 }
-#proteins::before {
-	content: 'Proteins';
+#exotic::before {
+	content: 'Exotic';
 }
 #devevo::before {
 	content: 'Developmental Evolutions''\a';
@@ -231,7 +241,10 @@ label {
 }
 #environment::before {
 	white-space: pre-wrap;
-	content: '\a''Environment''\a''Current: 'var(--current)'\a''    pH:    'var(--ph)'\a''Salinity: 'var(--salinity);
+	content:	'\a''Environment'
+				'\a''Current: 'var(--current)
+				'\a''    pH:    'var(--ph)
+				'\a''Salinity: 'var(--salinity);
 }
 #food::before {
 	content: 'Food: ';
@@ -255,16 +268,20 @@ label {
 	content: 'None';
 }
 .food::before {
-	content: 'Food is the basic building block to grow and evolve.';
+	content:	'Food is the basic building block to grow and evolve.'
+				'\a''The quantity of food determines the speed and amount of food that can be gathered.';
 }
 #gift::before {
 	content: 'Gift';
 }
 .gift::before {
-	content: 'A divine gift of 'var(--gift)' food for emergency use.';
+	content:	'A divine gift of 'var(--gift)' food for emergency use.'
+				'\a''This adds food for your creature to gather and eat.';
 }
 .swirl::before {
-	content: 'Cost: ' var(--cost-swirl) '\a''Move to a new area to find more resources.';
+	content:	'Cost: 'var(--cost-swirl)' 'var(--foodtype)
+				'\a''Move to a new area to find more resources.'
+				'\a''Moving resets food but also changes environmental conditions.';
 }
 #evolution::before {
 	content: '\a''Evolution';
@@ -273,7 +290,9 @@ label {
 	content: '  ('var(--evolution)')';
 }
 .evolution::before {
-	content: 'Cost: ' var(--cost-evolution) '\a''Gain an evolution point to evolve your cell.''\a''Evolution points are used to purchase evolutions.';
+	content:	'Cost: ' var(--cost-evolution)' 'var(--foodtype)
+				'\a''Gain an evolution point to evolve your cell.'
+				'\a''Evolution points are used to purchase evolutions.';
 }
 #protein {
     margin: auto;
@@ -286,7 +305,9 @@ label {
 	content: '  ('var(--protein)')  ';
 }
 .protein::before {
-	content: 'Long chains of amino acids.''\a''They are an essential part of all living organisms.';
+	content:	'Long chains of amino acids.'
+				'\a''They are an essential part of all living organisms.'
+				'\a''Used to upgrade Exotic Evolutions.';
 }
 #metabolize::before {
 	content: '\a''Metabolism: ';
@@ -304,7 +325,8 @@ label {
 	content: ' 'var(--photosynthesis)'/sec';
 }
 .photo::after {
-	content: 'Photophosphorylation uses sunlight, CO''\2082'', and H''\2082''O to create ATP and gives off O''\2082'' as a byproduct.''\a''You are currently making about 'var(--photosynthesis)' ATP per second.';
+	content:	'Photophosphorylation uses sunlight, CO''\2082'', and H''\2082''O to create ATP and gives off O''\2082'' as a byproduct.'
+				'\a''You are currently making about 'var(--photosynthesis)' 'var(--foodtype)' per second.';
 }
 #boost::before {
 	content: '\a''Boosted Evolutions''\a';
@@ -319,7 +341,8 @@ boost#size::after {
 	content: var(--size);
 }
 .size::before {
-	content: 'A creature\'s size effects many factors.  Movement, food, combat, and more.''\a''There are both positives and negatives to evolving to a larger size.';
+	content:	'A creature\'s size effects many factors.  Movement, food, combat, and more.'
+				'\a''There are both positives and negatives to evolving to a larger size.';
 }
 #health::before {
 	content: '\a''Health: ';
@@ -361,7 +384,9 @@ boost#size::after {
 	content: '  ('var(--balance)')';
 }
 .balance::before {
-	content: 'Cost: 'var(--cost-balance)'\a''Click to improve Balance quality.''\a''Statocyst is your cells evolution of balance.';
+	content:	'Cost: 'var(--cost-balance)' 'var(--foodtype)
+				'\a''Click to improve Balance quality.'
+				'\a''Balance improves your creatures ability to react.';
 }
 #nerve::before {
 	content: '\a''Nerve';
@@ -370,7 +395,9 @@ boost#size::after {
 	content: '  ('var(--nerve)')';
 }
 .nerve::before {
-	content: 'Cost: 'var(--cost-nerve)'\a''Click to improve Nerve quality.''\a''Nerves improve your cells ability to learn.';
+	content:	'Cost: 'var(--cost-nerve)' 'var(--foodtype)
+				'\a''Click to improve Nerve quality.'
+				'\a''Nerves improve your creature ability to learn.';
 }
 #vascular::before {
 	content: '\a''Vascular';
@@ -379,7 +406,9 @@ boost#size::after {
 	content: '  ('var(--vascular)')';
 }
 .vascular::before {
-	content: 'Cost: 'var(--cost-vascular)'\a''Click to improve Vascular quality.''\a''Vascular improves your cells ability to act.';
+	content:	'Cost: 'var(--cost-vascular)' 'var(--foodtype)
+				'\a''Click to improve Vascular quality.'
+				'\a''Vascular improves your creature ability to act.';
 }
 #muscle::before {
 	content: '\a''Muscle';
@@ -388,7 +417,9 @@ boost#size::after {
 	content: '  ('var(--muscle)')';
 }
 .muscle::before {
-	content: 'Cost: 'var(--cost-muscle)'\a''Click to improve Muscle quality.''\a''Muscle improves your cells ability to move.';
+	content:	'Cost: 'var(--cost-muscle)' 'var(--foodtype)
+				'\a''Click to improve Muscle quality.'
+				'\a''Muscle improves your creature ability to move.';
 }
 #respiratory::before {
 	content: '\a''Respiratory';
@@ -397,7 +428,9 @@ boost#size::after {
 	content: '  ('var(--respiratory)')';
 }
 .respiratory::before {
-	content: 'Cost: 'var(--cost-respiratory)'\a''Click to improve Respiratory quality.''\a''Respiratory improves your cells metabolism.';
+	content:	'Cost: 'var(--cost-respiratory)' 'var(--foodtype)
+				'\a''Click to improve Respiratory quality.'
+				'\a''Respiratory improves your creature metabolism.';
 }
 #digestive::before {
 	content: '\a''Digestive';
@@ -406,7 +439,9 @@ boost#size::after {
 	content: '  ('var(--digestive)')';
 }
 .digestive::before {
-	content: 'Cost: 'var(--cost-digestive)'\a''Click to improve Digestive quality.''\a''Digestion improves the quanity of food your cells eat.';
+	content:	'Cost: 'var(--cost-digestive)' 'var(--foodtype)
+				'\a''Click to improve Digestive quality.'
+				'\a''Digestion improves the quantity of food your creature eats.';
 }
 #excretion::before {
 	content: '\a''Excretion';
@@ -415,7 +450,9 @@ boost#size::after {
 	content: '  ('var(--excretion)')';
 }
 .excretion::before {
-	content: 'Cost: 'var(--cost-excretion)'\a''Click to improve Excretion quality.''\a''Excretion improves your cells ability to expell toxins and waste.';
+	content:	'Cost: 'var(--cost-excretion)' 'var(--foodtype)
+				'\a''Click to improve Excretion quality.'
+				'\a''Excretion improves your creature ability to expel toxins and waste.';
 }
 #sight::before {
 	content: '\a''Sight';
@@ -424,14 +461,16 @@ boost#size::after {
 	content: '  ('var(--sight)')';
 }
 .sight::before {
-	content: 'Cost: 'var(--cost-sight)'\a''Click to improve Light Sense quality.''\a''Light Sense improves your cells ability to find food.';
+	content:	'Cost: 'var(--cost-sight)' 'var(--foodtype)
+				'\a''Click to improve Light Sense quality.'
+				'\a''Sight improves your creature ability to see the world.';
 }
 /*lay*/
 #lay {
 	position: absolute;
 	background-color: black;
 	opacity: 0.5;
-	z-index: 9;
+	z-index: 8;
 }
 .layoff {
 	height: 0%;
@@ -448,7 +487,7 @@ boost#size::after {
 	background-color: black;
 	color: silver;
 	overflow: hidden;
-	z-index: 10;
+	z-index: 9;
 }
 .hidden {
 	top: -100px;

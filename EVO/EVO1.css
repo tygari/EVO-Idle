@@ -1,5 +1,5 @@
 #structure::before {
-	content: 'Cell Structures''\a';
+	content: 'Cell Structures';
 }
 #basic::after {
 	content: 'Basic';
@@ -14,7 +14,8 @@
 	content: '  ('var(--ATP)')';
 }
 .ATP::before {
-	content: 'Click to grow your Cell.''\a''Adenosine Triphosphate is how your cell grows.';
+	content:	'Click to gain 1 ATP for your cell.'
+				'\a''Adenosine Triphosphate is how your cell grows.';
 }
 struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc#cellwall::before {
 	content: '\a''Membrane: ';
@@ -23,25 +24,29 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: 'Bubble';
 }
 .bubble::before {
-	content: 'Your first evolution.''\a''A simple ocean bubble with amino acids in it.';
+	content:	'Your first evolution.'
+				'\a''A simple ocean bubble with amino acids in it.';
 }
 #doublebubble::after {
 	content: 'Double Bubble';
 }
 .doublebubble::before {
-	content: 'Double bubble wall was the second evolution of cells.''\a''A simple bubble inside of another bubble.';
+	content:	'Double bubble wall was the second evolution of cells.'
+				'\a''A bubble inside of another bubble.';
 }
 #phospholipid::after {
 	content: 'Phospholipid';
 }
 .phospholipid::before {
-	content: 'Phospholipid membranes are aligned amphipathic molecule chains.''\a''All modern cells carry this pivitol characteristic.';
+	content:	'Phospholipid membranes are aligned amphipathic molecule chains.'
+				'\a''All modern cells carry this pivitol characteristic.';
 }
 #cellwall::after {
 	content: 'Cell Wall';
 }
 .cellwall::before {
-	content: 'Cell Wall is a thick hard shell around a cells Phospholipid membrane.''\a''It greatly enhances a cells durability but drastically reduces a cells mobility.';
+	content:	'Cell Wall is a thick hard shell around a cells Phospholipid membrane.'
+				'\a''It greatly enhances a cells durability but drastically reduces a cells mobility.';
 }
 #cytoskeleton::before {
 	content: '\a''Cytoskeleton';
@@ -62,7 +67,11 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: '  (~'var(--mitosis)'%)';
 }
 .mitosis::before {
-	content: 'Cost: ' var(--cost-mitosis) '\a''Click to under go mitosis and reproduce a copy of your cell.''\a''Each upgrade rolls a random chance to gain a Evolution Point.';
+	content:	'Cost: 'var(--cost-mitosis)' 'var(--foodtype)
+				'\a''Under go cellular mitosis and reproduce a copy of your cell.'
+				'\a''Each purchase rolls a random chance to gain a Evolution Point.'
+				'\a''Failure to gain an evolution point raises the chance to gain a point next time.'
+				'\a''Success gives an evolution point but lowers the chance to gain a point next time.';
 }
 #cytoplasm::before {
 	content: '\a''Cytoplasm';
@@ -74,7 +83,10 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: var(--cytoplasm-x);
 }
 .cytoplasm::before {
-	content: 'Cost: ' var(--cost-cytoplasm) '\a''Click to add Cytoplasm to your cell.''\a''Cilia processes food faster.''\a''All upgrade costs are reduced by a small amount';
+	content:	'Cost: 'var(--cost-cytoplasm)' 'var(--foodtype)
+				'\a''Increase Cytoplasm within your cell.'
+				'\a''Lowers autoclick by 1ms.'
+				'\a''Reduces upgrade costs by a small amount';
 }
 #cilia::before {
 	content: '\a''Cilia';
@@ -86,7 +98,9 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: var(--cilia-x);
 }
 .cilia::before {
-	content: 'Cost: ' var(--cost-cilia) '\a''Click to grow more Cilia for your cell.''\a''Cilia gathers food for your metabolism to convert to ATP.';
+	content:	'Cost: 'var(--cost-cilia)' 'var(--foodtype)
+				'\a''Grow more Cilia for your cell.'
+				'\a''Cilia gathers food for your metabolism to convert to ATP.';
 }
 #flagellum::before {
 	content: '\a''Flagellum';
@@ -98,7 +112,10 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: var(--flagellum-x);
 }
 .flagellum::before {
-	content: 'Cost: ' var(--cost-flagellum) '\a''Click to grow a stronger Flagellum for your cell.''\a''Flagellum reduces the cost of movement for your cell and makes it easier to find more food.';
+	content:	'Cost: 'var(--cost-flagellum)' 'var(--foodtype)
+				'\a''Grow a stronger Flagellum for your cell.'
+				'\a''Reduces the cost of movement for your cell.'
+				'\a''Increases chances to find more food.';
 }
 #ribosome::before {
 	content: '\a''Ribosome';
@@ -107,7 +124,11 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: '  ('var(--ribosome)'k)  ';
 }
 .ribosome::before {
-	content: 'Cost: ' var(--cost-ribosome) '\a''Organic nanofactories composed of RNA within cells.''\a''Fabricates RNA and proteins from amino acids.';
+	content:	'Cost: 'var(--cost-3-ribosome)' 'var(--foodtype)' & 'var(--cost-ribosome)' RNA'
+				'\a''Organic nanofactories composed of RNA within cells.'
+				'\a''Makes RNA.'
+				'\a''Makes Ribosomes.'
+				'\a''Makes Proteins.';
 }
 #endoplasmic::before {
 	content: '\a''Endoplasmic Reticulum';
@@ -116,7 +137,10 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: '  ('var(--endoplasmic)')  ';
 }
 .endoplasmic::before {
-	content: 'Cost: ' var(--cost-endoplasmic) '\a''A network of membranous tubules within the cytoplasm.''\a''Assists with the production and transport of proteins.';
+	content:	'Cost: 'var(--cost-3-endoplasmic)' 'var(--foodtype)' & 'var(--cost-endoplasmic)' RNA'
+				'\a''A network of membranous tubules within the cytoplasm.'
+				'\a''Assists with the production and transport of proteins.'
+				'\a''Increases Protein production.';
 }
 #golgi::before {
 	content: '\a''Golgi Apparatus';
@@ -125,7 +149,10 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: '  ('var(--golgi)')  ';
 }
 .golgi::before {
-	content: 'Cost: ' var(--cost-golgi) '\a''A stack of small flat sacs formed by membranes inside a cell\'s cytoplasm.''\a''Assists with the production and transport of proteins.';
+	content:	'Cost: 'var(--cost-3-golgi)' 'var(--foodtype)' & 'var(--cost-golgi)' RNA'
+				'\a''A stack of small flat sacs formed by membranes inside a cell\'s cytoplasm.'
+				'\a''Assists with the production and transport of proteins.'
+				'\a''Increases Protein production.';;
 }
 #RNA::before {
 	content: '\a''RNA';
@@ -137,7 +164,10 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: var(--RNA-x);
 }
 .RNA::before {
-	content: 'Cost: ' var(--cost-RNA) '\a''Click to make RNA for your cell.''\a''RNA is required in advanced growth and evolution.''\a''RNA requires ATP to create.';
+	content:	'Cost: 'var(--cost-RNA)' 'var(--foodtype)
+				'\a''Make RNA for your cell.'
+				'\a''RNA is required in advanced growth and evolution.'
+				'\a''RNA requires ATP to create.';
 }
 #DNA::before {
 	content: '\a''DNA';
@@ -149,7 +179,10 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: var(--DNA-x);
 }
 .DNA::before {
-	content: 'Cost: ' var(--cost-DNA) '\a''Click to make DNA for your cell.''\a''DNA is required in advanced growth and evolution.''\a''DNA requires RNA to create.';
+	content:	'Cost: 'var(--cost-DNA)' RNA'
+				'\a''Make DNA for your cell.'
+				'\a''DNA is required in advanced growth and evolution.'
+				'\a''DNA requires RNA to create.';
 }
 #metabolism::before {
 	content: '\a''Metabolism';
@@ -158,7 +191,10 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: '  (+'var(--metabolism)'%)';
 }
 .metabolism::before {
-	content: 'Cost: ' var(--cost-metabolism) '\a''Click to improve your cell\'s metabolism.''\a''Your cells Metabolism costs RNA to improve.';
+	content:	'Cost: 'var(--cost-metabolism)' RNA'
+				'\a''Improve your cell\'s metabolism.'
+				'\a''Metabolism costs RNA to improve.'
+				'\a''Effects change based on your chosen Metabolic Evolutionary Path.';
 }
 #mitochondria::before {
 	content: '\a''Mitochondria';
@@ -167,7 +203,10 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: '  (+'var(--mitochondria)'%)';
 }
 .mitochondria::before {
-	content: 'Cost: ' var(--cost-mitochondria) '\a''Click to improve your cell\'s mitochondria.''\a''Mitochondria costs DNA to improve.''\a''Mitochondria further enhances your metabolism.';
+	content:	'Cost: 'var(--cost-mitochondria)' DNA'
+				'\a''Improve your cell\'s mitochondria.'
+				'\a''Mitochondria costs DNA to improve.'
+				'\a''Mitochondria further enhances your Metabolism.';
 }
 p#photo::after {
 	content: '';
@@ -176,5 +215,6 @@ p#photo::after {
 	content: 'Multicelluar';
 }
 .multicelluar::before {
-	content: 'Multicelluar evolution is the next stage in life when single celled creatures began joining together in colonies.''\a''This leads to the first simplest forms of multi cell life, sponges, anemone, jellyfish, and more.';
+	content:	'Multicelluar evolution is the next stage in life when single celled creatures began joining together in colonies.'
+				'\a''This leads to the first simplest forms of multi cell life, sponges, anemone, jellyfish, and more.';
 }

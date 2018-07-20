@@ -20,6 +20,6 @@ function play(){window.location.assign('EVO.html');}
 
 function donate(){window.open('https://www.paypal.me/tygari');}
 
-function reddit(){window.open('https://www.reddit.com/user/Tygari');}
+function reddit(){window.open('https://www.reddit.com/r/incremental_games/comments/8zquav/evo_idle_ver_03_released/');}
 
 function github(){window.open('https://github.com/tygari/EVO-Idle');}

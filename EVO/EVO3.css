@@ -38,7 +38,8 @@
 	content: var(--EPS-x);
 }
 .EPS::before {
-	content: 'Cost: 'var(--cost-EPS)'\a''Click to make Extracellular Polymeric Substances to protect from the pH of the water.';
+	content:	'Cost: 'var(--cost-EPS)' 'var(--foodtype)
+				'\a''Click to make Extracellular Polymeric Substances to protect from the pH of the water.';
 }
 #sex::before {
 	content: '\a''Dioecy Reproduction';

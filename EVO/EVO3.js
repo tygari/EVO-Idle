@@ -129,6 +129,7 @@ function start(){
 	document.getElementById('boost').style.display = 'none';
 	document.getElementById('health').style.display = 'none';
 	document.getElementById('stamina').style.display = 'none';
+	css('foodtype','Mineral');
 	specialized();
 	evos();
 	/*Initialize Program*/
@@ -538,9 +539,11 @@ function evos(x){
 	}
 	if (EVO.three.diet == 'carn' && !document.getElementById('meat')){
 		document.getElementById('mineral').id = 'meat';
+		css('foodtype','Meat');
 	}
 	if (EVO.three.diet == 'herb' && !document.getElementById('plant')){
 		document.getElementById('mineral').id = 'plant';
+		css('foodtype','Plant');
 	}
 	if (EVO.three.diet !== null && !document.getElementById(EVO.three.diet)){
 		copy('devone','diet');
@@ -709,13 +712,14 @@ function color(x){
 }
 
 function tip(x,y){
-	if (x == 'swirl'){css('cost-'+x,fun.moveCost());}
-	else if (x == 'evolution'){css('cost-'+x,math(x,EVO.evo.cost));}
+	let cost = function(z){css('cost-'+x,z);}
+	if (x == 'swirl'){cost(fun.moveCost());}
+	else if (x == 'evolution'){cost(math(x,EVO.evo.cost));}
 	else if (x == 'EPS'){
 		if (y == 11){y = 10-(EVO.EPS%10);}
-		css('cost-'+x,math(x,xbuy.EPS,y));
+		cost(math(x,xbuy.EPS,y));
 	}
-	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/)){css('cost-'+x,math(x,xbuy.specialize));}
+	else if (x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/)){cost(math(x,xbuy.specialize));}
 	let z = document.getElementById('tip');
 	z.classList.replace(z.className,x);
 	cssHTML('mouse','initial');

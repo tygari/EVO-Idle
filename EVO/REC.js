@@ -26,7 +26,7 @@ function reincarnate(){
 	var spl = '';
 	var cbt = '';
 	let rec = function(x){return '<p id="'+x+'" class="rainbow" onmouseenter="next(this.id)" onmouseleave="clears(this.id)" onclick="upgrade(this.id)"></p>';}
-	if (REC.cytoplasm < 100 && REC.bonus >= stageMath('cytoplasm')){cytoplasm = rec('cytoplasm');}
+	if (REC.cytoplasm < 40 && REC.bonus >= stageMath('cytoplasm')){cytoplasm = rec('cytoplasm');}
 	doc('stageOne',cytoplasm);
 	if (cytoplasm !== ''){css('cytoplasm',REC.cytoplasm+10);}
 	if (REC.bonus >= foodMath()){

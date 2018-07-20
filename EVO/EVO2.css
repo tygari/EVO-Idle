@@ -20,7 +20,9 @@
 	content: '  'var(--colony-x);
 }
 .colony::before {
-	content: 'Cost: 'var(--cost-colony)'\a''Click to mitosis a cell and try to adhere to it.''\a''It will help you gather nutrients';
+	content:	'Cost: 'var(--cost-colony)' 'var(--foodtype)
+				'\a''Click to mitosis a cell and try to adhere to it.'
+				'\a''It will help you gather nutrients';
 }
 #EPS::before {
 	content: '\a''EPS';
@@ -32,7 +34,8 @@
 	content: var(--EPS-x);
 }
 .EPS::before {
-	content: 'Cost: 'var(--cost-EPS)'\a''Click to make Extracellular Polymeric Substances to protect from the pH of the water.';
+	content:	'Cost: 'var(--cost-EPS)' 'var(--foodtype)
+				'\a''Click to make Extracellular Polymeric Substances to protect from the pH of the water.';
 }
 #sex::before {
 	content: '\a''Sexual Reproduction';
@@ -80,7 +83,8 @@
 	content: ': 'var(--osmoregulation);
 }
 .osmoregulation::before {
-	content: 'Osmoregulation is a cell\'s and colony\'s ability to regulate osmotic pressure.''\a''This is to maintain homeostasis of the colony\'s water content.';
+	content:	'Osmoregulation is a cell\'s and colony\'s ability to regulate osmotic pressure.'
+				'\a''This is to maintain homeostasis of the colony\'s water content.';
 }
 #motility::before {
 	content: '\a''Swarming Motility';
