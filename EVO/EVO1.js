@@ -105,9 +105,9 @@ function start(){
 	setTimeout(environment,60000);
 	setTimeout(autoClick, 6001-EVO.one.cytoplasm*6);
 	setTimeout(events,300000);
-	setTimeout(swirly,30,2,2,Math.floor(Math.random()*window.innerWidth)-50,Math.floor(Math.random()*window.innerHeight)-50,0);
-	css('gift',200);
+	css('gift',EVO.stage*200);
 	document.getElementById('load').style.display = 'none';
+	setTimeout(swirly,30,2,2,Math.floor(Math.random()*window.innerWidth)-50,Math.floor(Math.random()*window.innerHeight)-50,0);
 }
 
 function speedup(x){

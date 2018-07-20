@@ -170,8 +170,9 @@ function start(){
 	if (EVO.one.metabolismType == 'photo'){setTimeout(photosynth, 1000);}
 	setTimeout(cellTimer,Math.ceil(600000*((100-(EVO.two.balance/2))/100)));
 	setTimeout(events,300000);
+	css('gift',EVO.stage*200);
+	document.getElementById('load').style.display = 'none';
 	setTimeout(swirly,30,2,2,Math.floor(Math.random()*window.innerWidth)-50,Math.floor(Math.random()*window.innerHeight)-50,0);
-	css('gift',400);
 }
 
 function speedup(x){

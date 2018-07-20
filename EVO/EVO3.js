@@ -158,8 +158,9 @@ function start(){
 	setTimeout(protein,60000);
 	setTimeout(ribosome,3600000);
 	if (EVO.one.metabolismType == 'photo'){setTimeout(photosynth, 1000);}
-	
+	css('gift',EVO.stage*200);
 	//setTimeout(events, 300000);
+	document.getElementById('load').style.display = 'none';
 	setTimeout(swirly,30,2,2,Math.floor(Math.random()*window.innerWidth)-50,Math.floor(Math.random()*window.innerHeight)-50,0);
 }
 
