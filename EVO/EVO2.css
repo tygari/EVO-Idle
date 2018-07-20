@@ -21,7 +21,7 @@
 }
 .colony::before {
 	content:	'Cost: 'var(--cost-colony)' 'var(--foodtype)
-				'\a''Click to mitosis a cell and try to adhere to it.'
+				'\a''Mitosis a cell and try to adhere to it.'
 				'\a''It will help you gather nutrients';
 }
 #EPS::before {
@@ -35,13 +35,14 @@
 }
 .EPS::before {
 	content:	'Cost: 'var(--cost-EPS)' 'var(--foodtype)
-				'\a''Click to make Extracellular Polymeric Substances to protect from the pH of the water.';
+				'\a''Make Extracellular Polymeric Substances to protect from the pH of the water.';
 }
 #sex::before {
 	content: '\a''Sexual Reproduction';
 }
 .sex::before {
-	content: 'Sexual Reproduction is the act of sharing genetic material between two organisms.';
+	content:	'Sexual Reproduction is the act of sharing genetic material between two organisms.'
+				'Reproduction assists Evolution.';
 }
 #celladhesion::before {
 	content: '\a''Cellular Adhesion';
@@ -50,7 +51,8 @@
 	content: ': 'var(--celladhesion)'%';
 }
 .celladhesion::before {
-	content: 'Cellular adhesion is your cell\'s ability to stick to other cells of the same type.';
+	content:	'Cellular adhesion is your cell\'s ability to stick to other cells of the same type.'
+				'Reduces the chance to lose cells due to current speed.';
 }
 #communication::before {
 	content: '\a''Cellular Communication';

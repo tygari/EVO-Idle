@@ -398,7 +398,7 @@ function evos(x){
 		evo();
 	}
 	a = EVO.one.membraneScore;
-	let membrane = document.getElementById("bubble");
+	let membrane = document.getElementById('structure').firstElementChild;
 	if (a == 1){membrane.id = 'doublebubble';}
 	if (a == 2){membrane.id = 'phospholipid';}
 	if (a == 3){membrane.id = 'cellwall';}
