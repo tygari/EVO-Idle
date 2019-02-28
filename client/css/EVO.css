@@ -1,0 +1,712 @@
+:root{
+	--bg-color: rgb(0%,0%,0%);
+	--img-swirl: url(../img/swirl.png);
+	--text-eps: 'Cost: 'var(--cost-EPS)' 'var(--foodtype);
+	--text-balance: 'Cost: 'var(--cost-balance)' 'var(--foodtype)' 'var(--body-balance)' body''\a';
+	--text-nerve: 'Cost: 'var(--cost-nerve)' 'var(--foodtype)' 'var(--body-nerve)' body''\a';
+	--text-vascular: 'Cost: 'var(--cost-vascular)' 'var(--foodtype)' 'var(--body-vascular)' body''\a';
+	--text-muscle: 'Cost: 'var(--cost-muscle)' 'var(--foodtype)' 'var(--body-muscle)' body''\a';
+	--text-respiratory: 'Cost: 'var(--cost-respiratory)' 'var(--foodtype)' 'var(--body-respiratory)' body''\a';
+	--text-digestive: 'Cost: 'var(--cost-digestive)' 'var(--foodtype)' 'var(--body-digestive)' body''\a';
+	--text-excretion: 'Cost: 'var(--cost-excretion)' 'var(--foodtype)' 'var(--body-excretion)' body''\a';
+	--text-sight: 'Cost: 'var(--cost-sight)' 'var(--foodtype)' Body: 'var(--body-sight)'\a';
+	--genbody: '\a''Body: 'var(--body);
+	--genbalance: '\a''Balance: 'var(--xgenbalance);
+	--gennerve: '\a''Nerve: 'var(--xgennerve);
+	--genvascular: '\a''Vascular: 'var(--xgenvascular);
+	--genmuscle: '\a''Muscle: 'var(--xgenmuscle);
+	--genrespiratory: '\a''Respiratory: 'var(--xgenrespiratory);
+	--gendigestive: '\a''Digestive: 'var(--xgendigestive);
+	--genexcretion: '\a''Excretion: 'var(--xgenexcretion);
+	--gensight: '\a''Sight: 'var(--xgensight);
+	--photosynthesis-text: '\a''Your creature is currently making about 'var(--photosynthesis)' 'var(--foodtype)' per second.';
+}
+html{
+	height: 96%;
+	width: 99%;
+}
+#mouse{
+	background-color: black;
+	border-color: silver;
+	border-style: double;
+	position: absolute;
+	z-index: 5;
+	width: auto;
+	height: auto;
+	left: var(--mouseX);
+	top: var(--mouseY);
+	display: var(--mouse);
+}
+#tip{
+	color: white;
+	border-style: hidden;
+	text-align: center;
+	white-space: pre-wrap;
+}
+title::before{
+	content: 'EVO Idle';
+}
+body{
+	background-color: var(--bg-color);
+	user-select: none;
+	cursor: crosshair;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+#load{
+	background-image: var(--img-swirl);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	height: 100%;
+	width: 100%;
+	z-index: 10;
+}
+box{
+	border-style: hidden;
+	width: 24%;
+}
+.box{
+	height: 100%;
+}
+.stage{
+	float: left;
+}
+.game{
+	float: right;
+}
+.ltr{
+	direction: ltr;
+}
+.rtl{
+	direction: rtl;
+}
+.txtL{
+	text-align: left;
+}
+.txtR{
+	text-align: right;
+}
+.txtC{
+	text-align: center;
+}
+.orange{
+	color: orange;
+}
+.red{
+	color: red;
+}
+.button:not(#stage):not(#game):not(#combat):not(#body):not(#cross):not(#exotic){
+	border-radius: 50px;
+	white-space: pre-wrap;
+	border-style: double;
+}
+.button::before{
+	font-weight: bold;
+}
+.button::after{
+	content: '\a'' ';
+}
+.button c::before{
+	color: white;
+}
+.button b::before{
+	color: violet;
+}
+.butcol{
+	background-color: black;
+	border-color: var(--bg-color);
+	/*box-shadow: inset 0px 0px 50px 1px white, 0px 0px 50px 1px black;*/
+}
+.butcol:hover{
+	border-color: inherit;
+}
+.gold{
+	color: gold;
+}
+.blue{
+	color: blue;
+}
+.white{
+	color: white;
+}
+.purple{
+	color: purple;
+}
+.green{
+	color: green;
+}
+.red{
+	color: red;
+}
+.yellow{
+	color: yellow;
+}
+.grey{
+	color: grey;
+}
+.rainbow{
+	animation: rainbow 1s infinite;
+}
+@keyframes rainbow{
+	0%{color: red}
+	16.66%{color: orange}
+	33.33%{color: yellow}
+	50%{color: green}
+	66.66%{color: blue}
+	83.33%{color: purple}
+	100%{color: red}
+}
+.schism{
+	animation: schism 1s infinite;
+}
+@keyframes schism{
+	0%{color: white}
+	50%{color: black}
+	100%{color: white}
+}
+#event{
+	color: white;
+	border-style: hidden;
+	height: 100px;
+	text-align: center;
+	word-break: break-all;
+	display: none;
+}
+#eventone::before{
+	white-space: pre-wrap;
+	content: var(--event-one);
+}
+#eventtwo::before{
+	white-space: pre-wrap;
+	content: var(--event-two);
+}
+#swirl{
+	background-image: var(--img-swirl);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	position: absolute;
+	z-index: 2;
+	height: 50px;
+	width: 50px;
+	left: var(--swirl-left);
+	top: var(--swirl-top);
+	transform: rotate(var(--swirl-transform));
+	display: none;
+}
+tab{
+	border-style: hidden;
+	width: 2%;
+	z-index: 3;
+}
+.taboff{
+	display:none;
+	/*color: var(--bg-color);*/
+}
+nav{
+	position: fixed;
+	overflow: hidden;
+	z-index: 4;
+	transition: 1s;
+	top: 0px;
+	height: 100%;
+	width: 0%;
+	background-color: black;
+}
+#stagenavevo:not(.taboff):hover > #stageUpgrade,
+#combatnavevo:not(.taboff):hover > #combatUpgrade,
+#crossnavevo:not(.taboff):hover > #crossUpgrade,
+#exoticnavevo:not(.taboff):hover > #exoticUpgrade,
+#chat:not(.taboff):hover > #gameChat,
+#info:not(.taboff):hover > #gameInfo{
+	width: 25%;
+}
+#chat-box:checked + #gameChat{
+	width: 25%;
+}
+nav:hover{
+	width: 25%;
+}
+bin div{
+	width: 23.68%;
+}
+input[name=tabs],
+#chat-box,
+.tab{
+	display:none;
+}
+label{
+	background-color: black;
+}
+input[name=tabs] + label{
+	font-weight:bold;
+	padding:5px;
+	border-radius:5px;
+	color:white;
+}
+input[name=tabs]:checked + label{
+	border:solid 2px white;
+}
+container label{
+	margin: 10px;
+	visibility: hidden;
+}
+#tab1:checked ~ #tab1-content,
+#tab2:checked ~ #tab2-content,
+#tab3:checked ~ #tab3-content,
+#tab4:checked ~ #tab4-content{
+	display:block;
+}
+#tab1-content,
+#tab2-content,
+#tab3-content,
+#tab4-content{
+	margin-top: 10px;
+}
+#bodybox > div:nth-child(2n),
+#crossbox > div:nth-child(2n),
+#exoticbox > div:nth-child(2n){
+	float: right;
+}
+#bodybox > div:nth-child(2n+1),
+#crossbox > div:nth-child(2n+1),
+#exoticbox > div:nth-child(2n+1){
+	float: left;
+}
+#structure,
+#devevo,
+#talents,
+#boost{
+	white-space: pre;
+}
+#natural::before{
+	content: 'Natural';
+}
+#bodies::before{
+	content: 'Body';
+}
+#xcross::before{
+	content: 'Cross';
+}
+#exotics::before{
+	content: 'Exotic';
+}
+#devevo::before{
+	content: 'Developmental Evolutions''\a';
+}
+.evolutions::before{
+	content: 'Evolutions';
+	font-weight: bold;
+}
+.tabevo::before{
+	white-space: pre-wrap;
+	content: '\a''E''\a''v''\a''o''\a''l''\a''u''\a''t''\a''i''\a''o''\a''n';
+}
+.tabcht::before{
+	white-space: pre-wrap;
+	content: '\a''C''\a''h''\a''a''\a''t';
+}
+.info::before{
+	content: 'Information';
+	font-weight: bold;
+}
+.tabinf::before{
+	white-space: pre-wrap;
+	content: '\a''I''\a''n''\a''f''\a''o';
+}
+.combats::before{
+	content: 'Combat Evolutions';
+	font-weight: bold;
+}
+.tabcbt::before{
+	white-space: pre-wrap;
+	content: '\a''C''\a''o''\a''m''\a''b''\a''a''\a''t';
+}
+.xcross::before{
+	content: 'Cross Evolutions';
+	font-weight: bold;
+}
+.tabcrs::before{
+	white-space: pre-wrap;
+	content: '\a''C''\a''r''\a''o''\a''s''\a''s';
+}
+.exotics::before{
+	content: 'Exotic Evolutions';
+	font-weight: bold;
+}
+.tabexo::before{
+	white-space: pre-wrap;
+	content: '\a''E''\a''x''\a''o''\a''t''\a''i''\a''c';
+}
+#environment::before{
+	color: blue;
+	white-space: pre-wrap;
+	content:	'\a''Environment'
+				'\a''Current: 'var(--current)
+				'\a''    pH:    'var(--ph)
+				'\a''Salinity: 'var(--salinity);
+}
+#food::before{
+	content: 'Food: ';
+}
+#food.immeasurable::after{
+	content: 'Immeasurable';
+}
+#food.copious::after{
+	content: 'Copious';
+}
+#food.bountiful::after{
+	content: 'Bountiful';
+}
+#food.abundant::after{
+	content: 'Abundant';
+}
+#food.plentiful::after{
+	content: 'Plentiful';
+}
+#food.adequate::after{
+	content: 'Adequate';
+}
+#food.sparse::after{
+	content: 'Sparse';
+}
+#food.scant::after{
+	content: 'Scant';
+}
+#food.scarce::after{
+	content: 'Scarce';
+}
+#food.none::after{
+	content: 'None';
+}
+.food::before{
+	content:	'Food is the basic building block to grow and evolve.'
+				'\a''The quantity of food determines the speed and amount of food that can be gathered.';
+}
+#gifts::before{
+	content: var(--timer-gift);
+}
+#gift::before{
+	content: 'Gift';
+}
+.gift::before{
+	content:	'A divine gift of 'var(--gift)' food for emergency use.'
+				'\a''This adds food for your creature to gather and eat.';
+}
+.swirl::before{
+	content:	'Cost: 'var(--cost-swirl)' 'var(--foodtype)
+				'\a''Move to a new area to find more resources.'
+				'\a''Moving resets food but also changes environmental conditions.';
+}
+#evolution::before{
+	content: '\a''Evolution';
+}
+#evolution c::before{
+	content: '  ('var(--evolution)')';
+}
+.evolution::before{
+	content:	'Cost: ' var(--cost-evolution)' 'var(--foodtype)
+				'\a''Gain an evolution point to evolve your cell.'
+				'\a''Evolution points are used to purchase evolutions.';
+}
+#protein::before{
+	content: '\a''Protein';
+}
+#protein c::before{
+	content: '  ('var(--protein)')  ';
+}
+.protein::before{
+	content:	'Long chains of amino acids.'
+				'\a''They are an essential part of all living organisms.'
+				'\a''Used to upgrade Exotic Evolutions.';
+}
+#metabolize::before{
+	content: '\a''Metabolism: ';
+}
+#aerob::before{
+	content: 'Aerobic Respiration';
+}
+.aerob::after{
+	content: 'Aerobic Respiration uses O''\2082'' and food stuff to create ATP and gives off CO''\2082'' and H''\2082''O as a byproduct.';
+}
+#photo::before{
+	content: 'Photophosphorylation';
+}
+#photo::after{
+	content: ' 'var(--photosynthesis)'/sec';
+}
+
+.photo::after{
+	content:	'Photophosphorylation uses sunlight, CO''\2082'', and H''\2082''O to create ATP and gives off O''\2082'' as a byproduct.'
+				'This creates Glucose the basic sugar made by most plants.'
+				var(--photosynthesis-text,'');
+}
+#count::before{
+	content: '\a''Body: 'var(--body)' ';
+}
+#count::after{
+	content: '\a';
+}
+.count::before{
+	content:	'Cells of the body ready to be used.'
+				var(--genbody,'')
+				var(--genbalance,'')
+				var(--gennerve,'')
+				var(--genvascular,'')
+				var(--genmuscle,'')
+				var(--genrespiratory,'')
+				var(--gendigestive,'')
+				var(--genexcretion,'')
+				var(--gensight,'');
+}
+#talents::before{
+	content: '\a''Combative Talents';
+}
+#boost::before{
+	content: '\a''Boosted Evolutions''\a';
+}
+#size::before{
+	content: '\a''Size: ';
+}
+p#size::after{
+	content: var(--size1);
+}
+boost#size::after{
+	content: var(--size);
+}
+.size::before{
+	content:	'A creature\'s size effects many factors.  Movement, food, combat, and more.'
+				'\a''There are both positives and negatives to evolving to a larger size.';
+}
+#hlth::before{
+	content: '\a''Health: ';
+}
+#health::before{
+	content: var(--hlth);
+}
+#stmn::before{
+	content: '\a''Stamina: ';
+}
+#stamina::before{
+	content: var(--stmn);
+}
+#rtrt::before{
+	content: '\a''Retreat: ';
+}
+#retreat::before{
+	content: var(--rtrt);
+}
+#ii > *::after{
+	white-space: pre-wrap;
+	content: '\a';
+}
+.qq > * > span:first-child::before{
+	content: ' << ';
+}
+.oo > * > span:nth-child(2)::after{
+	content: '%';
+}
+.pp > * > span:last-child::after{
+	content: ' >> ';
+}
+
+/*stats*/
+#EPS::before {
+	content: '\a''EPS';
+}
+#EPS c::before {
+	content: '  ('var(--EPS)')  ';
+}
+#EPS b::before {
+	content: var(--EPS-x);
+}
+.EPS::before {
+	content:	var(--text-eps)
+				'\a''Make Extracellular Polymeric Substances to protect from the pH of the water.';
+}
+#balance::before{
+	content: '\a''Balance';
+}
+#balance c::before{
+	content: '  ('var(--balance)')';
+}
+.balance::before{
+	content:	var(--text-balance,'')
+				'Improves Balance quality.'
+				'\a''Balance improves your creatures ability to react.';
+}
+#nerve::before{
+	content: '\a''Nerve';
+}
+#nerve c::before{
+	content: '  ('var(--nerve)')';
+}
+.nerve::before{
+	content:	var(--text-nerve,'')
+				'Improves Nerve quality.'
+				'\a''Nerves improve your creature ability to learn.';
+}
+#vascular::before{
+	content: '\a''Vascular';
+}
+#vascular c::before{
+	content: '  ('var(--vascular)')';
+}
+.vascular::before{
+	content:	var(--text-vascular,'')
+				'Improves Vascular quality.'
+				'\a''Vascular improves your creature ability to act.';
+}
+#muscle::before{
+	content: '\a''Muscle';
+}
+#muscle c::before{
+	content: '  ('var(--muscle)')';
+}
+.muscle::before{
+	content:	var(--text-muscle,'')
+				'Improves Muscle quality.'
+				'\a''Muscle improves your creature ability to move.';
+}
+#respiratory::before{
+	content: '\a''Respiratory';
+}
+#respiratory c::before{
+	content: '  ('var(--respiratory)')';
+}
+.respiratory::before{
+	content:	var(--text-respiratory,'')
+				'Improves Respiratory quality.'
+				'\a''Respiratory improves your creature metabolism.';
+}
+#digestive::before{
+	content: '\a''Digestive';
+}
+#digestive c::before{
+	content: '  ('var(--digestive)')';
+}
+.digestive::before{
+	content:	var(--text-digestive,'')
+				'Improves Digestive quality.'
+				'\a''Digestion improves the quantity of food your creature eats.';
+}
+#excretion::before{
+	content: '\a''Excretion';
+}
+#excretion c::before{
+	content: '  ('var(--excretion)')';
+}
+.excretion::before{
+	content:	var(--text-excretion,'')
+				'Improves Excretion quality.'
+				'\a''Excretion improves your creature ability to expel toxins and waste.';
+}
+#sight::before{
+	content: '\a''Sight';
+}
+#sight c::before{
+	content: '  ('var(--sight)')';
+}
+.sight::before{
+	content:	var(--text-sight,'')
+				'Improves Light Sense quality.'
+				'\a''Sight improves your creature ability to see the world.';
+}
+#gameInfo{
+	overflow-y: scroll;
+	overflow-x: hidden;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+/*chat*/
+#chat-switch::before{
+	content: var(--chat-switch,'\2A01');
+	font-size: large;
+	float: right;
+}
+#chat-text::before{
+	content: var(--chat);
+}
+#chat-text{
+	width: 100%;
+	height: 90%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+#chat-input{
+	width: 100%;
+	height: 10%;
+}
+/*lay*/
+#lay{
+	position: absolute;
+	background-color: black;
+	opacity: 0.5;
+	z-index: 8;
+}
+.layoff{
+	height: 0%;
+	width: 0%;
+}
+.layon{
+	height: 100%;
+	width: 100%;
+}
+#carnate{
+	position: absolute;
+	margin: auto;
+	transform: translate(-50%,-50%);
+	background-color: black;
+	color: silver;
+	overflow: hidden;
+	z-index: 9;
+}
+.hidden{
+	top: -100px;
+	left: -100px;
+	width: 0px;
+	height: 0px;
+}
+.shown{
+	top: 50%;
+	left: 50%;
+	width: 300px;
+	height: 200px;
+}
+#box{
+	text-align: center;
+	font-size: x-large;
+	padding-top: 10%;
+}
+#box::before{
+	content: 'Would you like to Reincarnate?';
+}
+carnate{
+	white-space: pre-wrap;
+}
+#nocarnate{
+	width: 48%;
+	float: left;
+	color: green;
+}
+#nocarnate::before{
+	content: '\a''No';
+}
+#nocarnate::after{
+	content: '\a'' ';
+}
+#recarnate{
+	width: 48%;
+	float: right;
+	color: red;
+}
+#recarnate::before{
+	content: '\a''Yes';
+}
+#recarnate::after{
+	content: '\a'' ';
+}

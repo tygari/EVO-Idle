@@ -1,0 +1,280 @@
+:root{
+	--text-xbalance: 'Cost: 'var(--cost-xbalance)' 'var(--foodtype)' 'var(--body-balance)' body''\a';
+	--text-xnerve: 'Cost: 'var(--cost-xnerve)' 'var(--foodtype)' 'var(--body-nerve)' body''\a';
+	--text-xvascular: 'Cost: 'var(--cost-xvascular)' 'var(--foodtype)' 'var(--body-vascular)' body''\a';
+	--text-xmuscle: 'Cost: 'var(--cost-xmuscle)' 'var(--foodtype)' 'var(--body-muscle)' body''\a';
+	--text-xrespiratory: 'Cost: 'var(--cost-xrespiratory)' 'var(--foodtype)' 'var(--body-respiratory)' body''\a';
+	--text-xdigestive: 'Cost: 'var(--cost-xdigestive)' 'var(--foodtype)' 'var(--body-digestive)' body''\a';
+	--text-xexcretion: 'Cost: 'var(--cost-xexcretion)' 'var(--foodtype)' 'var(--body-excretion)' body''\a';
+	--text-xsight: 'Cost: 'var(--cost-xsight)' 'var(--foodtype)' 'var(--body-sight)' body''\a';
+	--text-xefficient: 'Cost: 'var(--cost-xefficient)' Ribosome''\a';
+	--text-xfoodmax: 'Cost: 'var(--cost-foodmax)' Evolution Points''\a';
+	--text-xfoodmin: 'Cost: 'var(--cost-foodmin)' Evolution Points''\a';
+}
+#xbalance::before {
+	content: '\a''Cross Balance';
+}
+#xbalance c::before {
+	content: '  ('var(--xbalance)')';
+}
+.xbalance::before {
+	content:	var(--text-xbalance,'')
+				'Click to improve Balance quality.'
+				'\a''Balance improves your creatures ability to react.';
+}
+#xnerve::before {
+	content: '\a''Cross Nerve';
+}
+#xnerve c::before {
+	content: '  ('var(--xnerve)')';
+}
+.xnerve::before {
+	content:	var(--text-xnerve,'')
+				'Click to improve Nerve quality.'
+				'\a''Nerves improve your creature ability to learn.';
+}
+#xvascular::before {
+	content: '\a''Cross Vascular';
+}
+#xvascular c::before {
+	content: '  ('var(--xvascular)')';
+}
+.xvascular::before {
+	content:	var(--text-xvascular,'')
+				'Click to improve Vascular quality.'
+				'\a''Vascular improves your creature ability to act.';
+}
+#xmuscle::before {
+	content: '\a''Cross Muscle';
+}
+#xmuscle c::before {
+	content: '  ('var(--xmuscle)')';
+}
+.xmuscle::before {
+	content:	var(--text-xmuscle,'')
+				'Click to improve Muscle quality.'
+				'\a''Muscle improves your creature ability to move.';
+}
+#xrespiratory::before {
+	content: '\a''Cross Respiratory';
+}
+#xrespiratory c::before {
+	content: '  ('var(--xrespiratory)')';
+}
+.xrespiratory::before {
+	content:	var(--text-xrespiratory,'')
+				'Click to improve Respiratory quality.'
+				'\a''Respiratory improves your creature metabolism.';
+}
+#xdigestive::before {
+	content: '\a''Cross Digestive';
+}
+#xdigestive c::before {
+	content: '  ('var(--xdigestive)')';
+}
+.xdigestive::before {
+	content:	var(--text-xdigestive,'')
+				'Click to improve Digestive quality.'
+				'\a''Digestion improves the quantity of food your creature eats.';
+}
+#xexcretion::before {
+	content: '\a''Cross Excretion';
+}
+#xexcretion c::before {
+	content: '  ('var(--xexcretion)')';
+}
+.xexcretion::before {
+	content:	var(--text-xexcretion,'')
+				'Click to improve Excretion quality.'
+				'\a''Excretion improves your creature ability to expel toxins and waste.';
+}
+#xsight::before {
+	content: '\a''Cross Sight';
+}
+#xsight c::before {
+	content: '  ('var(--xsight)')';
+}
+.xsight::before {
+	content:	var(--text-xsight,'')
+				'Click to improve Light Sense quality.'
+				'\a''Sight improves your creature ability to see the world.';
+}
+#xgenbalance::before {
+	content: '\a''Generation Balance';
+}
+.xgenbalance::before {
+	content: 'Generate Balance specialized cells.';
+}
+#xgennerve::before {
+	content: '\a''Generation Nerve';
+}
+.xgennerve::before {
+	content: 'Generate Nerve specialized cells.';
+}
+#xgenvascular::before {
+	content: '\a''Generation Vascular';
+}
+.xgenvascular::before {
+	content: 'Generate Vascular specialized cells.';
+}
+#xgenmuscle::before {
+	content: '\a''Generation Muscle';
+}
+.xgenmuscle::before {
+	content: 'Generate Muscle specialized cells.';
+}
+#xgenrespiratory::before {
+	content: '\a''Generation Respiratory';
+}
+.xgenrespiratory::before {
+	content: 'Generate Respiratory specialized cells.';
+}
+#xgendigestive::before {
+	content: '\a''Generation Digestive';
+}
+.xgendigestive::before {
+	content: 'Generate Digestive specialized cells.';
+}
+#xgenexcretion::before {
+	content: '\a''Generation Excretion';
+}
+.xgenexcretion::before {
+	content: 'Generate Excretion specialized cells.';
+}
+#xgensight::before {
+	content: '\a''Generation Sight';
+}
+.xgensight::before {
+	content: 'Generate Sight specialized cells.';
+}
+#xoffense::before {
+	content: '\a''Cross Offense';
+}
+.xoffense::before {
+	content: 'Offensive evolutions are the embodiment of those who strike first strike last.';
+}
+#xdefense::before {
+	content: '\a''Cross Defense';
+}
+.xdefense::before {
+	content: 'Defensive evolutions are the embodiment of not having to last forever just last long enough.';
+}
+#xspeed::before {
+	content: '\a''Cross Speed';
+}
+.xspeed::before {
+	content: 'Speed evolutions are the embodiment of if they can\'t be caught they can\'t be hurt.';
+}
+#xspecial::before {
+	content: '\a''Cross Special';
+}
+.xspecial::before {
+	content: 'Special evolutions are the embodiment of being able to do something amazing and terrifying.';
+}
+#xtraveler::before {
+	content: '\a''Traveler';
+}
+.xtraveler::before {
+	content: 'Wanderlust can be both a curse and a blessing.';
+}
+#xexpert::before {
+	content: '\a''Expert';
+}
+#xexpert c::before {
+	content: '  ('var(--xexpert)')';
+}
+.xexpert::before {
+	content: 'Those skilled in combat can find the flaws in any armor.';
+}
+#xcoward::before {
+	content: '\a''Coward';
+}
+#xcoward c::before {
+	content: '  ('var(--xcoward)')';
+}
+.xcoward::before {
+	content: 'Those who fight and run away live to fight another day.';
+}
+#xsurvivor::before {
+	content: '\a''Survivor';
+}
+#xsurvivor c::before {
+	content: '  ('var(--xsurvivor)')';
+}
+.xsurvivor::before {
+	content: 'The will to keep fighting when everything looks lost.';
+}
+#xinstinct::before {
+	content: '\a''Instinct';
+}
+#xinstinct c::before {
+	content: '  ('var(--xinstinct)')';
+}
+.xinstinct::before {
+	content: 'The faster one internalizes their experience the faster one can grow.';
+}
+#xbody::before {
+	content: '\a''Enhanced Body';
+}
+.xbody::before {
+	content: 'A strong body to last longer in a fight.';
+}
+#xsoul::before {
+	content: '\a''Enhanced Soul';
+}
+.xsoul::before {
+	content: 'A strong soul to fight harder in battle.';
+}
+#xwind::before {
+	content: '\a''Second Wind';
+}
+.xwind::before {
+	content: 'Stamina to keep moving forward when others would fall.';
+}
+#xshell::before {
+	content: '\a''Shell';
+}
+.xshell::before {
+	content:	'Hardened Extracellular Polymeric Substances that protect against physical harm.'
+				'\a''The counter is that the shells are heavy increasing move cost and size cost.';
+}
+#xdetox::before {
+	content: '\a''Detoxification';
+}
+.xdetox::before {
+	content:	'Detoxification helps a creature purge toxin build up within ones body.';
+}
+#xefficient::before {
+	content: '\a''Efficient Metabolism';
+}
+#xefficient c::before {
+	content: '  (+'var(--xefficient)'%)';
+}
+.xefficient::before {
+	content: 	var(--text-xefficient,'')
+				'After millions of metabolic cycles efficiency evolves.';
+}
+#xfoodmax::before {
+	content: '\a''Food Max';
+}
+#xfoodmax c::before {
+	content: '  ('var(--xfoodmax)')';
+}
+.xfoodmax::before {
+	content:	var(--text-xfoodmax,'')
+				'Increases max potential food +10%.'
+				'\a''This evolution costs Evolution Points to upgrade.'
+				'\a''This evolution is linked with Food Min';
+}
+#xfoodmin::before {
+	content: '\a''Food Min';
+}
+#xfoodmin c::before {
+	content: '  ('var(--xfoodmin)')';
+}
+.xfoodmin::before {
+	content:	var(--text-xfoodmin,'')
+				'Increases min potential food +10%.'
+				'\a''This evolution costs Evolution Points to upgrade.'
+				'\a''This evolution is linked with Food Max';
+}

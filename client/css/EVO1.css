@@ -1,0 +1,280 @@
+:root{
+	--text-mitosis: 'Cost: 'var(--cost-mitosis)' 'var(--foodtype)'\a';
+	--text-cytoplasm: 'Cost: 'var(--cost-cytoplasm)' 'var(--foodtype)'\a';
+	--text-cilia: 'Cost: 'var(--cost-cilia)' 'var(--foodtype)'\a';
+	--text-flagellum: 'Cost: 'var(--cost-flagellum)' 'var(--foodtype)'\a';
+	--text-ribosome: 'Cost: 'var(--cost-3-ribosome)' 'var(--foodtype)' & 'var(--cost-ribosome)' RNA''\a';
+	--text-endoplasmic: 'Cost: 'var(--cost-3-endoplasmic)' 'var(--foodtype)' & 'var(--cost-endoplasmic)' RNA & 'var(--cost-ribo-endoplasmic)' Ribosome''\a';
+	--text-golgi: 'Cost: 'var(--cost-3-golgi)' 'var(--foodtype)' & 'var(--cost-golgi)' RNA & 'var(--cost-ribo-golgi)' Ribosome''\a';
+	--text-rna: 'Cost: 'var(--cost-RNA)' 'var(--foodtype)'\a';
+	--text-dna: 'Cost: 'var(--cost-DNA)' RNA''\a';
+	--text-metabolism: 'Cost: 'var(--cost-metabolism)' RNA''\a';
+	--text-voracious: 'Cost: 'var(--cost-3-voracious)' 'var(--foodtype)' & 'var(--cost-voracious)' RNA''\a';
+	--text-glucose: 'Cost: 'var(--cost-3-glucose)' 'var(--foodtype)' & 'var(--cost-glucose)' RNA''\a';
+	--text-mitochondria: 'Cost: 'var(--cost-mitochondria)' DNA''\a';
+}
+#structure::before {
+	content: 'Cell Structures';
+}
+#basic::after {
+	content: 'Basic';
+}
+.basic::after {
+	content: 'The basic metabolism that is simple chemical reactions.';
+}
+#ATP::before {
+	content: '\a''ATP';
+}
+#ATP c::before {
+	content: '  ('var(--ATP)')';
+}
+.ATP::before {
+	content:	'Click to gain 1 ATP for your cell.'
+				'\a''Adenosine Triphosphate is how your cell grows.';
+}
+struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc#cellwall::before {
+	content: '\a''Membrane: ';
+}
+#bubbleless {
+	display: none;
+}
+#bubble::after {
+	content: 'Bubble';
+}
+.bubble::before {
+	content:	'Your creature\'s first evolution.'
+				'\a''A simple ocean bubble with amino acids in it.';
+}
+#doublebubble::after {
+	content: 'Double Bubble';
+}
+.doublebubble::before {
+	content:	'Double bubble wall was the second evolution of cells.'
+				'\a''A bubble inside of another bubble.';
+}
+#phospholipid::after {
+	content: 'Phospholipid';
+}
+.phospholipid::before {
+	content:	'Phospholipid membranes are aligned amphipathic molecule chains.'
+				'\a''All modern cells carry this pivitol characteristic.';
+}
+#cellwall::after {
+	content: 'Cell Wall';
+}
+.cellwall::before {
+	content:	'Cell Wall is a thick hard shell around a cells Phospholipid membrane.'
+				'\a''It greatly enhances a cells durability but drastically reduces a cells mobility.';
+}
+#cytoskeleton::before {
+	content: '\a''Cytoskeleton';
+}
+.cytoskeleton::before {
+	content: 'The internal and external structure of a cell is skeletally held together via micro filaments, intermediate filaments, and micro tubules.';
+}
+#nucleus::before {
+	content: '\a''Nucleus';
+}
+.nucleus::before {
+	content: 'The unified core of a cell.';
+}
+#mitosis::before {
+	content: '\a''Mitosis';
+}
+#mitosis c::before {
+	content: '  (~'var(--mitosis)'%)';
+}
+.mitosis::before {
+	content:	var(--text-mitosis,'')
+				'Under go cellular mitosis and reproduce a copy of your cell.'
+				'\a''Each purchase rolls a random chance to gain a Evolution Point.'
+				'\a''Failure to gain an evolution point raises the chance to gain a point next time.'
+				'\a''Success gives an evolution point but lowers the chance to gain a point next time.';
+}
+#cytoplasm::before {
+	content: '\a''Cytoplasm';
+}
+#cytoplasm c::before {
+	content: '  ('var(--cytoplasm)')  ';
+}
+#cytoplasm b::before {
+	content: var(--cytoplasm-x);
+}
+.cytoplasm::before {
+	content:	var(--text-cytoplasm,'')
+				'Increase Cytoplasm within your cell.'
+				'\a''Reduces upgrade costs by a small amount.';
+}
+#cilia::before {
+	content: '\a''Cilia';
+}
+#cilia c::before {
+	content: '  ('var(--cilia)')  ';
+}
+#cilia b::before {
+	content: var(--cilia-x);
+}
+.cilia::before {
+	content:	var(--text-cilia,'')
+				'Grow more Cilia for your cell.'
+				'\a''Cilia gathers food for your metabolism to convert to ATP.';
+}
+#flagellum::before {
+	content: '\a''Flagellum';
+}
+#flagellum c::before {
+	content: '  ('var(--flagellum)')  ';
+}
+#flagellum b::before {
+	content: var(--flagellum-x);
+}
+.flagellum::before {
+	content:	var(--text-flagellum,'')
+				'Grow a stronger Flagellum for your cell.'
+				'\a''Reduces the cost of movement for your cell.'
+				'\a''Increases chances to find more food.';
+}
+#ribosome::before {
+	content: '\a''Ribosome';
+}
+#ribosome c::before {
+	content: '  ('var(--ribosome)'k)  ';
+}
+.ribosome::before {
+	content:	var(--text-ribosome,'')
+				'Organic nanofactories composed of RNA within cells.'
+				'\a''Makes RNA.'
+				'\a''Makes Ribosomes.'
+				'\a''Makes Proteins.';
+}
+#endoplasmic::before {
+	content: '\a''Endoplasmic Reticulum';
+}
+#endoplasmic c::before {
+	content: '  ('var(--endoplasmic)')  ';
+}
+.endoplasmic::before {
+	content:	var(--text-endoplasmic,'')
+				'A network of membranous tubules within the cytoplasm.'
+				'\a''Assists with the production and transport of proteins.'
+				'\a''Increases Protein production.';
+}
+#golgi::before {
+	content: '\a''Golgi Apparatus';
+}
+#golgi c::before {
+	content: '  ('var(--golgi)')  ';
+}
+.golgi::before {
+	content:	var(--text-golgi,'')
+				'A stack of small flat sacs formed by membranes inside a cell\'s cytoplasm.'
+				'\a''Assists with the production and transport of proteins.'
+				'\a''Increases Protein production.';
+}
+#RNA::before {
+	content: '\a''RNA';
+}
+#RNA c::before {
+	content: '  ('var(--RNA)')  ';
+}
+#RNA b::before {
+	content: var(--RNA-x);
+}
+.RNA::before {
+	content:	var(--text-rna,'')
+				'Make RNA for your cell.'
+				'\a''RNA is required in advanced growth and evolution.'
+				'\a''RNA requires ATP to create.';
+}
+#DNA::before {
+	content: '\a''DNA';
+}
+#DNA c::before {
+	content: '  ('var(--DNA)')  ';
+}
+#DNA b::before {
+	content: var(--DNA-x);
+}
+.DNA::before {
+	content:	var(--text-dna,'')
+				'Make DNA for your cell.'
+				'\a''DNA is required in advanced growth and evolution.'
+				'\a''DNA requires RNA to create.';
+}
+#metabolism::before {
+	content: '\a''Metabolism';
+}
+#metabolism c::before {
+	content: '  (+'var(--metabolism)'%)';
+}
+.metabolism::before {
+	content:	var(--text-metabolism,'')
+				'Improve your cell\'s metabolism.'
+				'\a''Metabolism costs RNA to improve.'
+				'\a''Effects change based on your chosen Metabolic Evolutionary Path.';
+}
+#voracious::before {
+	content: '\a''Voracious';
+}
+#voracious c::before {
+	content: '  ('var(--voracious)')';
+}
+.voracious::before {
+	content:	var(--text-voracious,'')
+				'Voracious eaters consume available food faster clearing an area faster.';
+}
+#glucose::before {
+	content: '\a''Glucose';
+}
+#glucose c::before {
+	content: '  ('var(--glucose)')';
+}
+.glucose::before {
+	content:	var(--text-glucose,'')
+				'Glucose is the sugar created by plants that photosynthesize.'
+				'\a''It boosts the amount of sugar created by Photophosphorylation creatures.';
+}
+#mitochondria::before {
+	content: '\a''Mitochondria';
+}
+#mitochondria c::before {
+	content: '  (+'var(--mitochondria)'%)';
+}
+.mitochondria::before {
+	content:	var(--text-mitochondria,'')
+				'Improve your cell\'s mitochondria.'
+				'\a''Mitochondria costs DNA to improve.'
+				'\a''Mitochondria further enhances your Metabolism.';
+}
+p#photo::after {
+	content: '';
+}
+#multicelluar::before {
+	content: 'Multicelluar';
+}
+.multicelluar::before {
+	content:	'Multicelluar evolution is the next stage in life when single celled creatures began joining together in colonies.'
+				'\a''This leads to the first simplest forms of multi cell life, sponges, anemone, jellyfish, and more.';
+}
+#gameInfo::before {
+	content:	'Welcome to EVO Idle.'
+				'\a'
+				'\a''Upgrade Evolutions'
+				'\a''Simply acquire the resources, then click to upgrade.'
+				'\a'
+				'\a''Linked Evolutions'
+				'\a''Two or more evolutions linked together.'
+				'\a''Upgrade one in the link and the cost of the rest increases with it.'
+				'\a''Linked evolutions are more powerful than upgrade evolutions.'
+				'\a'
+				'\a''Branched Evolutions'
+				'\a''Multiple evolutions will be presented but only one will allowed to be chosen.'
+				'\a''These are the most powerful evolutions with some required.'
+				'\a'
+				'\a''Gate Evolutions'
+				'\a''These evolutions do nothing, they are simply gates to more powerful evolution trees.'
+				'\a'
+				'\a'
+				'\a''Newbie Tip'
+				'\a''To reach auto click evolve Double Bubble, Phospholipid, and Cytoskeleton.';
+}

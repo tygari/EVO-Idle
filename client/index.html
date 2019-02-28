@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<script id="load"  type="text/javascript" src="client/js/index.js"></script>
+	</head>
+	<body oncontextmenu="return false">
+		<box class="box stage txtL red">
+			<div class="marquee"></div>
+			<p class="status"></p>
+			<p class="prototype blue"></p>
+			<span class="protoStatus"></span>
+			<p class="alpha blue"></p>
+			<span class="alphaStatus"></span>
+			<p class="event purple"></p>
+			<p class="wipe yellow"></p>
+			<p class="beta blue"></p>
+			<span class="betaStatus"></span>
+			<p class="update version"></p>
+		</box>
+		<box class="box game txtR white">
+			<p id="bonus"></p>
+			<p onclick="soft()" class="soft"></p>
+			<p onclick="hard()" class="hard"></p>
+			<copyright></copyright>
+		</box>
+		<div class="txtC">
+			<p class="title rainbow"></p>
+			<p onclick="play()" class="start schism"></p>
+		</div>
+		<container>
+			<input id="tab1" type="radio" name="tabs" checked="checked">
+			<label id="intro" for="tab1"></label>
+			<input id="tab2" type="radio" name="tabs">
+			<label id="helpers" for="tab2"></label>
+			<input id="tab3" type="radio" name="tabs">
+			<label id="donators" for="tab3"></label>
+			<input id="tab4" type="radio" name="tabs">
+			<label id="links" for="tab4"></label>
+			<content id="tab1-content" class="tab">
+				<div class="white txtC text"></div>
+			</content>
+			<content id="tab2-content" class="tab">
+				<div class="link helpers"></div>
+			</content>
+			<content id="tab3-content" class="tab">
+				<div class="link donators">
+					<p onclick="donate()" class="paypal"></p>
+				</div>
+			</content>
+			<content id="tab4-content" class="tab">
+				<div class="link links">
+					<p onclick="reddit()" class="reddit"></p>
+					<p onclick="github()" class="github"></p>
+				</div>
+			</content>
+		</container>
+	</body>
+</html>

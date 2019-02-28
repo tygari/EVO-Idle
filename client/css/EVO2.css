@@ -1,0 +1,193 @@
+:root{
+	--text-rapacious: 'Cost: 'var(--cost-3-rapacious)' 'var(--foodtype)' & 'var(--cost-rapacious)' RNA''\a';
+	--text-fructose: 'Cost: 'var(--cost-3-fructose)' 'var(--foodtype)' & 'var(--cost-fructose)' RNA''\a';
+}
+#structure::before {
+	content: 'MultiCell Structures';
+}
+#nutrient::before {
+	content: '\a''Nutrient';
+}
+#nutrient c::before {
+	content: '  ('var(--nutrient)')';
+}
+.nutrient::before {
+	content:	'Gathered Nutrients for growing and developing.'
+				'\a''This button is not clickable.';
+}
+#colony::before {
+	content: '\a''Colony';
+}
+#colony c::before {
+	content: '  ('var(--body)')';
+}
+#colony b::before {
+	content: '  'var(--colony-x);
+}
+.colony::before {
+	content:	'Cost: 'var(--cost-colony)' 'var(--foodtype)
+				'\a''Mitosis a cell and try to adhere to it.'
+				'\a''It will help you gather nutrients'
+				var(--genbalance,'')
+				var(--gennerve,'')
+				var(--genvascular,'')
+				var(--genmuscle,'')
+				var(--genrespiratory,'')
+				var(--gendigestive,'')
+				var(--genexcretion,'')
+				var(--gensight,'');
+}
+#rapacious::before {
+	content: '\a''Rapacious';
+}
+#rapacious c::before {
+	content: '  ('var(--rapacious)')';
+}
+.rapacious::before {
+	content:	var(--text-rapacious,'')
+				'Rapacious eaters consume available food faster clearing an area faster.';
+}
+#fructose::before {
+	content: '\a''Fructose';
+}
+#fructose c::before {
+	content: '  ('var(--fructose)')';
+}
+.fructose::before {
+	content:	var(--text-fructose,'')
+				'Fructose is another sugar created by some plants that is sweeter than Glucose.'
+				'\a''It boosts the amount of sugar created by Photophosphorylation creatures.';
+}
+#sex::before {
+	content: '\a''Sexual Reproduction';
+}
+.sex::before {
+	content:	'Sexual Reproduction is the act of sharing genetic material between two organisms.'
+				'\a''Reproduction assists Evolution.';
+}
+#adhesion::before {
+	content: '\a''Cellular Adhesion';
+}
+#adhesion::after {
+	content: ': 'var(--adhesion)'%';
+}
+.adhesion::before {
+	content:	'Cellular Adhesion is your colony\'s ability to stick to other cells of the same type.'
+				'\a''Reduces the chance to lose cells due to current speed.';
+}
+#communication::before {
+	content: '\a''Cellular Communication';
+}
+.communication::before {
+	content: 'Your colony\'s capability to communicate with other cells of the same type.';
+}
+#organization::before {
+	content: '\a''Cellular Organization';
+}
+.organization::before {
+	content: 'Your colony\'s capability to organize itself with other cells of the same type.';
+}
+#generation::before {
+	content: '\a''Cellular Generation';
+}
+#generation::after {
+	content: ': 'var(--generation)'%';
+}
+.generation::before {
+	content:	'Cellular Generation is your colony\'s ability to produce cells automatically.'
+				'\a''Creates cells over time based on the amount of cells available.';
+}
+#quorum::before {
+	content: '\a''Quorum Sensing';
+}
+.quorum::before {
+	content: 'Quorum Sensing is a colony\'s ability to count how many of their own type there is within the colony.';
+}
+#biofilm::before {
+	content: '\a''Biofilm';
+}
+.biofilm::before {
+	content: 'Biofilm is a mucus coating of Extracellular Polymeric Substances used to protect a cell colony from pH differences.';
+}
+#osmoregulation::before {
+	content: '\a''Osmoregulation';
+}
+#osmoregulation::after {
+	content: ': 'var(--osmoregulation);
+}
+.osmoregulation::before {
+	content:	'Osmoregulation is a cell\'s and colony\'s ability to regulate osmotic pressure.'
+				'\a''This is to maintain homeostasis of the colony\'s water content.';
+}
+#motility::before {
+	content: '\a''Swarming Motility';
+}
+#motility::after {
+	content: ': 'var(--motility);
+}
+.motility::before {
+	content: 'Swarming Motility is your colony\'s ability to move as a collective in a desired direction.';
+}
+#specialization::before {
+	content: '\a''Cellular Specialization';
+}
+.specialization::before {
+	content:	'Cellular Specialization is the critical ability for cells within a colony to specialize in a given task.'
+				'\a''But comes at the cost of no longer being able to survive on their own.'
+				'\a''This is a major evolutionary step in advanced life.';
+}
+#circular::before {
+	content: '\a''Circular Symmetry';
+}
+.circular::before {
+	content: 'Your cells and newly developed systems find efficiency in organization and evolve into circular symmetry.';
+}
+#radial::before {
+	content: '\a''Radial Symmetry';
+}
+.radial::before {
+	content: 'Your cells and newly developed systems find efficiency in organization and evolve into radial symmetry.';
+}
+#dependency::before {
+	content: '\a''Dependency';
+}
+.dependency::before {
+	content: 'Some of your cells and newly developed systems have specialized to the degree that they can no longer survive on their own becoming dependent upon each other.';
+}
+#worm::before {
+	content: 'Worm';
+}
+.worm::before {
+	content:	'Sea worms became the first creatures to bring together the first eight biological systems into a single entity.'
+				'\a''They are the spring board from which all complex life sprang from.'
+}
+#gameInfo::before {
+	content:	'Hope your enjoying EVO Idle.'
+				'\a'
+				'\a''Upgrade Evolutions'
+				'\a''Simply acquire the resources, then click to upgrade.'
+				'\a'
+				'\a''Linked Evolutions'
+				'\a''Two or more evolutions linked together.'
+				'\a''Upgrade one in the link and the cost of the rest increases with it.'
+				'\a''Linked evolutions are more powerful than upgrade evolutions.'
+				'\a'
+				'\a''Branched Evolutions'
+				'\a''Multiple evolutions will be presented but only one will allowed to be chosen.'
+				'\a''These are the most powerful evolutions with some required.'
+				'\a'
+				'\a''Gate Evolutions'
+				'\a''These evolutions do nothing, they are simply gates to more powerful evolution trees.'
+				'\a'
+				'\a''Learned Evolutions'
+				'\a''These evolutions upgrade in response to actions, environment, or events.'
+				'\a''These can be a bit trickier to develop over other evolutions.'
+				'\a'
+				'\a'
+				'\a''Newbie Tip'
+				'\a''To reach body stats evolve Cellular Adhesion, Cellular Communication, Cellular Organization, and Cellular Specialization.'
+				'\a''Combat unlocks with the first evolution of any body stat.'
+				'\a''Reincarnation is offered after every death in battle.'
+				'\a''Reincarnation resets the game and awards Reincarnation Points.'
+				'\a''Reincarnation Points are added to a players Evolution Points after reincarnation.';
+}

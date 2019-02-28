@@ -1,0 +1,214 @@
+:root{
+	--donation: '+22.5%';
+}
+.marquee{
+  animation: marquee 5s alternate infinite;
+}
+.marquee::before{
+  content: '!!Important!!';
+}
+@keyframes marquee{
+  0%{margin-left: 0%;}
+  50%{margin-left: 80%;}
+  100%{margin-left: 0%;}
+}
+.status::before{
+	white-space: pre-wrap;
+	content: 'Game Status'
+			 '\a''Version: 'var(--version)
+			 '\a''Updated: 'var(--date);
+	font-weight: bold;
+}
+.prototype::before{
+	content: 'Prototype';
+	font-weight: bold;
+}
+.protoStatus::after{
+	white-space: pre-wrap;
+	color: green;
+	content:	'Stage One'
+				'\a''Stage Two'
+				'\a''Save Local'
+				'\a''Offline Progression'
+				'\a''Combat (PvE)'
+				'\a''Reincarnation';
+}
+.alpha::before{
+	content: 'Alpha Release';
+	font-weight: bold;
+}
+.alphaStatus::before{
+	white-space: pre-wrap;
+	color: green;
+	content:	'Stage Three'
+				'\a''Anti Auto Clicker'
+				'\a''Server'
+				'\a''Chat Room'
+				'\a''Xcross Evolution';
+}
+.alphaStatus::after{
+	white-space: pre-wrap;
+	color: red;
+	content:	'\a''Save Cloud'
+				'\a''Exotic Evolution'
+				'\a''Event Revamp'
+				'\a''Event Evolution'
+				'\a''Stage Four'
+				'\a''Stage Five'
+				'\a''Stage Six'
+				'\a''Reincarnation Revamp';
+}
+.beta::before{
+	content: 'Beta Release';
+	font-weight: bold;
+}
+.betaStatus::after{
+	white-space: pre-wrap;
+	color: red;
+	content:	'Graphics'
+				'\a''Combat (PvP)'
+				'\a''Game Store';
+}
+.event::before{
+	content: 'First Event';
+}
+.wipe::before{
+	content: 'All Saves Wiped';
+}
+.game{
+	position: relative;
+}
+#bonus::before{
+	white-space: pre-wrap;
+	content:	'Donation Bonuses'
+				'\a''Metabolism: 'var(--donation);
+}
+.soft{
+    position: absolute;
+    right: 0%;
+    bottom: 10%;
+}
+.soft:hover{
+	border: double;
+}
+.soft::before{
+	content: 'Soft Reset';
+}
+.hard{
+    position: absolute;
+    right: 0%;
+    bottom: 5%;
+}
+.hard:hover{
+	border: double;
+}
+.hard::before{
+	content: 'Hard Reset';
+}
+copyright{
+    position: absolute;
+    right: 0%;
+    bottom: 0%;
+}
+copyright::after{
+	content: '\00A9  Tygari Davis 2018';
+}
+.title::before{
+	content: 'EVO Idle';
+	font-size: 80px;
+	font-weight: bold;
+}
+.start::before{
+	content: '!!START!!';
+	font-size: 40px;
+	font-weight: bold;
+}
+container{
+	margin-top: 3%;
+    width: 52%;
+    float: left;
+}
+label{
+	float: left;
+	width: 18%;
+	text-align: center;
+}
+container label{
+	visibility: initial;
+}
+#intro::before{
+	content: 'Intro';
+}
+#helpers::before{
+	content: 'Contributers';
+}
+#donators::before{
+	content: 'Donators';
+}
+#links::before{
+	content: 'Links';
+}
+.link{
+	color: silver;
+	font-size: 20px;
+	text-align: center;
+}
+.text::after{
+	white-space: pre-wrap;
+	content:	'\a'' '
+				'\a'' '
+				'\a''EVO Idle is in Alpha Development.'
+				'\a''EVO Idle works great in Chrome and Opera.'
+				'\a''EVO Idle mostly works in FireFox, but not completely.'
+				'\a''Edge or Internet Explorer died after looking at the first line of code.'
+				'\a''The developer will do her best to preserve saves but some times that may not be possible.'
+				'\a''Please report any bugs and balance advice.'
+				'\a''To the left you can see the designers to-do list.'
+				'\a''Green means that part is active in the game.'
+				'\a''Red means that part is planned to eventually and hopefully be added to the game.'
+				'\a''I will develop content as fast as I can, but I am homeless.'
+}
+.helpers::after{
+	white-space: pre-wrap;
+	content:	'\a'' '
+				'\a'' '
+				'\a''Designer & Programmer'
+				'\a''Tygari Davis'
+				'\a'
+				'\a''System Administrator'
+				'\a''Kent Taylor'
+				'\a'
+				'\a''Artists'
+				'\a''Bobneson (Art not yet used)'
+				'\a'
+				'\a''Other'
+				'\a''Nova Labs - http://www.nova-labs.org'
+				'\a''Nova Labs taught me to program and allows me to use their facility to work at.'
+}
+.donators::before{
+	white-space: pre-wrap;
+	content:	'\a'' '
+				'\a''\a''All donations give a permanent bonus for the duration of Alpha.'
+				'\a''Metabolism Bonus 'var(--donation)
+				'\a';
+}
+.paypal::before{
+	content: 'PayPal Donation';
+	border-style: solid;
+}
+.donators::after{
+	white-space: pre-wrap;
+	content:	'Donators'
+				'\a''SpecialWES $200.00'
+				'\a''venti5 $25.00';
+}
+.links::before{
+	white-space: pre-wrap;
+	content:	'\a'' ';
+}
+.reddit::before{
+	content: 'Reddit';
+}
+.github::before{
+	content: 'GitHub';
+}

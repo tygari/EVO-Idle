@@ -1,0 +1,158 @@
+stat {
+	color: white;
+	border-style: hidden;
+	text-align: center;
+}
+stat p *{
+	background-color: black;
+	border-radius: 50px;
+}
+stats::before {
+	content: 'Stats';
+}
+off::before {
+	content: 'Off: 'var(--off);
+}
+def::before {
+	content: 'Def: 'var(--def);
+}
+spd::before {
+	content: 'Spd: 'var(--spd);
+}
+spl::before {
+	content: 'Spl: 'var(--spl);
+}
+hp::before {
+	content: 'Health: 'var(--hp) '/' var(--mhp);
+}
+sp::before {
+	content: 'Stamina: 'var(--sp) '/' var(--msp);
+}
+str::before {
+	content: 'Str: 'var(--str);
+}
+dex::before {
+	content: 'Dex: 'var(--dex);
+}
+con::before {
+	content: 'Con: 'var(--con);
+}
+agl::before {
+	content: 'Agl: 'var(--agl);
+}
+#experience::before {
+	content: '\a''Experience';
+}
+#experience c::before {
+	content: '  ('var(--experience)')';
+}
+.experience::before {
+	content:	'Your creature\'s combat experience.'
+				'\a''This button is not clickable.';
+}
+#talent::before {
+	content: '\a''Combat Talent';
+}
+.talent::before {
+	content: 'Evolve combative talent to fight off opponents.';
+}
+#offense::before {
+	content: '\a''Offense';
+}
+.offense::before {
+	content:	'Cost: 'var(--offense)' Experience'
+				'\a''Offensive evolutions are the embodiment of those who strike first strike last.';
+}
+#defense::before {
+	content: '\a''Defense';
+}
+.defense::before {
+	content:	'Cost: 'var(--defense)' Experience'
+				'\a''Defensive evolutions are the embodiment of not having to last forever just last long enough.';
+}
+#speed::before {
+	content: '\a''Speed';
+}
+.speed::before {
+	content:	'Cost: 'var(--speed)' Experience'
+				'\a''Speed evolutions are the embodiment of if they can\'t be caught they can\'t be hurt.';
+}
+#special::before {
+	content: '\a''Special';
+}
+.special::before {
+	content:	'Cost: 'var(--special)' Experience'
+				'\a''Special evolutions are the embodiment of being able to do something amazing and terrifying.';
+}
+#limb::before {
+	content: '\a''Extra Limbs';
+}
+.limb::before {
+	content: 'Extra Limbs are special limbs that do more than normal limbs.';
+}
+#frce::before {
+	content: '\a''Fierce';
+}
+.frce::before {
+	content: 'Fierce creatures fight harder if not smarter.';
+}
+#crit::before {
+	content: '\a''Critical';
+}
+.crit::before {
+	content: 'Wild attacks sometimes hit vulnerable spots.';
+}
+#hard::before {
+	content: '\a''Harded';
+}
+.hard::before {
+	content: 'Harden is the tensing up of muscle and skin to temporarily raise ones defense.';
+}
+#anti::before {
+	content: '\a''Anti-Venom';
+}
+.anti::before {
+	content: 'AntiVenom neutralizes the powerful effects of venom.';
+}
+#regen::before {
+	content: '\a''Regeneration';
+}
+.regen::before {
+	content: 'Regeneration heals wounds completely after battle.';
+}
+#burst::before {
+	content: '\a''Burst';
+}
+.burst::before {
+	content: 'Burst is a sudden surge of speed.';
+}
+#run::before {
+	content: '\a''Run';
+}
+.run::before {
+	content: 'Run how quickly one can flee a battle.';
+}
+#line::before {
+	content: '\a''Streamline';
+}
+.line::before {
+	content: 'Streamline refines the efficiency of the body in combat.';
+}
+#elec::before {
+	content: '\a''Electrogenesis';
+}
+.elec::before {
+	content: 'Electrogenesis is the ability to create an electric field for both prey and predators.';
+}
+#venom::before {
+	content: '\a''Venom';
+}
+.venom::before {
+	content: 'Venom is the use of poisons for both prey and predators.';
+}
+#lumin::before {
+	content: '\a''Luminesence';
+}
+.lumin::before {
+	content: 'Luminesence is the ability to attract prey and blind predators.';
+}

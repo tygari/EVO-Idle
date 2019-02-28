@@ -1,0 +1,142 @@
+#structure::before {
+	content: 'Worm Structures';
+}
+#mineral::before {
+	content: '\a''Mineral';
+}
+#mineral c::before {
+	content: '  ('var(--mineral)')';
+}
+.mineral::before {
+	content:	'Yours colony\'s minerals for growing and developing.'
+				'\a''This button is not clickable.';;
+}
+#plant::before {
+	content: '\a''Plant';
+}
+#plant c::before {
+	content: '  ('var(--plant)')';
+}
+.plant::before {
+	content:	'Yours worm\'s plants for growing and developing.'
+				'\a''This button is not clickable.';
+}
+#meat::before {
+	content: '\a''Meat';
+}
+#meat c::before {
+	content: '  ('var(--meat)')';
+}
+.meat::before {
+	content:	'Yours worm\'s meats for growing and developing.'
+				'\a''This button is not clickable.';
+}
+#sex::before {
+	content: '\a''Dioecy Reproduction';
+}
+.sex::before {
+	content: 'Dioecy Reproduction is the evolution of a species developing two separate sexes for the purpose of sharing genetic material.';
+}
+#circular::before {
+	content: '\a''Circular Symmetry';
+}
+.circular::before {
+	content: 'Your worm\'s and newly developed systems find efficiency in organization and evolve into circular symmetry.';
+}
+#radial::before {
+	content: '\a''Radial Symmetry';
+}
+.radial::before {
+	content: 'Your worm\'s and newly developed systems find efficiency in organization and evolve into radial symmetry.';
+}
+#bilateral::before {
+	content: '\a''Bilateral Symmetry';
+}
+.bilateral::before {
+	content: 'Your worm\'s and newly developed systems find efficiency in organization and evolve into bilateral symetry.';
+}
+#peristalsis::before {
+	content: '\a''Peristalsis';
+}
+#peristalsis::after {
+	content: ': 'var(--peristalsis);
+}
+.peristalsis::before {
+	content: 'Your worm learns to undulate its body for motion.';
+}
+#diet::before {
+	content: '\a''Diet: ';
+}
+#carn::before {
+	content: 'Carnivore';
+}
+.carn::before {
+	content: 'Your worm\'s diet specializes to break down animal matter.';
+}
+#herb::before {
+	content: 'Herbivore';
+}
+.herb::before {
+	content: 'Your worm\'s diet specializes to break down plant matter.';
+}
+#skeleton::before {
+	content: '\a''Skeleton: ';
+}
+#endo::before {
+	content: 'Endoskeleton';
+}
+.endo::before {
+	content: 'Your worm develops an internal skeleton to give structure to its growing size.';
+}
+#exo::before {
+	content: 'Exoskeleton';
+}
+.exo::before {
+	content: 'Your worm develops an external skeleton for its growing needs for protection.';
+}
+#camo::before {
+	content: '\a''Camoflauge';
+}
+.camo::before {
+	content: 'Camoflauge assists with hiding when hunting or avoiding being hunted.';
+}
+#terri::before {
+	content: '\a''Territorial';
+}
+.terri::before {
+	content: 'Territorial creatures protect their area slowing potential food loss.';
+}
+#roam::before {
+	content: '\a''Roaming';
+}
+.roam::before {
+	content: 'Roaming creatures don\'t stop moving finding new areas faster.';
+}
+#hyper::before {
+	content: '\a''Hyper Metabolic';
+}
+.hyper::before {
+	content: 'Hyper Metabolic creatures enter a heightened metabolic state when wounded.';
+}
+#gameInfo::before {
+	content:	'Hope your enjoying EVO Idle.'
+				'\a'
+				'\a''Upgrade Evolutions'
+				'\a''Simply acquire the resources, then click to upgrade.'
+				'\a'
+				'\a''Linked Evolutions'
+				'\a''Two or more evolutions linked together.'
+				'\a''Upgrade one in the link and the cost of the rest increases with it.'
+				'\a''Linked evolutions are more powerful than upgrade evolutions.'
+				'\a'
+				'\a''Branched Evolutions'
+				'\a''Multiple evolutions will be presented but only one will allowed to be chosen.'
+				'\a''These are the most powerful evolutions with some required.'
+				'\a'
+				'\a''Gate Evolutions'
+				'\a''These evolutions do nothing, they are simply gates to more powerful evolution trees.'
+				'\a'
+				'\a''Learned Evolutions'
+				'\a''These evolutions upgrade in response to actions, environment, or events.'
+				'\a''These can be a bit trickier to develop over other evolutions.';
+}

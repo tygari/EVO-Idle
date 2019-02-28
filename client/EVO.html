@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<meta charset="utf-8"
+			name="description" content="Evolution Themed Idle Game"
+			name="keywords" content="CSS,HTML,JavaScript,Dynamic CSS,NodeJS,DynamoDB,Game,Idle,Evolution,Tygari"
+			name="author" content="Tygari Davis"
+			name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js" sync></script>
+		<script type="text/javascript" src="https://cdn1.kongregate.com/javascripts/kongregate_api.js" sync></script>
+		<script type="text/javascript" src="js/load.js" async></script>
+	</head>
+	<body oncontextmenu="return false">
+		<figure id="load"></figure>
+		<overlay id="lay" class="layoff"></overlay>
+		<figure id="carnate" class="hidden">
+			<div id="box">
+				<p></p>
+				<carnate id="nocarnate" onclick="rec.nocarnate()"></carnate>
+				<carnate id="recarnate" onclick="rec.recarnate()"></carnate>
+			</div>
+		</figure>
+		<figure id="mouse">
+			<div id="tip" class="empty"></div>
+		</figure>
+		<figure id="swirl" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="move()"></figure>
+		<tab class="stage txtC">
+			<div id="chat" class="ltr tabcht red">
+				<input id="chat-box" type="checkbox"></input>
+				<nav id="gameChat" class="white">
+					<label id="chat-switch" onclick="chat.flip()"></label>
+					<div id="chat-text" class="txtL"></div>
+					<form id="chat-form">
+						<input id="chat-input" type="text" autocomplete="off"></input>
+					</form>
+				</nav>
+			</div>
+			<div id="info" class="ltr tabinf yellow">
+				<nav id="gameInfo" class="grey"></nav>
+			</div>
+		</tab>
+		<tab class="game txtC">
+			<div id="stagenavevo" class="rtl tabevo taboff">
+				<nav id="stageUpgrade" class="blue"></nav>
+			</div>
+			<div id="combatnavevo" class="rtl tabcbt taboff">
+				<nav id="combatUpgrade" class="purple"></nav>
+			</div>
+			<div id="crossnavevo" class="rtl tabcrs taboff">
+				<nav id="crossUpgrade" class="green"></nav>
+			</div>
+			<div id="exoticnavevo" class="rtl tabexo taboff">
+				<nav id="exoticUpgrade" class="red"></nav>
+			</div>
+		</tab>
+		<box class="box stage txtL orange">
+			<div id="environment"></div>
+			<p id="food" class="none" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></p>
+			<p id="structure">
+				<struc id="struc" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></struc>
+			</p>
+			<p id="ii" class="qq oo pp"></p>
+			<div>
+				<span id="gifts"><div id="gift" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="gift()"></div></span>
+			</div>
+		</box>
+		<box class="box game txtR red">
+			<p id="devevo">
+				<devevo id="devone"><span id="devtwo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></span></devevo>
+			</p>
+			<p id="talents">
+				<talent id="cbtevo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></talent>
+			</p>
+			<p id="boost">
+				<boost id="bstevo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></boost>
+			</p>
+		</box>
+		<event id="event">
+			<p id="eventone"></p>
+			<p id="eventtwo"></p>
+		</event>
+		<stat id="stat">
+			<p>
+				<off></off> &nbsp; &nbsp; <def></def> &nbsp; &nbsp; <spd></spd> &nbsp; &nbsp; <spl></spl>
+				<br>
+				<hp></hp> &nbsp; &nbsp; &nbsp; <stats></stats> &nbsp; &nbsp; &nbsp; <sp></sp>
+				<br>
+				<str></str> &nbsp; &nbsp; <dex></dex> &nbsp; &nbsp; <con></con> &nbsp; &nbsp; <agl></agl>
+			</p>
+		</stat>
+		<container>
+			<input id="tab1" type="radio" name="tabs" checked="checked">
+			<label id="natural" for="tab1"></label>
+			<input id="tab2" type="radio" name="tabs">
+			<label id="bodies" for="tab2"></label>
+			<input id="tab3" type="radio" name="tabs">
+			<label id="xcross" for="tab3"></label>
+			<input id="tab4" type="radio" name="tabs">
+			<label id="exotics" for="tab4"></label>
+			<content id="tab1-content" class="tab">
+				<box id="stagebox" class="stage txtC" casscade=""></box>
+				<box id="gamebox" class="game txtC"></box>
+			</content>
+			<content id="tab2-content" class="tab">
+				<bin id="bodybox" class="txtC"></bin>
+			</content>
+			<content id="tab3-content" class="tab">
+				<bin id="crossbox" class="txtC"></bin>
+			</content>
+			<content id="tab4-content" class="tab">
+				<bin id="exoticbox" class="txtC"></bin>
+			</content>
+		</container>
+	</body>
+</html>
