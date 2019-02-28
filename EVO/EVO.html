@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<!--<script src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>-->
+		<script type="text/javascript" src="script.js"></script>
+	</head>
+	<body oncontextmenu="return false">
+		<figure id="load"></figure>
+		<overlay id="lay" class="layoff"></overlay>
+		<figure id="carnate" class="hidden">
+			<div id="box">
+				<p></p>
+				<carnate id="nocarnate" onclick="nocarnate()"></carnate>
+				<carnate id="recarnate" onclick="recarnate()"></carnate>
+			</div>
+		</figure>
+		<figure id="mouse">
+			<div id="tip" class="empty"></div>
+		</figure>
+		<img id="swirl" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="move()">
+		<tab class="stage txtC">
+			<div id="stagenavevo" class="ltr tabevo taboff">
+				<nav id="stageUpgrade" class="blue"></nav>
+			</div>
+		</tab>
+		<tab class="game txtC">
+			<div id="gamenavevo" class="rtl tabevo taboff">
+				<nav id="gameUpgrade" class="blue"></nav>
+			</div>
+			<div id="combatnavevo" class="rtl tabcbt taboff">
+				<nav id="combatUpgrade" class="purple"></nav>
+			</div>
+		</tab>
+		<box class="box stage txtL orange">
+			<div id="environment" class="white"></div>
+			<p id="food" class="none" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></p>
+			<p id="structure">
+				<struc id="struc" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></struc>
+			</p>
+			<p id="ii" class="qq oo pp">
+				<span id="health">
+					<span onclick="gage('hlth',-1)"></span>
+					<span id="hlth"></span>
+					<span onclick="gage('hlth',1)"></span>
+				</span>
+				<span id="stamina">
+					<span onclick="gage('stmn',-1)"></span>
+					<span id="stmn"></span>
+					<span onclick="gage('stmn',1)"></span>
+				</span>
+				<span id="retreat">
+					<span onclick="gage('rtrt',-1)"></span>
+					<span id="rtrt"></span>
+					<span onclick="gage('rtrt',1)"></span>
+				</span>
+			</p>
+			<div>
+				<span id="adHTML"><div id="gift" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="gift()"></div></span>
+			</div>
+		</box>
+		<box class="box game txtR red">
+			<p id="devevo">
+				<devevo id="devone"><span id="devtwo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></span></devevo>
+			</p>
+			<p id="cbtevoHTML"></p>
+			<p id="boost">
+				<boost id="bstevo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></boost>
+			</p>
+		</box>
+		<span id="eventHTML"></span>
+		<stat id="stat">
+			<p>
+				<off></off> &nbsp; &nbsp; <def></def> &nbsp; &nbsp; <spd></spd> &nbsp; &nbsp; <spl></spl>
+				<br>
+				<hp></hp> &nbsp; &nbsp; &nbsp; <stats><stats> &nbsp; &nbsp; &nbsp; <sp></sp>
+				<br>
+				<str></str> &nbsp; &nbsp; <dex></dex> &nbsp; &nbsp; <con></con> &nbsp; &nbsp; <agl></agl>
+			</p>
+		</stat>
+		<container>
+			<input id="tab1" type="radio" name="tabs" checked="checked">
+			<label id="natural" for="tab1"></label>
+			<input id="tab2" type="radio" name="tabs">
+			<label id="exotic" for="tab2"></label>
+			<content id="tab1-content" class="tab">
+				<box id="stagebox" class="stage txtC"></box>
+				<box id="gamebox" class="game txtC"></box>
+			</content>
+			<content id="tab2-content" class="tab">
+				<box id="lootbox" class="txtC"></box>
+			</content>
+		</container>
+	</body>
+</html>

@@ -1,0 +1,174 @@
+body {
+	color: white;
+	border-style: hidden;
+	text-align: center;
+	font-weight: bold;
+}
+.recbox {
+	height: 80%;
+	width: 25%;
+	float: left;
+	overflow-y: auto;
+}
+.recpoint::before {
+	content: 'You have 'var(--rec-bonus)' Reincarnation points.'
+}
+#next {
+	height: 100px;
+	white-space: pre-wrap;
+}
+stage::before {
+	content: 'Stage Upgrades';
+}
+#cytoplasm::before {
+	content: 'Cytoplasm';
+}
+#cytoplasm::after {
+	color: white;
+	content: ' -'var(--cytoplasm)'%';
+}
+.cytoplasm::before {
+	content: 'Cost: 'var(--cost-cytoplasm)'\a''Increases cytoplasm cost reduction.';
+}
+world::before {
+	content: 'World Upgrades';
+}
+#foodmax::before {
+	content: 'Food Maximum';
+}
+#foodmax::after {
+	color: white;
+	content: ' +'var(--food-max)'%';
+}
+.foodmax::before {
+	content: 'Cost: 'var(--cost-foodmax)'\a''Increases maximum possible food found.';
+}
+#foodmin::before {
+	content: 'Food Minimum';
+}
+#foodmin::after {
+	color: white;
+	content: ' +'var(--food-min)'%';
+}
+.foodmin::before {
+	content: 'Cost: 'var(--cost-foodmin)'\a''Increases minimum possible food found.';
+}
+level::before {
+	content: 'Combat Level Upgrades';
+}
+#offensive::before {
+	content: 'Offensive';
+}
+.offensive::before {
+	content: 'Cost: 'var(--cost-offensive)'\a''Increase your max offensive potential.';
+}
+#defensive::before {
+	content: 'Defensive';
+}
+.defensive::before {
+	content: 'Cost: 'var(--cost-defensive)'\a''Increase your max defensive potential.';
+}
+#speed::before {
+	content: 'Speed';
+}
+.speed::before {
+	content: 'Cost: 'var(--cost-speed)'\a''Increase your max speed potential.';
+}
+#special::before {
+	content: 'Special';
+}
+.special::before {
+	content: 'Cost: 'var(--cost-special)'\a''Increase your max special potential.';
+}
+#ability::before {
+	content: 'Ability';
+}
+.ability::before {
+	content: 'Cost: 'var(--cost-ability)'\a''Increase your max combat ability potential.';
+}
+stat::before {
+	content: 'Combat Stat Upgrades';
+}
+#balance::before {
+	content: 'Balance';
+}
+#balance::after {
+	color: white;
+	content: ' -'var(--balance)'%';
+}
+.balance::before {
+	content: 'Cost: 'var(--cost-balance)'\a''Reduces balance cost by -1% in all stages.''\a''Marginally reduces other combat stats cost.';
+}
+#nerve::before {
+	content: 'Nerve';
+}
+#nerve::after {
+	color: white;
+	content: ' -'var(--nerve)'%';
+}
+.nerve::before {
+	content: 'Cost: 'var(--cost-nerve)'\a''Reduces nerve cost by -1% in all stages.''\a''Marginally reduces other combat stats cost.';
+}
+#vascular::before {
+	content: 'Vascular';
+}
+#vascular::after {
+	color: white;
+	content: ' -'var(--vascular)'%';
+}
+.vascular::before {
+	content: 'Cost: 'var(--cost-vascular)'\a''Reduces vascular cost by -1% in all stages.''\a''Marginally reduces other combat stats cost.';
+}
+#muscle::before {
+	content: 'Muscle';
+}
+#muscle::after {
+	color: white;
+	content: ' -'var(--muscle)'%';
+}
+.muscle::before {
+	content: 'Cost: 'var(--cost-muscle)'\a''Reduces muscle cost by -1% in all stages.''\a''Marginally reduces other combat stats cost.';
+}
+#respiratory::before {
+	content: 'Respiratory';
+}
+#respiratory::after {
+	color: white;
+	content: ' -'var(--respiratory)'%';
+}
+.respiratory::before {
+	content: 'Cost: 'var(--cost-respiratory)'\a''Reduces respiratory cost by -1% in all stages.''\a''Marginally reduces other combat stats cost.';
+}
+#digestive::before {
+	content: 'Digestive';
+}
+#digestive::after {
+	color: white;
+	content: ' -'var(--digestive)'%';
+}
+.digestive::before {
+	content: 'Cost: 'var(--cost-digestive)'\a''Reduces digestive cost by -1% in all stages.''\a''Marginally reduces other combat stats cost.';
+}
+#excretion::before {
+	content: 'Excretion';
+}
+#excretion::after {
+	color: white;
+	content: ' -'var(--excretion)'%';
+}
+.excretion::before {
+	content: 'Cost: 'var(--cost-excretion)'\a''Reduces excretion cost by -1% in all stages.''\a''Marginally reduces other combat stats cost.';
+}
+#sight::before {
+	content: 'Sight';
+}
+#sight::after {
+	color: white;
+	content: ' -'var(--sight)'%';
+}
+.sight::before {
+	content: 'Cost: 'var(--cost-sight)'\a''Reduces sight cost by -1% in all stages.''\a''Marginally reduces other combat stats cost.';
+}
+.reincarnate::before {
+	content: 'Reincarnate';
+}

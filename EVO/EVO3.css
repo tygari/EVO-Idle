@@ -1,0 +1,127 @@
+#structure::before {
+	content: 'Worm Structures';
+}
+#mineral::before {
+	content: '\a''Mineral';
+}
+#mineral c::before {
+	content: '  ('var(--mineral)')';
+}
+.mineral::before {
+	content: 'Yours colony\'s minerals for growing and developing.';
+}
+#plant::before {
+	content: '\a''Plant';
+}
+#plant c::before {
+	content: '  ('var(--mineral)')';
+}
+.plant::before {
+	content: 'Yours worm\'s plants for growing and developing.';
+}
+#meat::before {
+	content: '\a''Meat';
+}
+#meat c::before {
+	content: '  ('var(--mineral)')';
+}
+.meat::before {
+	content: 'Yours worm\'s meats for growing and developing.';
+}
+#EPS::before {
+	content: '\a''EPS';
+}
+#EPS c::before {
+	content: '  ('var(--EPS)')  ';
+}
+#EPS b::before {
+	content: var(--EPS-x);
+}
+.EPS::before {
+	content:	'Cost: 'var(--cost-EPS)' 'var(--foodtype)
+				'\a''Click to make Extracellular Polymeric Substances to protect from the pH of the water.';
+}
+#sex::before {
+	content: '\a''Dioecy Reproduction';
+}
+.sex::before {
+	content: 'Dioecy Reproduction is the evolution of a species developing two separate sexes for the purpose of sharing genetic material.';
+}
+#circular::before {
+	content: '\a''Circular Symmetry';
+}
+.circular::before {
+	content: 'Your worm\'s and newly developed systems find efficiency in organization and evolve into circular symmetry.';
+}
+#radial::before {
+	content: '\a''Radial Symmetry';
+}
+.radial::before {
+	content: 'Your worm\'s and newly developed systems find efficiency in organization and evolve into radial symmetry.';
+}
+#bilateral::before {
+	content: '\a''Bilateral Symmetry';
+}
+.bilateral::before {
+	content: 'Your worm\'s and newly developed systems find efficiency in organization and evolve into bilateral symetry.';
+}
+#peristalsis::before {
+	content: '\a''Peristalsis';
+}
+.peristalsis::before {
+	content: 'Your worm learns to undulate its body for motion.';
+}
+#diet::before {
+	content: '\a''Diet: ';
+}
+#carn::before {
+	content: 'Carnivore';
+}
+.carn::before {
+	content: 'Your worm\'s diet specializes to break down animal matter.';
+}
+#herb::before {
+	content: 'Herbivore';
+}
+.herb::before {
+	content: 'Your worm\'s diet specializes to break down plant matter.';
+}
+#skeleton::before {
+	content: '\a''Skeleton: ';
+}
+#endo::before {
+	content: 'Endoskeleton';
+}
+.endo::before {
+	content: 'Your worm develops an internal skeleton to give structure to its growing size.';
+}
+#exo::before {
+	content: 'Exoskeleton';
+}
+.exo::before {
+	content: 'Your worm develops an external skeleton to give structure to its growing size.';
+}
+#camo::before {
+	content: '\a''Camoflauge';
+}
+.camo::before {
+	content: 'Camoflauge assists with hiding when hunting or avoiding being hunted.';
+}
+#terri::before {
+	content: '\a''Territorial';
+}
+.terri::before {
+	content: 'Territorial creatures protect their area slowing potential food loss.';
+}
+#roam::before {
+	content: '\a''Roaming';
+}
+.roam::before {
+	content: 'Roaming creatures don\'t stop moving finding new areas faster.';
+}
+#hyper::before {
+	content: '\a''Hyper Metabolic';
+}
+.hyper::before {
+	content: 'Hyper Metabolic creatures enter a heightened metabolic state when wounded.';
+}
