@@ -86,7 +86,7 @@ const start =()=>{
 }
 const play =()=>{window.location.assign('client/EVO.html');}
 const donate =()=>{window.open('https://www.paypal.me/tygari');}
-const reddit =()=>{window.open('https://www.reddit.com/r/incremental_games/comments/9sj0le/evo_idle_ver_04_released/');}
+const reddit =()=>{window.open('https://www.reddit.com/r/incremental_games/comments/aw1o07/evo_idle_ver_045_released/');}
 const github =()=>{window.open('https://github.com/tygari/EVO-Idle');}
 
 const soft =()=>{
