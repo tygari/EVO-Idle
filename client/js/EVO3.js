@@ -10,7 +10,7 @@ const fun = {
 
 const start =()=>{
 	if (Object.keys(EVO.three).length == 0){
-		EVO.three = {"specialized": 1,};
+		EVO.three = {"huntcycle": 0,"specialized": 1,};
 		EVO.combat.hlth = 100;
 		EVO.combat.stmn = 100;
 		for (let id in EVO.two){
@@ -167,11 +167,13 @@ const speedup =(x)=>{
 	let t1 = performance.now();
 	console.log("Speedup call took " + (t1 - t0) + " milliseconds for " + x + " milliseconds which is " + clock(x) + ".");
 }
+
 const hunt =()=>{
 	if (cbt.check){
 		if (EVO.stage.food < 1 && EVO.three.diet && EVO.combat.hp >= Math.floor(EVO.combat.hlth*EVO.combat.mhp/100) && EVO.combat.sp >= Math.floor(EVO.combat.spcl*EVO.combat.msp/100)){
 			ID('event').style.display = 'initial';
 			hunt[EVO.three.diet](move.cost(),hunt.random(),(EVO.three.boost == 'camo' ? EVO.combat.offense : 0));
+			EVO.three.huntcycle += body.stat.mul('nerve',1);
 		}
 		if (cbt.check){
 			hunt.rehunt();

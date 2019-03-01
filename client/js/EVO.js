@@ -111,36 +111,47 @@ const foods = {
 
 const growth = {
 	"membrane":(x)=>(x*4-(EVO.one.membraneScore||0)*x),
-	"metabolism":(z)=>{
+	"metabolism":(x)=>{
 		EVO.one.metacycle += body.stat.mul('nerve',1);
-		z *= (1+(evolution.creations()/1000));
-		z *= (1+(EVO.one.metabolism.val||0)/100);
-		z *= (1+(EVO.one.mitochondria||0)/100);
-		z *= (1+(EVO.cross.efficient||0)/100);
-		z *= body.stat.mul('respiratory',1);
-		if (EVO.three.diet == 'carn'){z *= 1+(EVO.area.grazer-(EVO.area.predator*10))/100;}
-		if (EVO.three.diet == 'herb'){z *= 1+((EVO.area.field/10)-EVO.area.grazer)/100;}
-		if (EVO.three.boost == 'hyper' && EVO.combat.hp < EVO.combat.mhp){z *= (1+(EVO.combat.special/100));}
-		z *= (1+(donation/1000));
+		x *= (1+(evolution.creations()/1000));
+		x *= (1+(EVO.one.metabolism.val||0)/100);
+		x *= (1+(EVO.one.mitochondria||0)/100);
+		x *= (1+(EVO.cross.efficient||0)/100);
+		x *= body.stat.mul('respiratory',1);
+		if (EVO.three.boost == 'hyper' && EVO.combat.hp < EVO.combat.mhp){x *= (1+(EVO.combat.special/100));}
+		x *= (1+(donation/1000));
 		try {
-			if (isNaN(z)){throw 'growth.metabolism is NaN';}
-			else {return z;}
+			if (isNaN(x)){throw 'growth.metabolism is NaN';}
+			else {return x;}
 		}
 		catch(err){
 			console.log(err);
 			return 0;
 		}
 	},
-	"autoClick":(x)=>{
+	"hunt":(x)=>{
+		if (EVO.three.diet == 'carn'){x *= 1+(EVO.area.grazer-(EVO.area.predator*10))/100;}
+		if (EVO.three.diet == 'herb'){x *= 1+((EVO.area.field/10)-EVO.area.grazer)/100;}
+		try {
+			if (isNaN(x)){throw 'growth.metabolism is NaN';}
+			else {return x;}
+		}
+		catch(err){
+			console.log(err);
+			return 0;
+		}
+	},
+	"autoClick":(x,y,z)=>{
 		let type = foods.check();
-		let z = 0;
+		z = 0;
 		z += (EVO.one.cilia||0)/EVO.stage.num;
 		z += body.stat.add('digestive');
 		z *= body.stat.mul('digestive',1);
 		z *= (1-(EVO.enviro.phd||0)/100);
 		z *= (foods[type].multi * (1+((EVO.one.voracious||0)+(EVO.two.rapacious||0))/200));
+		if (EVO.three.diet){z = growth.hunt(z);}
 		if (z < 1){z = 1;}
-		let y = z;
+		y = z;
 		if (EVO.one.metabolism && EVO.one.metabolism.type == 'aerob'){y = growth.metabolism(y);}
 		y /= EVO.enviro.virus[0];
 		try {
@@ -157,12 +168,9 @@ const growth = {
 			foods.update();
 			updateFood();
 			setTimeout(growth.autoClick,growth.autotime(EVO.one.cilia ? clock.second : growth.membrane(clock.second)));
-		}	
+		}
 	},
-	"autotime":(x)=>{
-		if (x == undefined){x = clock.second;}
-		return Math.ceil(x*foods[foods.check()].timer*(1+((EVO.enviro.salt||0)/100))*10)/10;
-	},
+	"autotime":(x)=>(Math.ceil((x ? x : clock.second)*foods[foods.check()].timer*(1+((EVO.enviro.salt||0)/100))*10)/10),
 	"photosynth":(x)=>{
 		let z = EVO.stage.num + (((EVO.one.glucose||0)+(EVO.two.fructose||0))/10);
 		z *= (1+(EVO.enviro.sun.position/100));
@@ -181,9 +189,9 @@ const growth = {
 			setTimeout(growth.photosynth,growth.phototime());
 		}
 	},
-	"phototime":()=>{return Math.ceil(clock.second*(1+((EVO.enviro.salt||0)/100))*10)/10;}
+	"phototime":()=>(Math.ceil(clock.second*(1+((EVO.enviro.salt||0)/100))*10)/10),
 }
-clock.metacycle =(x)=>{return (clock.hour*x-EVO.one.metacycle)/clock.hour;}
+clock.metacycle =(x)=>((clock.hour*x-EVO.one.metacycle)/clock.hour);
 
 const move =(x)=>{
 	let z = move.cost();
@@ -603,7 +611,7 @@ const body = {
 			let a =(c)=>{
 				let chk = 0;
 				if (EVO[loc][c] !== undefined){chk = EVO[loc][c];}
-				return chk*(100-(REC[c].cost||0)/2)/100;//FIX REC
+				return chk;//*(100-(REC[c].cost||0)/2)/100
 			};
 			let b = {
 				"balance": a('balance'),
@@ -615,7 +623,7 @@ const body = {
 				"excretion":  a('excretion'),
 				"sight":  a('sight'),
 			};
-			if (x !== undefined && EVO[loc][x] !== undefined){b[x] = EVO[loc][x]*(100-(REC[x].cost||0))/100;}//FIX REC
+			if (x !== undefined && EVO[loc][x] !== undefined){b[x] = EVO[loc][x];}//*(100-(REC[x].cost||0))/100
 			return b.balance + b.nerve + b.vascular + b.muscle + b.respiratory + b.digestive + b.excretion + b.sight;
 		},
 		"buy":(x)=>{
@@ -626,7 +634,7 @@ const body = {
 				x = x.substring(1);
 			}
 			let cost = body.stat.add(x)+1;
-			if(EVO.stage[fun.food] >= y && body.cell.body(x) > cost && EVO[loc][x] < (REC[x].max||0)+100){//FIX REC
+			if(EVO.stage[fun.food] >= y && body.cell.body(x) > cost && EVO[loc][x] < 100){//(REC[x].max||0)+
 				EVO.stage[fun.food] -= y;
 				EVO[loc][x]++;
 				if (EVO.cross['gen'+x]){
@@ -825,24 +833,24 @@ const cheat =()=>{
 		if (EVO.one.ribosome && EVO.one.ribosome.val > 1000){hard();}
 	}
 	if (key('two')){
-		if (EVO.two.balance && EVO.two.balance > (REC.balance.max||0) + 100){hard();}
-		if (EVO.two.nerve && EVO.two.nerve > (REC.nerve.max||0) + 100){hard();}
-		if (EVO.two.vascular && EVO.two.vascular > (REC.vascular.max||0) + 100){hard();}
-		if (EVO.two.muscle && EVO.two.muscle > (REC.muscle.max||0) + 100){hard();}
-		if (EVO.two.respiratory && EVO.two.respiratory > (REC.respiratory.max||0) + 100){hard();}
-		if (EVO.two.digestive && EVO.two.digestive > (REC.digestive.max||0) + 100){hard();}
-		if (EVO.two.excretion && EVO.two.excretion > (REC.excretion.max||0) + 100){hard();}
-		if (EVO.two.sight && EVO.two.sight > (REC.sight.max||0) + 100){hard();}
+		if (EVO.two.balance && EVO.two.balance > 100){hard();}
+		if (EVO.two.nerve && EVO.two.nerve > 100){hard();}
+		if (EVO.two.vascular && EVO.two.vascular > 100){hard();}
+		if (EVO.two.muscle && EVO.two.muscle > 100){hard();}
+		if (EVO.two.respiratory && EVO.two.respiratory > 100){hard();}
+		if (EVO.two.digestive && EVO.two.digestive > 100){hard();}
+		if (EVO.two.excretion && EVO.two.excretion > 100){hard();}
+		if (EVO.two.sight && EVO.two.sight > 100){hard();}
 	}
 	if (key('three')){
-		if (EVO.three.balance && EVO.three.balance > (REC.balance.max||0) + 100){hard();}
-		if (EVO.three.nerve && EVO.three.nerve > (REC.nerve.max||0) + 100){hard();}
-		if (EVO.three.vascular && EVO.three.vascular > (REC.vascular.max||0) + 100){hard();}
-		if (EVO.three.muscle && EVO.three.muscle > (REC.muscle.max||0) + 100){hard();}
-		if (EVO.three.respiratory && EVO.three.respiratory > (REC.respiratory.max||0) + 100){hard();}
-		if (EVO.three.digestive && EVO.three.digestive > (REC.digestive.max||0) + 100){hard();}
-		if (EVO.three.excretion && EVO.three.excretion > (REC.excretion.max||0) + 100){hard();}
-		if (EVO.three.sight && EVO.three.sight > (REC.sight.max||0) + 100){hard();}
+		if (EVO.three.balance && EVO.three.balance > 100){hard();}
+		if (EVO.three.nerve && EVO.three.nerve > 100){hard();}
+		if (EVO.three.vascular && EVO.three.vascular > 100){hard();}
+		if (EVO.three.muscle && EVO.three.muscle > 100){hard();}
+		if (EVO.three.respiratory && EVO.three.respiratory > 100){hard();}
+		if (EVO.three.digestive && EVO.three.digestive > 100){hard();}
+		if (EVO.three.excretion && EVO.three.excretion > 100){hard();}
+		if (EVO.three.sight && EVO.three.sight > 100){hard();}
 	}
 }
 
@@ -870,40 +878,42 @@ const rec = {
 	"recarnate":()=>{
 		ID('lay').classList.replace('layon','layoff');
 		ID('carnate').classList.replace('shown','hidden');
-		rec.resave();
-		for (let key in save.one){
-			if (typeof save.one[key] === 'number' && save.one[key] < 0){save.one[key] = 0;}
-		}
-		let bonus = save.evo.evolution + save.one.metabolism + save.one.mitochondria + (save.one.cytoplasm + save.one.cilia + save.one.flagellum + save.one.mitosis)/10;
-		if (save.two){
-			for (let key in save.two){
-				if (typeof save.two[key] === 'number' && save.two[key] < 0){save.two[key] = 0;}
-			}
-			bonus += save.two.adhesion + save.two.generation
-				+ save.two.balance + save.two.nerve
-				+ save.two.vascular + save.two.muscle
-				+ save.two.respiratory + save.two.digestive
-				+ save.two.excretion + save.two.sight
-				+ (save.two.motility.val/10);
-		}
-		if (save.three){
-			for (let key in save.three){
-				if (typeof save.three[key] === 'number' && save.three[key] < 0){save.three[key] = 0;}
-			}
-			bonus += save.three.balance + save.three.nerve
-				+ save.three.vascular + save.three.muscle
-				+ save.three.respiratory + save.three.digestive
-				+ save.three.excretion + save.three.sight
-				+ (save.three.peristalsis.val/10);
-		}
-		if (save.combat){bonus += save.combat.offense + save.combat.defense + save.combat.speed + save.combat.special;}
-		bonus = Math.floor(bonus/100);
+		//Stage 1
+		let bonus = save.evo.evolution
+				+ (save.one.metabolism.val||0)
+				+ (save.one.mitochondria||0)
+				+ (save.one.voracious||0)
+				+ (save.one.glucose||0)
+				+ (save.one.endoplasmic||0)
+				+ (save.one.golgi||0)
+				+ ((save.one.cytoplasm||0)
+					+ (save.one.cilia||0)
+					+ (save.one.flagellum||0)
+					+ (save.one.mitosis||0)
+					+ (save.one.ribosome.val||0)
+				)
+					/10;
+		//Stage 2
+		bonus += (save.two.adhesion.val||0) + (save.two.generation.val||0)
+				+ (save.two.balance||0) + (save.two.nerve||0)
+				+ (save.two.vascular||0) + (save.two.muscle||0)
+				+ (save.two.respiratory||0) + (save.two.digestive||0)
+				+ (save.two.excretion||0) + (save.two.sight||0)
+				+ (save.two.rapacious||0) + (save.two.fructose||0)
+				+ (save.two.motility.val/10||0);
+		//Stage 3
+		bonus += (save.three.balance||0) + (save.three.nerve||0)
+			+ (save.three.vascular||0) + (save.three.muscle||0)
+			+ (save.three.respiratory||0) + (save.three.digestive||0)
+			+ (save.three.excretion||0) + (save.three.sight||0)
+			+ (save.three.peristalsis.val/10||0);
+		if (save.combat){bonus += (save.combat.offense||0) + (save.combat.defense||0) + (save.combat.speed||0) + (save.combat.special||0);}
+		bonus = Math.floor(bonus/10);
 		REC.bonus += bonus;
-		REC.bonusMax += bonus;
-		localStorage.setItem("REC", JSON.stringify(REC));
+		rec.resave();
 		localStorage.removeItem("EVO");
 		//window.location.assign("REC.html");
 		window.location.assign("EVO1.html");
 	},
-	"resave":()=>{localStorage.setItem("REC", JSON.stringify(REC));}
+	"resave":()=>{localStorage.setItem("REC", JSON.stringify(REC));},
 }

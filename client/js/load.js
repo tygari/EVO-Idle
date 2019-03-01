@@ -1,7 +1,7 @@
 //{"game":{"version":0.4,"date":1550981462503},"stage":{"num":2,"food":1915.4000000000144,"ate":93801.20000000097,"order":[],"nutrient":109439174239776940},"evo":{"evolution":1,"evolved":66,"bonus":1005,"cost":"1.30"},"one":{"metacycle":13470,"membraneScore":2,"metabolism":{"val":10,"type":"photo"},"cytoskeleton":true,"cilia":100,"flagellum":100,"cytoplasm":100,"RNA":{"val":1452,"sRNA":1442,"rRNA":2,"tRNA":70},"mitosis":59,"ribosome":{"val":10,"bonus":0,"partial":40}},"two":{"colony":520,"body":450,"bodyPart":909.61176,"specialized":1,"celladhesion":{"val":10,"learn":8},"sex":true,"communication":true,"EPS":0,"biofilm":true,"osmoregulation":{"val":22,"learn":7},"motility":{"val":1,"learn":1},"organization":true,"quorum":true,"generation":{"val":8,"learn":58},"specialization":true},"three":{},"four":{},"five":{},"six":{},"combat":{"talent":0,"cbtevo":[],"mhp":0,"hp":0,"msp":0,"sp":0,"exp":0,"scar":0,"offense":0,"defense":0,"speed":0,"special":0,"body":0,"soul":0,"wind":0,"expert":0,"coward":0,"survivor":0,"rtrt":100},"cross":{"foodmax":2},"exotic":[],"enviro":{"sun":{"shift":-1,"position":12},"current":11,"currentDamage":97,"ph":106,"phd":4,"salinity":30,"salt":0,"toxin":0},"size":{"game":3,"stage":2},"protein":{"whole":3,"partial":368},"toxin":418.8341000000004}
 var EVO = {
 	"game":{
-		"version": 0.4,
+		"version": 0.45,
 		"date": Date.now(),
 	},
 	"stage":{
@@ -11,7 +11,7 @@ var EVO = {
 		"ate": 0,
 	},
 	"load":{
-		'struc':[],
+		'struc':['ATP', 'evolution',],
 		'stage':[],
 		'game':[],
 		'boost':[],
@@ -34,7 +34,7 @@ var EVO = {
 	"six":{},
 	"combat":{},
 	"cross":{},
-	"exotic":[],
+	"exotic":{},
 	"enviro":{
 		"sun":{
 			"shift": 1,
@@ -50,28 +50,8 @@ var EVO = {
 		"whole": 0,
 		"partial": 0,
 	},
-
 };
-var REC = {
-	"bonusMax": 0,
-	"bonus": 0,
-	"food": {"max": 0, "min": 0,},
-	"cytoplasm": 0,
-	"offensive": 0,
-	"defensive": 0,
-	"speed": 0,
-	"special": 0,
-	"ability": 0,
-	"balance": {"cost": 0, "max": 0,},
-	"nerve": {"cost": 0, "max": 0,},
-	"vascular": {"cost": 0, "max": 0,},
-	"muscle": {"cost": 0, "max": 0,},
-	"respiratory": {"cost": 0, "max": 0,},
-	"digestive": {"cost": 0, "max": 0,},
-	"excretion": {"cost": 0, "max": 0,},
-	"sight": {"cost": 0, "max": 0,},
-	"exotic": [],
-};
+var REC = {"bonus": 0};
 
 const load =()=>{
 	/*Save File load*/
@@ -168,28 +148,6 @@ window.addEventListener("load",()=>{
 			id.value = '';
 		}
 	}
-	
-	
-	
-	try {
-		const LoadingAPI = window.parent.LoadingAPI;
-		if (LoadingAPI){var kongregate = window.parent.kongregateAPI.getAPI();}
-	}
-	catch(err){
-		console.log(err);
-	}
-	
-	console.log(kongregate);
-	if (kongregate){
-		let kong = {
-			"id": kongregate.services.getUserId(),
-			"name": kongregate.services.getUsername(),
-		};
-		console.log(kong);
-		kong = JSON.stringify(kong);
-		console.log(kong);
-		socket.emit('kong',kong);
-	}
 });
 
 document.addEventListener("mousemove",(mouse)=>{
@@ -207,7 +165,7 @@ const css =(x,y)=>{
 }
 
 const copy =(loc,id,pos)=>{
-	if(!Array.isArray(id)){id = [id];}
+	if (!Array.isArray(id)){id = [id];}
 	if (pos == undefined){pos = 'afterend';}
 	for (let i = 0; i < id.length; i++){
 		let node = ID(loc);
@@ -217,8 +175,7 @@ const copy =(loc,id,pos)=>{
 	}
 }
 
-const clock =(t,c,r,i)=>{
-	//Only t is passed
+const clock =(t,c,r,i)=>{//Only t is passed
 	c =()=>(i > 0 || r !== '');
 	r = '';
 	i = ~~(t/clock.day);
@@ -240,4 +197,3 @@ clock.month = 2.628e+9;
 clock.year = 3.154e+10;
 clock.decade = 3.154e+11;
 clock.century = 3.154e+12;
-

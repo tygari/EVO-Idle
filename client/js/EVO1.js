@@ -151,7 +151,7 @@ stage.start =()=>{
 				ID('exotics').style.visibility = 'initial';
 				copy('exotic','protein');
 				ID('protein').removeAttribute('onclick');
-				for (let i = 0; i < REC.exotic.length; i++){copy('exotic',exotic.evo[i]);}
+				//for (let i = 0; i < REC.exotic.length; i++){copy('exotic',exotic.evo[i]);}
 				css('protein',EVO.protein.whole);
 				setTimeout(RNA,clock.minute);
 				setTimeout(protein,clock.minute);
@@ -274,7 +274,7 @@ stage.data = {
 	//Currency
 	"RNA":{
 		"id": 'RNA',
-		"evo":()=>{if (evolution.creations() >= evolution.stage.data.RNA.cost()){evolution.stage.copy('RNA');}},
+		"evo":()=>{if (EVO.one.metabolism && evolution.creations() >= evolution.stage.data.RNA.cost()){evolution.stage.copy('RNA');}},
 		"math":(x)=>(math('RNA',RNA.cost,x)),
 		"buy":(x,y,z)=>{
 			y = (y > 1 ? 10-(RNA.RNA()%10) : 1);
@@ -447,7 +447,7 @@ stage.data = {
 			ID('exotics').style.visibility = 'initial';
 			copy('exotic','protein');
 			ID('protein').removeAttribute('onclick');
-			for (let i = 0; i < REC.exotic.length; i++){copy('exotic',exotic.evo[i]);}
+			//for (let i = 0; i < REC.exotic.length; i++){copy('exotic',exotic.evo[i]);}
 			css('protein',EVO.protein.whole);
 			setTimeout(RNA,clock.minute);
 			setTimeout(protein,clock.minute);

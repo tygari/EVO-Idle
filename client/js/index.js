@@ -1,63 +1,60 @@
 //var loc = window.location.href;
-
-if (localStorage.getItem('EVO') !== null){//Update REC
-	let save = JSON.parse(localStorage.getItem('EVO'));
-	if (save.game == undefined){
-		let recar;
-		if (localStorage.getItem('RE') !== null){recar = JSON.parse(localStorage.getItem('REC'));}
-		else {
-			recar = {
-				"bonusMax": 0,
-				"bonus": 0,
-				"food": {"max": 0, "min": 0,},
-				"cytoplasm": 0,
-				"offensive": 0,
-				"defensive": 0,
-				"speed": 0,
-				"special": 0,
-				"ability": 0,
-				"balance": {"cost": 0, "max": 0,},
-				"nerve": {"cost": 0, "max": 0,},
-				"vascular": {"cost": 0, "max": 0,},
-				"muscle": {"cost": 0, "max": 0,},
-				"respiratory": {"cost": 0, "max": 0,},
-				"digestive": {"cost": 0, "max": 0,},
-				"excretion": {"cost": 0, "max": 0,},
-				"sight": {"cost": 0, "max": 0,},
-				"exotic": [],
-			};
-		}
-		for (let key in save.one){
-			if (typeof save.one[key] === 'number' && save.one[key] < 0){save.one[key] = 0;}
-		}
-		let bonus = save.evo.evolution + save.one.metabolism + save.one.mitochondria + (save.one.cytoplasm + save.one.cilia + save.one.flagellum + save.one.mitosis)/10;
-		if (save.two){
-			for (let key in save.two){
-				if (typeof save.two[key] === 'number' && save.two[key] < 0){save.two[key] = 0;}
-			}
-			bonus += save.two.celladhesion + save.two.generation
-				+ save.two.balance + save.two.nerve
-				+ save.two.vascular + save.two.muscle
-				+ save.two.respiratory + save.two.digestive
-				+ save.two.excretion + save.two.sight
-				+ (save.two.motility/10);
-		}
-		if (save.three){
-			for (let key in save.three){
-				if (typeof save.three[key] === 'number' && save.three[key] < 0){save.three[key] = 0;}
-			}
-			bonus += save.three.balance + save.three.nerve
-				+ save.three.vascular + save.three.muscle
-				+ save.three.respiratory + save.three.digestive
-				+ save.three.excretion + save.three.sight
-				+ (save.three.peristalsis/10);
-		}
-		if (save.combat){bonus += save.combat.offense + save.combat.defense + save.combat.speed + save.combat.special;}
-		bonus = Math.floor(bonus/100);
-		recar.bonus += bonus;
-		recar.bonusMax += bonus;
-		localStorage.setItem("REC", JSON.stringify(recar));
-		localStorage.removeItem('EVO');
+var EVO;
+var REC = {"bonus": 0};
+const rec =()=>{
+	let save = EVO;
+	//Stage 1
+	let bonus = save.evo.evolution
+			+ (save.one.metabolism.val||0)
+			+ (save.one.mitochondria||0)
+			+ ((save.one.cytoplasm||0)
+				+ (save.one.cilia||0)
+				+ (save.one.flagellum||0)
+				+ (save.one.mitosis||0))
+				/10;
+	//Stage 2
+	bonus += (save.two.adhesion.val||0) + (save.two.generation.val||0)
+			+ (save.two.balance||0) + (save.two.nerve||0)
+			+ (save.two.vascular||0) + (save.two.muscle||0)
+			+ (save.two.respiratory||0) + (save.two.digestive||0)
+			+ (save.two.excretion||0) + (save.two.sight||0)
+			+ (save.two.motility.val/10||0);
+	//Stage 3
+	bonus += (save.three.balance||0) + (save.three.nerve||0)
+		+ (save.three.vascular||0) + (save.three.muscle||0)
+		+ (save.three.respiratory||0) + (save.three.digestive||0)
+		+ (save.three.excretion||0) + (save.three.sight||0)
+		+ (save.three.peristalsis.val/10||0);
+	if (save.combat){bonus += (save.combat.offense||0) + (save.combat.defense||0) + (save.combat.speed||0) + (save.combat.special||0);}
+	bonus = Math.floor(bonus/10);
+	REC.bonus += bonus;
+	localStorage.setItem("REC", JSON.stringify(REC));
+	localStorage.removeItem("EVO");
+}
+if (localStorage.getItem('EVO') !== null){
+	if (localStorage.getItem('REC') !== null){REC = JSON.parse(localStorage.getItem('REC'));}
+	if (localStorage.getItem('EVO') !== null){EVO = JSON.parse(localStorage.getItem('EVO'));}
+	if (EVO.game.version < 0.45){
+		if(REC && REC.bonusMax){
+			delete REC.bonusMax;
+			delete REC.food;
+			delete REC.cytoplasm;
+			delete REC.offensive;
+			delete REC.defensive;
+			delete REC.speed;
+			delete REC.special;
+			delete REC.ability;
+			delete REC.balance;
+			delete REC.nerve;
+			delete REC.vascular;
+			delete REC.muscle;
+			delete REC.respiratory;
+			delete REC.digestive;
+			delete REC.excretion;
+			delete REC.sight;
+			delete REC.exotic;
+		};
+		rec();
 	}
 }
 
