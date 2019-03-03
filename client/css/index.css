@@ -1,5 +1,5 @@
 :root{
-	--donation: '+22.5%';
+	--donation: '+25%';
 }
 .marquee{
   animation: marquee 5s alternate infinite;
