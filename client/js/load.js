@@ -176,16 +176,16 @@ const copy =(loc,id,pos)=>{
 }
 
 const clock =(t,c,r,i)=>{//Only t is passed
-	c =()=>(i > 0 || r !== '');
-	r = '';
-	i = ~~(t/clock.day);
-	if (c()){r += i+':';}
-	i = ~~((t/clock.hour)%24);
-	if (c()){r += (i > 9 ? i+':' : (r !== '' ? '0'+i+':' : i+':'));}
-	i = ~~((t/clock.minute)%60);
-	if (c()){r += (i > 9 ? i+':' : (r !== '' ? '0'+i+':' : i+':'));}
-	i = ~~((t/clock.second)%60);
-	if (c()){r += (i > 9 ? i : (r !== '' ? '0'+i : i));}
+	c=()=>(i>0||r!=='');
+	r='';
+	i=~~(t/clock.day);
+	if(c()){r+=i+':'};
+	i=~~((t/clock.hour)%24);
+	if(c()){r+=(i>9?i+':':(r!==''?'0'+i+':':i+':'))};
+	i=~~((t/clock.minute)%60);
+	if(c()){r+=(i>9?i+':':(r!==''?'0'+i+':':i+':'))};
+	i=~~((t/clock.second)%60);
+	if(c()){r+=(i>9?i:(r!==''?'0'+i:i))};
 	return r;
 }
 clock.second = 1000;
