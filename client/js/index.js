@@ -5,7 +5,7 @@ const rec =()=>{
 	let save = EVO;
 	//Stage 1
 	let bonus = save.evo.evolution
-			+ (save.one.metabolism.val||0)
+			+ (save.one.metabolism?(save.one.metabolism.val||0):0)
 			+ (save.one.mitochondria||0)
 			+ ((save.one.cytoplasm||0)
 				+ (save.one.cilia||0)
@@ -13,18 +13,18 @@ const rec =()=>{
 				+ (save.one.mitosis||0))
 				/10;
 	//Stage 2
-	bonus += (save.two.adhesion.val||0) + (save.two.generation.val||0)
+	if (EVO.two){bonus += (save.two.adhesion?(save.two.adhesion.val||0):0) + (save.two.generation?(save.two.generation.val||0):0)
 			+ (save.two.balance||0) + (save.two.nerve||0)
 			+ (save.two.vascular||0) + (save.two.muscle||0)
 			+ (save.two.respiratory||0) + (save.two.digestive||0)
 			+ (save.two.excretion||0) + (save.two.sight||0)
-			+ (save.two.motility.val/10||0);
+			+ (save.two.motility?(save.two.motility.val/10||0):0);}
 	//Stage 3
-	bonus += (save.three.balance||0) + (save.three.nerve||0)
+	if (EVO.three){bonus += (save.three.balance||0) + (save.three.nerve||0)
 		+ (save.three.vascular||0) + (save.three.muscle||0)
 		+ (save.three.respiratory||0) + (save.three.digestive||0)
 		+ (save.three.excretion||0) + (save.three.sight||0)
-		+ (save.three.peristalsis.val/10||0);
+		+ (save.three.peristalsis?(save.three.peristalsis.val/10||0):0);}
 	if (save.combat){bonus += (save.combat.offense||0) + (save.combat.defense||0) + (save.combat.speed||0) + (save.combat.special||0);}
 	bonus = Math.floor(bonus/10);
 	REC.bonus += bonus;
