@@ -486,7 +486,7 @@ const RNA =(x,y,z)=>{
 }
 RNA.RNA =()=>(EVO.one.RNA ? EVO.one.RNA.val + EVO.one.RNA.rRNA - EVO.one.RNA.sRNA : 0);
 RNA.cost = 1.01;
-RNA.time =()=(clock.minute*5*body.stat.mul('vascular',-2));
+RNA.time =()=>(clock.minute*5*body.stat.mul('vascular',-2));
 
 const ribosome =(x)=>{
 	EVO.one.ribosome.partial += ribosome.add();
@@ -501,7 +501,7 @@ const ribosome =(x)=>{
 	}
 }
 ribosome.add =()=>(EVO.one.ribosome.val + EVO.one.ribosome.bonus);
-ribosome.time =()=(clock.hour*body.stat.mul('vascular',-2));
+ribosome.time =()=>(clock.hour*body.stat.mul('vascular',-2));
 
 const protein =(x)=>{
 	let y = ribosome.add();
@@ -575,7 +575,7 @@ const body = {
 			b('gensight');
 			if (start.check){setTimeout(body.cell.cell,body.cell.timer());}
 		},
-		"timer":()=>(clock.minute*5*body.stat.mul('vascular',-2));
+		"timer":()=>(clock.minute*5*body.stat.mul('vascular',-2)),
 	},
 	"stat": {
 		"add":(x,z)=>{
