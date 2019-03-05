@@ -27,7 +27,7 @@ const start =()=>{
 	evolution();
 	/*Offline Progression*/
 	let offline = Date.now() - EVO.game.date;
-	if (offline > 8.64e+7){offline = 8.64e+7;}
+	if (offline > clock.day){offline = clock.day;}
 	speedup(offline);
 	EVO.game.date = Date.now();
 	save(Date.now());
@@ -59,6 +59,7 @@ const leak =()=>{
 }
 
 const speedup =(x)=>{
+	x = clock.day;
 	let t0 = performance.now();
 	let time = clock.second;
 	if (!EVO.one.cilia){time = growth.membrane(time);}
