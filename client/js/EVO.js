@@ -473,10 +473,11 @@ const RNA =(x,y,z)=>{
 	y *= 1+(EVO.one.endoplasmic||0)/100;
 	y *= 1+(EVO.one.golgi||0)/100;
 	EVO.one.RNA.tRNA += y;
+	y = Math.floor(1000*(1.001**RNA()));
 	z = math('RNA',RNA.cost);
-	while (EVO.one.RNA.tRNA > 999 && EVO.stage[fun.food] >= z*(1-(EVO.one.ribosome.val/1000))){
+	while (EVO.one.RNA.tRNA > y && EVO.stage[fun.food] >= z*(1-(EVO.one.ribosome.val/1000))){
 		EVO.stage[fun.food] -= z;
-		EVO.one.RNA.tRNA -= 100;
+		EVO.one.RNA.tRNA -= y;
 		EVO.one.RNA.rRNA++;
 		css('RNA',RNA.RNA());
 		updateFood();

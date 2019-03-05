@@ -431,7 +431,8 @@ container label{
 	content: 'Aerobic Respiration';
 }
 .aerob::after{
-	content: 'Aerobic Respiration uses O''\2082'' and food stuff to create ATP and gives off CO''\2082'' and H''\2082''O as a byproduct.';
+	content:	'Aerobic Respiration uses O''\2082'' and food stuff'
+				'\a''to create ATP and gives off CO''\2082'' and H''\2082''O as a byproduct.';
 }
 #photo::before{
 	content: 'Photophosphorylation';
@@ -441,8 +442,9 @@ container label{
 }
 
 .photo::after{
-	content:	'Photophosphorylation uses sunlight, CO''\2082'', and H''\2082''O to create ATP and gives off O''\2082'' as a byproduct.'
-				'This creates Glucose the basic sugar made by most plants.'
+	content:	'Photophosphorylation uses sunlight, CO''\2082'', and H''\2082''O'
+				'\a''to create ATP and gives off O''\2082'' as a byproduct.'
+				'\a''This creates Glucose the basic sugar made by most plants.'
 				var(--photosynthesis-text,'');
 }
 #count::before{
@@ -628,7 +630,7 @@ boost#size::after{
 	font-size: large;
 	float: right;
 }
-.chat-text::before{
+#chat-text::before{
 	content: var(--chat);
 }
 #chat-text{

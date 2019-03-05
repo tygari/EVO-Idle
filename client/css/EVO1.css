@@ -44,7 +44,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 .bubble::before {
 	content:	'Your creature\'s first evolution.'
 				'\a''A simple ocean bubble with amino acids in it.'
-				'/a''This ceases the loss of ATP gathered.';
+				'\a''This ceases the loss of ATP gathered.';
 }
 #doublebubble::after {
 	content: 'Double Bubble';
@@ -125,7 +125,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content:	var(--text-cilia,'')
 				'Grow more Cilia for your cell.'
 				'\a''Cilia gathers 1 food per upgrade.'
-				'\a''Gathered food passed to the metabolism.';
+				'\a''Gathered food is passed to the metabolism.';
 }
 #flagellum::before {
 	content: '\a''Flagellum';
