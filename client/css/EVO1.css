@@ -43,40 +43,46 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 }
 .bubble::before {
 	content:	'Your creature\'s first evolution.'
-				'\a''A simple ocean bubble with amino acids in it.';
+				'\a''A simple ocean bubble with amino acids in it.'
+				'/a''This ceases the loss of ATP gathered.';
 }
 #doublebubble::after {
 	content: 'Double Bubble';
 }
 .doublebubble::before {
 	content:	'Double bubble wall was the second evolution of cells.'
-				'\a''A bubble inside of another bubble.';
+				'\a''A bubble inside of another bubble.'
+				'\a''Slightly speeds up auto ATP gathering.';
 }
 #phospholipid::after {
 	content: 'Phospholipid';
 }
 .phospholipid::before {
 	content:	'Phospholipid membranes are aligned amphipathic molecule chains.'
-				'\a''All modern cells carry this pivitol characteristic.';
+				'\a''All modern cells carry this pivitol characteristic.'
+				'\a''Slightly speeds up auto ATP gathering.';
 }
 #cellwall::after {
 	content: 'Cell Wall';
 }
 .cellwall::before {
 	content:	'Cell Wall is a thick hard shell around a cells Phospholipid membrane.'
-				'\a''It greatly enhances a cells durability but drastically reduces a cells mobility.';
+				'\a''It greatly enhances a cells durability but drastically reduces a cells mobility.'
+				'\a''Raises defensive ability.';
 }
 #cytoskeleton::before {
 	content: '\a''Cytoskeleton';
 }
 .cytoskeleton::before {
-	content: 'The internal and external structure of a cell is skeletally held together via micro filaments, intermediate filaments, and micro tubules.';
+	content:	'The internal and external structure of a cell is skeletally held together via micro filaments, intermediate filaments, and micro tubules.'
+				'\a''Required for other evolutions.';
 }
 #nucleus::before {
 	content: '\a''Nucleus';
 }
 .nucleus::before {
-	content: 'The unified core of a cell.';
+	content:	'The unified core of a cell.'
+				'\a''Required for other evolutions.';
 }
 #mitosis::before {
 	content: '\a''Mitosis';
@@ -87,7 +93,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 .mitosis::before {
 	content:	var(--text-mitosis,'')
 				'Under go cellular mitosis and reproduce a copy of your cell.'
-				'\a''Each purchase rolls a random chance to gain a Evolution Point.'
+				'\a''Each purchase rolls a random chance to gain a bonus evolution point.'
 				'\a''Failure to gain an evolution point raises the chance to gain a point next time.'
 				'\a''Success gives an evolution point but lowers the chance to gain a point next time.';
 }
@@ -103,7 +109,8 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 .cytoplasm::before {
 	content:	var(--text-cytoplasm,'')
 				'Increase Cytoplasm within your cell.'
-				'\a''Reduces upgrade costs by a small amount.';
+				'\a''Reduces upgrade costs of all upgrades by 0.01% per upgrade.'
+				'\a''Doesn\'t effect Cytoplasm and Evolution.';
 }
 #cilia::before {
 	content: '\a''Cilia';
@@ -117,7 +124,8 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 .cilia::before {
 	content:	var(--text-cilia,'')
 				'Grow more Cilia for your cell.'
-				'\a''Cilia gathers food for your metabolism to convert to ATP.';
+				'\a''Cilia gathers 1 food per upgrade.'
+				'\a''Gathered food passed to the metabolism.';
 }
 #flagellum::before {
 	content: '\a''Flagellum';
@@ -131,8 +139,8 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 .flagellum::before {
 	content:	var(--text-flagellum,'')
 				'Grow a stronger Flagellum for your cell.'
-				'\a''Reduces the cost of movement for your cell.'
-				'\a''Increases chances to find more food.';
+				'\a''Reduces the cost of movement by +0.1% per upgrade.'
+				'\a''Max food found by +0.1% per upgrade.';
 }
 #ribosome::before {
 	content: '\a''Ribosome';
@@ -143,9 +151,10 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 .ribosome::before {
 	content:	var(--text-ribosome,'')
 				'Organic nanofactories composed of RNA within cells.'
-				'\a''Makes RNA.'
-				'\a''Makes Ribosomes.'
-				'\a''Makes Proteins.';
+				'\a''Will make RNA over time.'
+				'\a''Will make more Ribosomes over time.'
+				'\a''Will make Protiens over time.'
+				'\a''How much is made is based on quantity of Ribosome.';
 }
 #endoplasmic::before {
 	content: '\a''Endoplasmic Reticulum';
@@ -157,7 +166,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content:	var(--text-endoplasmic,'')
 				'A network of membranous tubules within the cytoplasm.'
 				'\a''Assists with the production and transport of proteins.'
-				'\a''Increases Protein production.';
+				'\a''Protein production by +1% per upgrade.';
 }
 #golgi::before {
 	content: '\a''Golgi Apparatus';
@@ -169,7 +178,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content:	var(--text-golgi,'')
 				'A stack of small flat sacs formed by membranes inside a cell\'s cytoplasm.'
 				'\a''Assists with the production and transport of proteins.'
-				'\a''Increases Protein production.';
+				'\a''Protein production by +1% per upgrade.';
 }
 #RNA::before {
 	content: '\a''RNA';
@@ -183,7 +192,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 .RNA::before {
 	content:	var(--text-rna,'')
 				'Make RNA for your cell.'
-				'\a''RNA is required in advanced growth and evolution.'
+				'\a''RNA is a currency.'
 				'\a''RNA requires ATP to create.';
 }
 #DNA::before {
@@ -198,7 +207,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 .DNA::before {
 	content:	var(--text-dna,'')
 				'Make DNA for your cell.'
-				'\a''DNA is required in advanced growth and evolution.'
+				'\a''DNA is a currency.'
 				'\a''DNA requires RNA to create.';
 }
 #metabolism::before {
@@ -211,7 +220,8 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content:	var(--text-metabolism,'')
 				'Improve your cell\'s metabolism.'
 				'\a''Metabolism costs RNA to improve.'
-				'\a''Effects change based on your chosen Metabolic Evolutionary Path.';
+				'\a''Effects change based on your chosen Metabolic Evolutionary Path.'
+				'\a''Metabolic Evolutionary Path +1% per upgrade.';
 }
 #voracious::before {
 	content: '\a''Voracious';
@@ -221,7 +231,8 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 }
 .voracious::before {
 	content:	var(--text-voracious,'')
-				'Voracious eaters consume available food faster clearing an area faster.';
+				'Voracious eaters consume available food faster clearing an area faster.'
+				'\a''Amount of food consumed +0.5% per metacycle.';
 }
 #glucose::before {
 	content: '\a''Glucose';
@@ -232,7 +243,8 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 .glucose::before {
 	content:	var(--text-glucose,'')
 				'Glucose is the sugar created by plants that photosynthesize.'
-				'\a''It boosts the amount of sugar created by Photophosphorylation creatures.';
+				'\a''It boosts the amount of sugar created by Photophosphorylation creatures.'
+				'\a''Amount of base ATP created +0.1 per metacycle.';
 }
 #mitochondria::before {
 	content: '\a''Mitochondria';
@@ -244,7 +256,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content:	var(--text-mitochondria,'')
 				'Improve your cell\'s mitochondria.'
 				'\a''Mitochondria costs DNA to improve.'
-				'\a''Mitochondria further enhances your Metabolism.';
+				'\a''Metabolic Evolutionary Path +1% per upgrade.';
 }
 p#photo::after {
 	content: '';
@@ -253,8 +265,11 @@ p#photo::after {
 	content: 'Multicelluar';
 }
 .multicelluar::before {
-	content:	'Multicelluar evolution is the next stage in life when single celled creatures began joining together in colonies.'
-				'\a''This leads to the first simplest forms of multi cell life, sponges, anemone, jellyfish, and more.';
+	content:	'Multicelluar evolution is the next stage in life when'
+				'\a''single celled creatures began joining together in colonies.'
+				'\a''This leads to the first simplest forms of multi cell life,'
+				'\a''sponges, anemone, jellyfish, and more.'
+				'\a''Advances a player to the next stage of evolution.';
 }
 #gameInfo::before {
 	content:	'Welcome to EVO Idle.'

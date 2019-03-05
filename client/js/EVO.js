@@ -317,7 +317,7 @@ const enviro = {
 			if (body.cell.total()+EVO.two.body > EVO.one.cytoplasm/10 && EVO.two.body > 0){enviro.toxin(x);}
 			enviro.adhesion(x);
 		}
-		if (start.check){setTimeout(enviro.loop,clock.minute);}
+		if (start.check){setTimeout(enviro.loop,enviro.time());}
 	},
 	"current":{
 		"hi": 100,
@@ -465,6 +465,7 @@ const enviro = {
 		css('bg-color','rgb('+[x,x,x].join('%,')+'%)');
 		css('sun',x+'%');
 	},
+	"time":()=>(clock.minute),
 }
 
 const RNA =(x,y,z)=>{
@@ -473,7 +474,7 @@ const RNA =(x,y,z)=>{
 	y *= 1+(EVO.one.golgi||0)/100;
 	EVO.one.RNA.tRNA += y;
 	z = math('RNA',RNA.cost);
-	while (EVO.one.RNA.tRNA > 99 && EVO.stage[fun.food] >= z*(1-(EVO.one.ribosome.val/1000))){
+	while (EVO.one.RNA.tRNA > 999 && EVO.stage[fun.food] >= z*(1-(EVO.one.ribosome.val/1000))){
 		EVO.stage[fun.food] -= z;
 		EVO.one.RNA.tRNA -= 100;
 		EVO.one.RNA.rRNA++;
@@ -481,39 +482,41 @@ const RNA =(x,y,z)=>{
 		updateFood();
 		evolution();
 	}
-	if (start.check){setTimeout(RNA,clock.minute*2*body.stat.mul('vascular',-2));}
+	if (start.check){setTimeout(RNA,RNA.time());}
 }
-RNA.RNA =()=>{return (EVO.one.RNA ? EVO.one.RNA.val + EVO.one.RNA.rRNA - EVO.one.RNA.sRNA : 0);}
+RNA.RNA =()=>(EVO.one.RNA ? EVO.one.RNA.val + EVO.one.RNA.rRNA - EVO.one.RNA.sRNA : 0);
 RNA.cost = 1.01;
+RNA.time =()=(clock.minute*5*body.stat.mul('vascular',-2));
 
 const ribosome =(x)=>{
 	EVO.one.ribosome.partial += ribosome.add();
-	let y = Math.floor(1000*Math.pow(1.001,EVO.one.ribosome.bonus));
+	let y = Math.floor(1000*(1.001**EVO.one.ribosome.bonus));
 	if (EVO.one.ribosome.partial > y){
 		EVO.one.ribosome.partial -= y;
 		EVO.one.ribosome.bonus++;
 	}
 	if (start.check){
 		css('ribosome',ribosome.add());
-		setTimeout(ribosome,clock.hour*body.stat.mul('vascular',-2));
+		setTimeout(ribosome,ribosome.time());
 	}
 }
-ribosome.add =()=>{return EVO.one.ribosome.val + EVO.one.ribosome.bonus;}
+ribosome.add =()=>(EVO.one.ribosome.val + EVO.one.ribosome.bonus);
+ribosome.time =()=(clock.hour*body.stat.mul('vascular',-2));
 
 const protein =(x)=>{
 	let y = ribosome.add();
 	y *= 1+(EVO.one.endoplasmic||0)/100;
 	y *= 1+(EVO.one.golgi||0)/100;
 	EVO.protein.partial += y;
-	let z = Math.floor(1000*Math.pow(1.001,EVO.protein.whole));
+	let z = Math.floor(1000*(1.001**EVO.protein.whole));
 	while (EVO.protein.partial >= z){
 		EVO.protein.partial -= z;
 		EVO.protein.whole++;
-		z = Math.floor(1000*Math.pow(1.001,EVO.protein.whole));
+		z = Math.floor(1000*(1.001**EVO.protein.whole));
 	}
 	if (start.check){
 		css('protein',EVO.protein.whole);
-		setTimeout(protein,clock.minute*2*body.stat.mul('vascular',-2));
+		setTimeout(protein,RNA.time());
 	}
 }
 
@@ -545,7 +548,7 @@ const body = {
 		"cell":(x)=>{
 			EVO.two.bodyPart += (EVO.two.body+EVO.two.generation.val)*(1+((EVO.one.mitosis||0)/1000))*(1-(EVO.two.generation.val/100));
 			if (EVO.two.bodyPart < 0){EVO.two.bodyPart = 0;}
-			let y = Math.floor(1000*Math.pow(1.001,EVO.two.body));
+			let y = Math.floor(1000*(1.001**EVO.two.body));
 			while (EVO.two.bodyPart > y){
 				EVO.two.bodyPart -= y;
 				EVO.two.body++;
@@ -554,7 +557,7 @@ const body = {
 			let b =(z)=>{
 				if (EVO.cross[z]){
 					EVO.cross[z].part += body.stat.add(z.substring(3))*(1+(EVO.one.mitosis/1000))*(1-((100-EVO.two.generation)/100));
-					y = Math.floor(1000*Math.pow(1.001,EVO.cross[z].val));
+					y = Math.floor(1000*(1.001**EVO.cross[z].val));
 					while (EVO.cross[z].part > y){
 						EVO.cross[z].part -= y;
 						EVO.cross[z].val++;
@@ -572,7 +575,7 @@ const body = {
 			b('gensight');
 			if (start.check){setTimeout(body.cell.cell,body.cell.timer());}
 		},
-		"timer":()=>{return clock.minute*5*body.stat.mul('vascular',-2);}
+		"timer":()=>(clock.minute*5*body.stat.mul('vascular',-2));
 	},
 	"stat": {
 		"add":(x,z)=>{
@@ -597,7 +600,15 @@ const body = {
 			z *= (1+(EVO.cross[x]||0)/100*y);
 			return z;
 		},
-		"total":()=>{return body.stat.add('balance')+body.stat.add('nerve')+body.stat.add('vascular')+body.stat.add('muscle')+body.stat.add('respiratory')+body.stat.add('digestive')+body.stat.add('excretion')+body.stat.add('sight');},
+		"total":()=>(body.stat.add('balance')
+					+body.stat.add('nerve')
+					+body.stat.add('vascular')
+					+body.stat.add('muscle')
+					+body.stat.add('respiratory')
+					+body.stat.add('digestive')
+					+body.stat.add('excretion')
+					+body.stat.add('sight')
+					),
 		"match":(x)=>{
 			if (x.substring(0,1) == 'x'){x = x.substring(1);}
 			return x.match(/^(balance|nerve|vascular|muscle|respiratory|digestive|excretion|sight)$/);
@@ -765,7 +776,7 @@ const math =(x,y,z)=>{
 	else if (EVO[fun.wrd][x] !== undefined){evo = (typeof EVO[fun.wrd][x] === 'object' ? EVO[fun.wrd][x].val : EVO[fun.wrd][x]);}
 	if (evo !== undefined){
 		if (z == undefined){z = 1;}
-		cost = 10*(Math.pow(y,evo)*(Math.pow(y,z)-1))/(y-1);
+		cost = 10*((y**evo)*((y**z)-1))/(y-1);
 		if (!x.match(/^(evolution|cytoplasm)$/)){cost *= 1-((EVO.one.cytoplasm||0)/(10000-body.stat.add('balance')-body.stat.add('vascular')));}
 	}
 	return (Math.floor(cost)||0);
@@ -822,7 +833,7 @@ const save =(x)=>{
 }
 
 const cheat =()=>{
-	let key =(x)=>{return Object.keys(EVO[x]).length == 0;}
+	let key =(x)=>(Object.keys(EVO[x]).length == 0);
 	if (key('one')){
 		if (EVO.one.metabolism.val && EVO.one.metabolism > 100){hard();}
 		if (EVO.one.mitochondria && EVO.one.mitochondria > 100){hard();}

@@ -134,7 +134,7 @@ const combat =(x)=>{
 	evolution();
 }
 
-const cbtMath =(x)=>{return Math.floor(10*Math.pow(2,EVO.combat[x]+(EVO.combat.offense+EVO.combat.defense+EVO.combat.speed+EVO.combat.special-EVO.combat[x])/2));}
+const cbtMath =(x)=>{return Math.floor(10*(2**EVO.combat[x]+(EVO.combat.offense+EVO.combat.defense+EVO.combat.speed+EVO.combat.special-EVO.combat[x])/2));}
 
 const cbtupg =(x)=>{
 	let y = cbtMath(x);

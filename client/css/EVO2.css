@@ -27,7 +27,7 @@
 .colony::before {
 	content:	'Cost: 'var(--cost-colony)' 'var(--foodtype)
 				'\a''Mitosis a cell and try to adhere to it.'
-				'\a''It will help you gather nutrients'
+				'\a''Colony requires Nutrients to create.'
 				var(--genbalance,'')
 				var(--gennerve,'')
 				var(--genvascular,'')
@@ -45,7 +45,8 @@
 }
 .rapacious::before {
 	content:	var(--text-rapacious,'')
-				'Rapacious eaters consume available food faster clearing an area faster.';
+				'Rapacious eaters consume available food faster clearing an area faster.'
+				'\a''Amount of food consumed +0.5% per metacycle.';
 }
 #fructose::before {
 	content: '\a''Fructose';
@@ -56,14 +57,15 @@
 .fructose::before {
 	content:	var(--text-fructose,'')
 				'Fructose is another sugar created by some plants that is sweeter than Glucose.'
-				'\a''It boosts the amount of sugar created by Photophosphorylation creatures.';
+				'\a''It boosts the amount of sugar created by Photophosphorylation creatures.'
+				'\a''Amount of base ATP created +0.1 per metacycle.';
 }
 #sex::before {
-	content: '\a''Sexual Reproduction';
+	content:	'\a''Sexual Reproduction';
 }
 .sex::before {
 	content:	'Sexual Reproduction is the act of sharing genetic material between two organisms.'
-				'\a''Reproduction assists Evolution.';
+				'\a''Reduces Evolution ramp cost -0.05';
 }
 #adhesion::before {
 	content: '\a''Cellular Adhesion';
@@ -79,13 +81,15 @@
 	content: '\a''Cellular Communication';
 }
 .communication::before {
-	content: 'Your colony\'s capability to communicate with other cells of the same type.';
+	content:	'Your colony\'s capability to communicate with other cells of the same type.'
+				'\a''Required for other evolutions.';
 }
 #organization::before {
 	content: '\a''Cellular Organization';
 }
 .organization::before {
-	content: 'Your colony\'s capability to organize itself with other cells of the same type.';
+	content:	'Your colony\'s capability to organize itself with other cells of the same type.'
+				'\a''Required for other evolutions.';
 }
 #generation::before {
 	content: '\a''Cellular Generation';
@@ -101,13 +105,15 @@
 	content: '\a''Quorum Sensing';
 }
 .quorum::before {
-	content: 'Quorum Sensing is a colony\'s ability to count how many of their own type there is within the colony.';
+	content:	'Quorum Sensing is a colony\'s ability to count how many of their own type there is within the colony.'
+				'\a''Displaces Colony amount.';
 }
 #biofilm::before {
 	content: '\a''Biofilm';
 }
 .biofilm::before {
-	content: 'Biofilm is a mucus coating of Extracellular Polymeric Substances used to protect a cell colony from pH differences.';
+	content:	'Biofilm is a mucus coating of Extracellular Polymeric Substances used to protect a cell colony from pH differences.'
+				'\a''Allows the creation of EPS for protection against pH.';
 }
 #osmoregulation::before {
 	content: '\a''Osmoregulation';
@@ -126,7 +132,9 @@
 	content: ': 'var(--motility);
 }
 .motility::before {
-	content: 'Swarming Motility is your colony\'s ability to move as a collective in a desired direction.';
+	content:	'Swarming Motility is your colony\'s ability to move as a collective in a desired direction.'
+				'\a''Reduces the cost of movement by +0.1% per upgrade.'
+				'\a''Max food found by +0.1% per upgrade.';
 }
 #specialization::before {
 	content: '\a''Cellular Specialization';
@@ -134,32 +142,43 @@
 .specialization::before {
 	content:	'Cellular Specialization is the critical ability for cells within a colony to specialize in a given task.'
 				'\a''But comes at the cost of no longer being able to survive on their own.'
-				'\a''This is a major evolutionary step in advanced life.';
+				'\a''Required for stat evolutions.';
 }
 #circular::before {
 	content: '\a''Circular Symmetry';
 }
 .circular::before {
-	content: 'Your cells and newly developed systems find efficiency in organization and evolve into circular symmetry.';
+	content:	'Your cells and newly developed systems find'
+				'\a''efficiency in organization and evolve into'
+				'\a''circular symmetry.'
+				'\a''Required to continue stat evolutions.';
 }
 #radial::before {
 	content: '\a''Radial Symmetry';
 }
 .radial::before {
-	content: 'Your cells and newly developed systems find efficiency in organization and evolve into radial symmetry.';
+	content:	'Your cells and newly developed systems find'
+				'\a''efficiency in organization and evolve into'
+				'\a''radial symmetry.'
+				'\a''Required to continue stat evolutions.';
 }
 #dependency::before {
 	content: '\a''Dependency';
 }
 .dependency::before {
-	content: 'Some of your cells and newly developed systems have specialized to the degree that they can no longer survive on their own becoming dependent upon each other.';
+	content:	'Some of your cells and newly developed systems have'
+				'\a''specialized to the degree that they can no longer'
+				'\a''survive on their own becoming dependent upon each other.'
+				'\a''Required to continue stat evolutions and more.';
 }
 #worm::before {
 	content: 'Worm';
 }
 .worm::before {
-	content:	'Sea worms became the first creatures to bring together the first eight biological systems into a single entity.'
+	content:	'Sea worms became the first creatures to bring together'
+				'\a''the first eight biological systems into a single entity.'
 				'\a''They are the spring board from which all complex life sprang from.'
+				'\a''Advances a player to the next stage of evolution.';
 }
 #gameInfo::before {
 	content:	'Hope your enjoying EVO Idle.'

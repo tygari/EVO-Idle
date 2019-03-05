@@ -80,7 +80,7 @@ window.addEventListener("load",()=>{
 const css =(x,y)=>(document.body.style.setProperty('--'+x,'"'+y+'"'));
 const start =()=>{
 	let date = '7/16/2018';
-	let version = 0.4;
+	let version = 0.45;
 	css('date',date);
 	css('version',version);
 }

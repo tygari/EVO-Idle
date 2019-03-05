@@ -78,21 +78,21 @@ const speedup =(x)=>{
 			speedUp[z] = y;
 		}
 		z++;
-		y = clock.minute;
+		y = enviro.time();
 		if (speedUp[0] >= speedUp[z] + y){
 			enviro.loop();
 			speedUp[z] = y;
 		}
 		if (EVO.one.ribosome){
 			z++;
-			y = clock.minute;
+			y = RNA.time();
 			if (speedUp[0] >= speedUp[z] + y){
 				RNA();
 				protein();
 				speedUp[z] = y;
 			}
 			z++;
-			y = clock.hour;
+			y = ribosome.time();
 			if (speedUp[0] >= speedUp[z] + y){
 				ribosome();
 				speedUp[z] = y;

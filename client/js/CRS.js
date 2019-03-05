@@ -93,7 +93,7 @@ xcross.setup =()=>{
 			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.stage.ate > 9999){evolution.xcross.copy('x'+a);}},
 			"buy":()=>{
 				let b = (EVO.cross.foodmax||0)+(EVO.cross.foodmin||0)+1;
-				if (EVO.stage.ate >= Math.pow(100,b) && evolution.creations() >= b){
+				if (EVO.stage.ate >= 100**b && evolution.creations() >= b){
 					EVO.evo.evolved += b;
 					EVO.cross[a]++;
 					css('x'+a,EVO.cross[a]);
@@ -104,7 +104,7 @@ xcross.setup =()=>{
 			"color":()=>{
 				let clr = ID('x'+a);
 				let b = (EVO.cross.foodmax||0)+(EVO.cross.foodmin||0)+1;
-				if (EVO.stage.ate >= Math.pow(100,b) && evolution.creations() >= b){clr.classList.replace('green','red');}
+				if (EVO.stage.ate >= 100**b && evolution.creations() >= b){clr.classList.replace('green','red');}
 				else {clr.classList.replace('red','green');}
 			},
 			"tip":()=>{css('cost-'+a,(EVO.cross.foodmax||0)+(EVO.cross.foodmin||0)+1);},

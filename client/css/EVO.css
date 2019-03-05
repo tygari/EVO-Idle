@@ -398,7 +398,8 @@ container label{
 .swirl::before{
 	content:	'Cost: 'var(--cost-swirl)' 'var(--foodtype)
 				'\a''Move to a new area to find more resources.'
-				'\a''Moving resets food but also changes environmental conditions.';
+				'\a''Moving resets food and changes environmental conditions.'
+				'\a''No guaranty the new area will have more food.';
 }
 #evolution::before{
 	content: '\a''Evolution';
@@ -409,7 +410,8 @@ container label{
 .evolution::before{
 	content:	'Cost: ' var(--cost-evolution)' 'var(--foodtype)
 				'\a''Gain an evolution point to evolve your cell.'
-				'\a''Evolution points are used to purchase evolutions.';
+				'\a''Evolution points are used to purchase evolutions.'
+				'\a''Every idle evolution point raises metabolism +0.1%.';
 }
 #protein::before{
 	content: '\a''Protein';
@@ -420,7 +422,7 @@ container label{
 .protein::before{
 	content:	'Long chains of amino acids.'
 				'\a''They are an essential part of all living organisms.'
-				'\a''Used to upgrade Exotic Evolutions.';
+				'\a''Required for exotic evolutions.';
 }
 #metabolize::before{
 	content: '\a''Metabolism: ';
@@ -626,7 +628,7 @@ boost#size::after{
 	font-size: large;
 	float: right;
 }
-#chat-text::before{
+.chat-text::before{
 	content: var(--chat);
 }
 #chat-text{

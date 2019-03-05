@@ -35,25 +35,37 @@
 	content: '\a''Dioecy Reproduction';
 }
 .sex::before {
-	content: 'Dioecy Reproduction is the evolution of a species developing two separate sexes for the purpose of sharing genetic material.';
+	content:	'Dioecy Reproduction is the evolution of a species'
+				'\a''developing two separate sexes for the purpose'
+				'\a''ofsharing genetic material.'
+				'\a''Reduces Evolution ramp cost -0.05';
 }
 #circular::before {
 	content: '\a''Circular Symmetry';
 }
 .circular::before {
-	content: 'Your worm\'s and newly developed systems find efficiency in organization and evolve into circular symmetry.';
+	content:	'Your cells and newly developed systems find'
+				'\a''efficiency in organization and evolve into'
+				'\a''circular symmetry.'
+				'\a''Required to continue stat evolutions.';
 }
 #radial::before {
 	content: '\a''Radial Symmetry';
 }
 .radial::before {
-	content: 'Your worm\'s and newly developed systems find efficiency in organization and evolve into radial symmetry.';
+	content:	'Your cells and newly developed systems find'
+				'\a''efficiency in organization and evolve into'
+				'\a''radial symmetry.'
+				'\a''Required to continue stat evolutions.';
 }
 #bilateral::before {
 	content: '\a''Bilateral Symmetry';
 }
 .bilateral::before {
-	content: 'Your worm\'s and newly developed systems find efficiency in organization and evolve into bilateral symetry.';
+	content:	'Your worm\'s and newly developed systems find'
+				'\a''efficiency in organization and evolve into'
+				'\a''bilateral symetry.'
+				'\a''Required to continue beyond the stat evolutions.';
 }
 #peristalsis::before {
 	content: '\a''Peristalsis';
@@ -62,7 +74,9 @@
 	content: ': 'var(--peristalsis);
 }
 .peristalsis::before {
-	content: 'Your worm learns to undulate its body for motion.';
+	content: 'Your worm learns to undulate its body for motion.'
+				'\a''Reduces the cost of movement by +0.1% per upgrade.'
+				'\a''Max food found by +0.1% per upgrade.';
 }
 #diet::before {
 	content: '\a''Diet: ';
