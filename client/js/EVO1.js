@@ -59,15 +59,12 @@ const leak =()=>{
 }
 
 const speedup =(x)=>{
-	x = clock.day;
 	let t0 = performance.now();
-	let time = clock.second;
-	if (!EVO.one.cilia){time = growth.membrane(time);}
 	let speedUp = new Array(10).fill(0);
 	let y,z;
 	while (x > speedUp[0]){
 		z = 1;
-		y = speedUp[z] + growth.autotime(time);
+		y = speedUp[z] + growth.autotime(EVO.one.cilia ? clock.second : growth.membrane());
 		if (speedUp[0] >= y){
 			growth.autoClick();
 			speedUp[z] = y;

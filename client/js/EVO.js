@@ -32,10 +32,10 @@ const foods = {
 		(EVO.stage[fun.food] >= move.cost() ? x.display = 'initial' : x.display = 'none');
 	},
 	"max":()=>{
-		let onek =(x,y,z)=>{
-			let a = (EVO[x][y] ? (1+((EVO[x][y].val || EVO[x][y])/1000))/(EVO.stage.num-z) : 1);
+		let onek =(stg,mov,num)=>{
+			let a = (EVO[stg][mov] ? (1+((EVO[stg][mov].val || EVO[stg][mov])/1000))/(EVO.stage.stg-num) : 1);
 			if (isNaN(a)){
-				console.log('Food Max '+y+' created a NaN. It was auto fixed.');
+				console.log('Food Max '+mov+' created a NaN. It was auto fixed.');
 				a = 1;
 			}
 			return a;
@@ -110,7 +110,7 @@ const foods = {
 };
 
 const growth = {
-	"membrane":(x)=>(x*4-(EVO.one.membraneScore||0)*x),
+	"membrane":()=>(clock.second*4-(EVO.one.membraneScore||0)*clock.second),
 	"metabolism":(x)=>{
 		EVO.one.metacycle += body.stat.mul('nerve',1);
 		x *= (1+(evolution.creations()/1000));
@@ -167,7 +167,7 @@ const growth = {
 		if (start.check){
 			foods.update();
 			updateFood();
-			setTimeout(growth.autoClick,growth.autotime(EVO.one.cilia ? clock.second : growth.membrane(clock.second)));
+			setTimeout(growth.autoClick,growth.autotime(EVO.one.cilia ? clock.second : growth.membrane()));
 		}
 	},
 	"autotime":(x)=>(Math.ceil((x ? x : clock.second)*foods[foods.check()].timer*(1+((EVO.enviro.salt||0)/100))*10)/10),
