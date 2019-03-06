@@ -56,6 +56,7 @@ if (localStorage.getItem('EVO') !== null){
 		};
 		rec();
 	}
+	if (EVO.enviro.virus == undefined){EVO.enviro.virus = [1 ,0, 0, 0];}
 }
 
 const load =()=>{
@@ -69,6 +70,7 @@ const load =()=>{
 	  x.async = false;
 	  document.head.insertBefore(x,document.getElementsByTagName("script")[0]);
 	});
+	console.log(navigator);
 }
 load();
 

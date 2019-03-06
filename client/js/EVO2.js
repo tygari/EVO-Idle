@@ -20,6 +20,7 @@ const start =()=>{
 				"shift": EVO.enviro.sun.shift,
 				"position": EVO.enviro.sun.position,
 			},
+			"virus": [1 ,0, 0, 0],
 			"current": 50,
 			"currentDamage": 0,
 			"ph": 70,

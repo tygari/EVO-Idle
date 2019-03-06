@@ -85,13 +85,15 @@
 	content: 'Carnivore';
 }
 .carn::before {
-	content: 'Your worm\'s diet specializes to break down animal matter.';
+	content:	'Your worm\'s diet specializes to break down animal matter.'
+				;
 }
 #herb::before {
 	content: 'Herbivore';
 }
 .herb::before {
-	content: 'Your worm\'s diet specializes to break down plant matter.';
+	content:	'Your worm\'s diet specializes to break down plant matter.'
+				;
 }
 #skeleton::before {
 	content: '\a''Skeleton: ';

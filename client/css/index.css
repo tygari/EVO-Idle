@@ -1,6 +1,9 @@
 :root{
 	--donation: '+25%';
 }
+title::before{
+	content: 'EVO Idle';
+}
 .marquee{
   animation: marquee 5s alternate infinite;
 }

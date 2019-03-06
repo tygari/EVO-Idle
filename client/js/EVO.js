@@ -110,7 +110,7 @@ const foods = {
 };
 
 const growth = {
-	"membrane":()=>(clock.second*4-(EVO.one.membraneScore||0)*clock.second),
+	"membrane":()=>(clock.second*(4-(EVO.one.membraneScore||0))),
 	"metabolism":(x)=>{
 		EVO.one.metacycle += body.stat.mul('nerve',1);
 		x *= (1+(evolution.creations()/1000));
