@@ -56,7 +56,10 @@ if (localStorage.getItem('EVO') !== null){
 		};
 		rec();
 	}
-	if (EVO.enviro.virus == undefined){EVO.enviro.virus = [1 ,0, 0, 0];}
+	if (EVO.enviro.virus == undefined){
+		EVO.enviro.virus = [1 ,0, 0, 0];
+		localStorage.setItem("EVO", JSON.stringify(EVO));
+	}
 }
 
 const load =()=>{

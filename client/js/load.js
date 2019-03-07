@@ -174,7 +174,8 @@ const copy =(loc,id,pos)=>{
 	}
 }
 
-const clock =(t,c,r,i)=>{//Only t is passed
+const clock =(t,c,r,i)=>{
+	//Only pass t a number for milliseconds
 	c=()=>(i>0||r!=='');
 	r='';
 	i=~~(t/clock.day);
