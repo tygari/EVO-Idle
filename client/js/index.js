@@ -1,4 +1,3 @@
-//var loc = window.location.href;
 var EVO;
 var REC = {"bonus": 0};
 const rec =()=>{
@@ -34,35 +33,10 @@ const rec =()=>{
 if (localStorage.getItem('EVO') !== null){
 	if (localStorage.getItem('REC') !== null){REC = JSON.parse(localStorage.getItem('REC'));}
 	if (localStorage.getItem('EVO') !== null){EVO = JSON.parse(localStorage.getItem('EVO'));}
-	if (EVO.game.version < 0.45){
-		if(REC && REC.bonusMax){
-			delete REC.bonusMax;
-			delete REC.food;
-			delete REC.cytoplasm;
-			delete REC.offensive;
-			delete REC.defensive;
-			delete REC.speed;
-			delete REC.special;
-			delete REC.ability;
-			delete REC.balance;
-			delete REC.nerve;
-			delete REC.vascular;
-			delete REC.muscle;
-			delete REC.respiratory;
-			delete REC.digestive;
-			delete REC.excretion;
-			delete REC.sight;
-			delete REC.exotic;
-		};
-		rec();
-	}
-	if (EVO.enviro.virus == undefined){
-		EVO.enviro.virus = [1 ,0, 0, 0];
-		localStorage.setItem("EVO", JSON.stringify(EVO));
-	}
+	if (EVO.game.version < 0.46){rec();}
 }
 
-const load =()=>{
+(()=>{
 	[	'EVO',
 		'index',
 	].forEach((href)=>{
@@ -73,26 +47,22 @@ const load =()=>{
 	  x.async = false;
 	  document.head.insertBefore(x,document.getElementsByTagName("script")[0]);
 	});
-	console.log(navigator);
-}
-load();
+})();
 
 window.addEventListener("load",()=>{
 	document.getElementsByTagName("body")[0].style.overflow = 'auto';
-	start();
+	css('date','7/16/2018');
+	css('version',0.46);
 });
 
 const css =(x,y)=>(document.body.style.setProperty('--'+x,'"'+y+'"'));
-const start =()=>{
-	let date = '7/16/2018';
-	let version = 0.45;
-	css('date',date);
-	css('version',version);
-}
-const play =()=>{window.location.assign('client/EVO.html');}
-const donate =()=>{window.open('https://www.paypal.me/tygari');}
-const reddit =()=>{window.open('https://www.reddit.com/r/incremental_games/comments/aw1o07/evo_idle_ver_045_released/');}
-const github =()=>{window.open('https://github.com/tygari/EVO-Idle');}
+
+const play =()=>{window.location.assign('client/EVO.html')}
+const donate =()=>{window.open('https://www.paypal.me/tygari')}
+const patreon =()=>{window.open('https://www.patreon.com/tailedbeastgames')}
+const discord =()=>{window.open('https://discord.gg/EmnM7zp')}
+const reddit =()=>{window.open('https://www.reddit.com/r/incremental_games/comments/aw1o07/evo_idle_ver_045_released/')}
+const github =()=>{window.open('https://github.com/tygari/EVO-Idle')}
 
 const soft =()=>{
 	localStorage.removeItem('EVO');

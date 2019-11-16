@@ -1,4 +1,10 @@
-evolution.xcross =()=>{for (let id in evolution.xcross.data){if (!EVO.cross[id] && !ID('x'+id)){evolution.xcross.data[id].evo();}}}
+evolution.xcross =()=>{
+	for (let id in evolution.xcross.data){
+		if (!EVO.cross[id]){
+			evolution.xcross.data[id].evo();
+		}
+	}
+}
 let xcross = evolution.xcross;
 xcross.setup =()=>{
 	let z = evolution.xcross.data;
@@ -7,7 +13,7 @@ xcross.setup =()=>{
 			"id": 'x'+a,
 			"evo":()=>{
 				if (evolution.creations() >= evolution.xcross.cost() && body.stat.add(a) > 99){
-					evolution.xcross.copy('x'+a);
+					evolution.evo.push('x'+a);
 				}
 			},
 			"buy":()=>{body.stat.buy('x'+a);},
@@ -26,7 +32,7 @@ xcross.setup =()=>{
 			"id": 'xgen'+a,
 			"evo":()=>{
 				if (evolution.creations() >= evolution.xcross.cost() && EVO.one.mitosis > 199 && EVO.two.generation > 19 && EVO.cross[a] > 1){
-					evolution.xcross.copy('xgen'+a);
+					evolution.evo.push('xgen'+a);
 				}
 			},
 			"dat":()=>({"val": 0,"part": 0,}),
@@ -43,7 +49,7 @@ xcross.setup =()=>{
 	x =(a,b,c)=>{
 		z[a] = {
 			"id": 'x'+a,
-			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && body.stat.mul(b,1)*body.stat.mul(c,1) >= 5){evolution.xcross.copy('x'+a);}},
+			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && body.stat.mul(b,1)*body.stat.mul(c,1) >= 5){evolution.evo.push('x'+a);}},
 			"dat":()=>('on'),
 		};
 	}
@@ -55,7 +61,7 @@ xcross.setup =()=>{
 		if (b == undefined){b = a;}
 		z[a] = {
 			"id": 'x'+a,
-			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.combat !== undefined && EVO.combat[a] > 99){evolution.xcross.copy('x'+a);}},
+			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.combat !== undefined && EVO.combat[a] > 99){evolution.evo.push('x'+a);}},
 			"buy":()=>{
 				let c = math('x'+a,2);
 				if (EVO.combat.exp > c && EVO.combat[b] > EVO.cross[a]+1 && EVO.cross[a] < 100){
@@ -80,7 +86,7 @@ xcross.setup =()=>{
 	x =(a)=>{
 		z[a] = {
 			"id": 'x'+a,
-			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.combat[a] > 999){evolution.xcross.copy('x'+a);}},
+			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.combat[a] > 999){evolution.evo.push('x'+a);}},
 			"dat":()=>({"val": 0,"exp": 0}),
 		};
 	}
@@ -90,11 +96,14 @@ xcross.setup =()=>{
 	x =(a)=>{
 		z[a] = {
 			"id": 'x'+a,
-			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.stage.ate > 9999){evolution.xcross.copy('x'+a);}},
-			"buy":()=>{
+			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.stage.ate > 99999){evolution.evo.push('x'+a);}},
+			"con":()=>{
 				let b = (EVO.cross.foodmax||0)+(EVO.cross.foodmin||0)+1;
-				if (EVO.stage.ate >= 100**b && evolution.creations() >= b){
-					EVO.evo.evolved += b;
+				return EVO.stage.ate >= 10**(b+4) && evolution.creations() >= b && (a == 'foodmin' ? (EVO.cross.foodmin||0)-10 < (EVO.cross.foodmax||0) : true);
+			},
+			"buy":()=>{
+				if (evolution.xcross.data[a].con()){
+					EVO.evo.evolved += (EVO.cross.foodmax||0)+(EVO.cross.foodmin||0)+1;
 					EVO.cross[a]++;
 					css('x'+a,EVO.cross[a]);
 					evolution();
@@ -103,11 +112,13 @@ xcross.setup =()=>{
 			"dat":()=>(0),
 			"color":()=>{
 				let clr = ID('x'+a);
-				let b = (EVO.cross.foodmax||0)+(EVO.cross.foodmin||0)+1;
-				if (EVO.stage.ate >= 100**b && evolution.creations() >= b){clr.classList.replace('green','red');}
+				if (evolution.xcross.data[a].con()){clr.classList.replace('green','red');}
 				else {clr.classList.replace('red','green');}
 			},
-			"tip":()=>{css('cost-'+a,(EVO.cross.foodmax||0)+(EVO.cross.foodmin||0)+1);},
+			"tip":()=>{
+				css('cost-'+a,(EVO.cross.foodmax||0)+(EVO.cross.foodmin||0)+1);
+				css('food-toeat',10**((EVO.cross.foodmax||0)+(EVO.cross.foodmin||0)+5));
+			},
 		};
 	}
 	x('foodmax');
@@ -115,16 +126,10 @@ xcross.setup =()=>{
 	evolution.xcross.start();
 }
 xcross.start =()=>{
-	for (let id in EVO.cross){
-		if (evolution.xcross.data[id].buy){
-			copy('cross',evolution.xcross.data[id].id);
-		}
-		if (typeof EVO.cross[id] === 'object'){
-			css(evolution.xcross.data[id].id,EVO.cross[id].val);
-		} else {
-			css(evolution.xcross.data[id].id,EVO.cross[id]);
-		}
-	}
+	echo('crossbox','cross');
+	for (let id in EVO.cross){typeof EVO.cross[id] === 'object'
+		? css(evolution.xcross.data[id].id,EVO.cross[id].val)
+		: css(evolution.xcross.data[id].id,EVO.cross[id]);}
 	if (Object.keys(EVO.cross).length > 0){
 		ID('natural').style.visibility = 'initial';
 		ID('xcross').style.visibility = 'initial';
@@ -134,16 +139,20 @@ xcross.cost =()=>(5*(Object.keys(EVO.cross).length+1));
 xcross.evo =(x)=>{
 	ID(x).removeAttribute('id');
 	x = x.substring(1);
-	if (evolution.xcross.data[x].buy){copy('cross',evolution.xcross.data[x].id);}
+	if (evolution.xcross.data[x].buy){
+		EVO.echo.cross.push('x'+x);
+		echo('crossbox','cross');
+	}
 	EVO.evo.evolved += evolution.xcross.cost();
 	EVO.cross[x] = evolution.xcross.data[x].dat();
 	(typeof EVO.cross[x] === 'object' ? css(evolution.xcross.data[x].id,EVO.cross[x].val) : css(evolution.xcross.data[x].id,EVO.cross[x]));
 	if (x.match(/^(expert|coward|survivor)$/)){EVO.combat[x] -= 100;}
 	evolution();
-	ID('natural').style.visibility = 'initial';
-	ID('xcross').style.visibility = 'initial';
+	if (EVO.echo.cross.length > 0){
+		ID('natural').style.visibility = 'initial';
+		ID('xcross').style.visibility = 'initial';
+	}
 }
-xcross.copy =(x)=>{copy('xcrossevo',x);}
 xcross.cntLrn =(x,y)=>{
 	EVO.cross[x].exp += y;
 	if (EVO.cross[x].exp > (EVO.cross[x].val+1)*100 && EVO.cross[x].val < 100){
@@ -156,13 +165,13 @@ xcross.data = {
 		"id": 'xtraveler',
 		"evo":()=>{
 			let x = (EVO.one.flagellum||0)+(EVO.two.motility||0)+(EVO.three.peristalsis||0);
-			if (evolution.creations() >= evolution.xcross.cost() && x > 1000){evolution.xcross.copy('xtraveler');}
+			if (evolution.creations() >= evolution.xcross.cost() && x > 1000){evolution.evo.push('xtraveler');}
 		},
 		"dat":()=>({"val": 0, "exp": 0}),
 	},
 	"shell": {
 		"id": 'xshell',
-		"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.two.EPS > 999){evolution.xcross.copy('xshell');}},
+		"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.two.EPS > 999){evolution.evo.push('xshell');}},
 		"buy":()=>{
 			if (EVO.two.EPS >= 1000*(EVO.cross.shell+1)){
 				EVO.cross.shell++;
@@ -181,7 +190,7 @@ xcross.data = {
 		"id": 'xdetoxification',
 		"evo":()=>{
 			if (EVO.stage.num > 1 && evolution.creations() >= evolution.xcross.cost() && enviro.toxcalc()[0]/10 > 99){
-				evolution.xcross.copy('xdetox');
+				evolution.evo.push('xdetox');
 			}
 		},
 		"dat":()=>({"val": 0, "exp": 0}),
@@ -190,7 +199,7 @@ xcross.data = {
 		"id": 'xefficient',
 		"evo":()=>{
 			if (EVO.one.metabolism && (1+(EVO.one.metabolism.val||0)/100)*(1+(EVO.one.mitochondria||0)/100) >= clock.metacycle(250)/24 && evolution.creations() >= evolution.xcross.cost()){
-				evolution.xcross.copy('xefficient');
+				evolution.evo.push('xefficient');
 			}
 		},
 		"buy":()=>{

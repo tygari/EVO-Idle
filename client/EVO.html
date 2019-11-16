@@ -7,8 +7,9 @@
 			name="keywords" content="CSS,HTML,JavaScript,Dynamic CSS,NodeJS,DynamoDB,Game,Idle,Evolution,Tygari"
 			name="author" content="Tygari Davis"
 			name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js" sync></script>
-		<script type="text/javascript" src="js/load.js" async></script>
+		<script id="socket" type="text/javascript" src="/socket.io/socket.io.js" sync></script>
+		<script id="echo" type="text/javascript" src="https://cdn.jsdelivr.net/gh/tygari/echo-js/echo.js" sync></script>
+		<script id="evoload" type="text/javascript" src="js/load.js" async></script>
 	</head>
 	<body oncontextmenu="return false">
 		<figure id="load"></figure>
@@ -40,40 +41,19 @@
 			</div>
 		</tab>
 		<tab class="game txtC">
-			<div id="stagenavevo" class="rtl tabevo taboff">
-				<nav id="stageUpgrade" class="blue"></nav>
-			</div>
-			<div id="combatnavevo" class="rtl tabcbt taboff">
-				<nav id="combatUpgrade" class="purple"></nav>
-			</div>
-			<div id="crossnavevo" class="rtl tabcrs taboff">
-				<nav id="crossUpgrade" class="green"></nav>
-			</div>
-			<div id="exoticnavevo" class="rtl tabexo taboff">
-				<nav id="exoticUpgrade" class="red"></nav>
-			</div>
+			<echo- echo="stagenav combatnav crossnav exoticnav" code="<div class='rtl taboff'><nav><br><div></div><echo-></echo-></nav></div>"></echo->
 		</tab>
 		<box class="box stage txtL orange">
 			<div id="environment"></div>
 			<p id="food" class="none" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></p>
-			<p id="structure">
-				<struc id="struc" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></struc>
-			</p>
+			<echo- id="struc"></echo->
 			<p id="ii" class="qq oo pp"></p>
 			<div>
 				<span id="gifts"><div id="gift" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="gift()"></div></span>
 			</div>
 		</box>
 		<box class="box game txtR red">
-			<p id="devevo">
-				<devevo id="devone"><span id="devtwo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></span></devevo>
-			</p>
-			<p id="talents">
-				<talent id="cbtevo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></talent>
-			</p>
-			<p id="boost">
-				<boost id="bstevo" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></boost>
-			</p>
+		<echo- echo="develop talents boost" code="<echo-></echo->"></echo->
 		</box>
 		<event id="event">
 			<p id="eventone"></p>
@@ -98,17 +78,17 @@
 			<input id="tab4" type="radio" name="tabs">
 			<label id="exotics" for="tab4"></label>
 			<content id="tab1-content" class="tab">
-				<box id="stagebox" class="stage txtC"></box>
-				<box id="gamebox" class="game txtC"></box>
+				<echo- id="stagebox" class="stage txtC"></echo->
+				<echo- id="gamebox" class="game txtC"></echo->
 			</content>
 			<content id="tab2-content" class="tab">
-				<bin id="bodybox" class="txtC"></bin>
+				<echo- id="bodybox" class="txtC"></echo->
 			</content>
 			<content id="tab3-content" class="tab">
-				<bin id="crossbox" class="txtC"></bin>
+				<echo- id="crossbox" class="txtC"></echo->
 			</content>
 			<content id="tab4-content" class="tab">
-				<bin id="exoticbox" class="txtC"></bin>
+				<echo- id="exoticbox" class="txtC"></echo->
 			</content>
 		</container>
 	</body>

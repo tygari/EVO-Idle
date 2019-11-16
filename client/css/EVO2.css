@@ -2,7 +2,7 @@
 	--text-rapacious: 'Cost: 'var(--cost-3-rapacious)' 'var(--foodtype)' & 'var(--cost-rapacious)' RNA''\a';
 	--text-fructose: 'Cost: 'var(--cost-3-fructose)' 'var(--foodtype)' & 'var(--cost-fructose)' RNA''\a';
 }
-#structure::before {
+#struc::before {
 	content: 'MultiCell Structures';
 }
 #nutrient::before {

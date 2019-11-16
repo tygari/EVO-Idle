@@ -19,6 +19,7 @@
 	--gendigestive: '\a''Digestive: 'var(--xgendigestive);
 	--genexcretion: '\a''Excretion: 'var(--xgenexcretion);
 	--gensight: '\a''Sight: 'var(--xgensight);
+	--photosynthesis-name: ' 'var(--photosynthesis)'/sec';
 	--photosynthesis-text: '\a''Your creature is currently making about 'var(--photosynthesis)' 'var(--foodtype)' per second.';
 }
 html{
@@ -63,12 +64,16 @@ body{
 	width: 100%;
 	z-index: 10;
 }
-box{
+box,
+#tab1-content echo-{
 	border-style: hidden;
 	width: 24%;
 }
 .box{
 	height: 100%;
+}
+content:not(#tab1-content) echo- div{
+	width: 23.68%;
 }
 .stage{
 	float: left;
@@ -97,7 +102,7 @@ box{
 .red{
 	color: red;
 }
-.button:not(#stage):not(#game):not(#combat):not(#body):not(#cross):not(#exotic){
+.button{
 	border-radius: 50px;
 	white-space: pre-wrap;
 	border-style: double;
@@ -215,22 +220,32 @@ nav{
 	width: 0%;
 	background-color: black;
 }
-#stagenavevo:not(.taboff):hover > #stageUpgrade,
-#combatnavevo:not(.taboff):hover > #combatUpgrade,
-#crossnavevo:not(.taboff):hover > #crossUpgrade,
-#exoticnavevo:not(.taboff):hover > #exoticUpgrade,
+nav:hover{
+	width: 25%;
+}
+.nav{
+	position: fixed;
+	overflow: hidden;
+	z-index: 4;
+	transition: 1s;
+	top: 0px;
+	height: 100%;
+	width: 0%;
+	background-color: black;
+}
+.nav:hover{
+	width: 25%;
+}
+#stagenav:not(.taboff):hover > nav,
+#combatnav:not(.taboff):hover > nav,
+#crossnav:not(.taboff):hover > nav,
+#exoticnav:not(.taboff):hover > nav,
 #chat:not(.taboff):hover > #gameChat,
 #info:not(.taboff):hover > #gameInfo{
 	width: 25%;
 }
 #chat-box:checked + #gameChat{
 	width: 25%;
-}
-nav:hover{
-	width: 25%;
-}
-bin div{
-	width: 23.68%;
 }
 input[name=tabs],
 #chat-box,
@@ -275,8 +290,8 @@ container label{
 #exoticbox > div:nth-child(2n+1){
 	float: left;
 }
-#structure,
-#devevo,
+#struc,
+#develop,
 #talents,
 #boost{
 	white-space: pre;
@@ -293,16 +308,14 @@ container label{
 #exotics::before{
 	content: 'Exotic';
 }
-#devevo::before{
-	content: 'Developmental Evolutions''\a';
+#develop::before{
+	content: '\a''Developmental Evolutions''\a';
 }
-.evolutions::before{
-	content: 'Evolutions';
-	font-weight: bold;
+#talents::before{
+	content: '\a''\a''Combative Talents''\a';
 }
-.tabevo::before{
-	white-space: pre-wrap;
-	content: '\a''E''\a''v''\a''o''\a''l''\a''u''\a''t''\a''i''\a''o''\a''n';
+#boost::before{
+	content: '\a''\a''Boosted Evolutions''\a';
 }
 .tabcht::before{
 	white-space: pre-wrap;
@@ -316,29 +329,49 @@ container label{
 	white-space: pre-wrap;
 	content: '\a''I''\a''n''\a''f''\a''o';
 }
-.combats::before{
-	content: 'Combat Evolutions';
+#stagenav::before{
+	white-space: pre-wrap;
+	content: '\a''E''\a''v''\a''o''\a''l''\a''u''\a''t''\a''i''\a''o''\a''n';
+}
+#stagenav div::before{
+	content: 'Stage Evolutions';
 	font-weight: bold;
 }
-.tabcbt::before{
+#stageUpgrade{
+	color:blue;
+}
+#combatnav::before{
 	white-space: pre-wrap;
 	content: '\a''C''\a''o''\a''m''\a''b''\a''a''\a''t';
 }
-.xcross::before{
-	content: 'Cross Evolutions';
+#combatnav div::before{
+	content: 'Combat Evolutions';
 	font-weight: bold;
 }
-.tabcrs::before{
+#combatUpgrade{
+	color:purple;
+}
+#crossnav::before{
 	white-space: pre-wrap;
 	content: '\a''C''\a''r''\a''o''\a''s''\a''s';
 }
-.exotics::before{
+#crossnav div::before{
+	content: 'Cross Evolutions';
+	font-weight: bold;
+}
+#crossUpgrade{
+	color:green;
+}
+#exoticnav::before{
+	white-space: pre-wrap;
+	content: '\a''E''\a''x''\a''o''\a''t''\a''i''\a''c';
+}
+#exoticnav div::before{
 	content: 'Exotic Evolutions';
 	font-weight: bold;
 }
-.tabexo::before{
-	white-space: pre-wrap;
-	content: '\a''E''\a''x''\a''o''\a''t''\a''i''\a''c';
+#exoticUpgrade{
+	color:red;
 }
 #environment::before{
 	color: blue;
@@ -424,36 +457,35 @@ container label{
 				'\a''They are an essential part of all living organisms.'
 				'\a''Required for exotic evolutions.';
 }
-#metabolize::before{
+span#aerob::before,
+span#photo::before{
 	content: '\a''Metabolism: ';
 }
-#aerob::before{
+#aerob::after{
 	content: 'Aerobic Respiration';
 }
 .aerob::after{
 	content:	'Aerobic Respiration uses O''\2082'' and food stuff'
-				'\a''to create ATP and gives off CO''\2082'' and H''\2082''O as a byproduct.';
-}
-#photo::before{
-	content: 'Photophosphorylation';
-}
-#photo::after{
-	content: ' 'var(--photosynthesis)'/sec';
+				'\a''to create ATP and gives off CO''\2082'' and H''\2082''O as a byproduct.'
+				'Aerobic Respiration increases ATP generated per food eaten.';
 }
 
+#photo::after{
+	content: 'Photophosphorylation'var(--photosynthesis-name,'');
+}
 .photo::after{
 	content:	'Photophosphorylation uses sunlight, CO''\2082'', and H''\2082''O'
 				'\a''to create ATP and gives off O''\2082'' as a byproduct.'
 				'\a''This creates Glucose the basic sugar made by most plants.'
 				var(--photosynthesis-text,'');
 }
-#count::before{
+#cells::before{
 	content: '\a''Body: 'var(--body)' ';
 }
-#count::after{
+#cells::after{
 	content: '\a';
 }
-.count::before{
+.cells::before{
 	content:	'Cells of the body ready to be used.'
 				var(--genbody,'')
 				var(--genbalance,'')
@@ -465,19 +497,13 @@ container label{
 				var(--genexcretion,'')
 				var(--gensight,'');
 }
-#talents::before{
-	content: '\a''Combative Talents';
-}
-#boost::before{
-	content: '\a''Boosted Evolutions''\a';
-}
 #size::before{
 	content: '\a''Size: ';
 }
 p#size::after{
 	content: var(--size1);
 }
-boost#size::after{
+span#size::after{
 	content: var(--size);
 }
 .size::before{

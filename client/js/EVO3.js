@@ -8,47 +8,18 @@ const fun = {
 	"hunt": 0,
 };
 
-const start =()=>{
-	if (Object.keys(EVO.three).length == 0){
-		EVO.three = {"huntcycle": 0,"specialized": 1,};
-		EVO.combat.hlth = 100;
-		EVO.combat.stmn = 100;
-		for (let id in EVO.two){
-			if (body.stat.match(id)){EVO.three[id] = 0;}//Adds evolved stage two stats to stage three evolutions
-			if (id.match(/^(circular|radial)$/)){
-				EVO.three[id] = true;
-				delete EVO.two[id];
-			}
-			if (id = 'EPS'){
-				EVO.three.EPS = EVO.two.EPS;
-				delete EVO.two.EPS;
-			}
-		}
-		localStorage.setItem('EVO', JSON.stringify(EVO));
-	}
-	/*HTML Alterations*/
+start.HTMLSetup =()=>{
 	if (EVO.three.diet){
 		if (EVO.three.diet == 'carn'){fun.food = 'meat';}
 		if (EVO.three.diet == 'herb'){fun.food = 'plant';}
 	}
-	copy('devone','metabolize');
-	ID('metabolize').firstChild.id = EVO.one.metabolism.type;
-	copy('devone','cells');
-	ID('cells').firstChild.id = 'count';
-	copy('stage',fun.food);
 	ID(fun.food).removeAttribute("onclick");
 	ID('natural').style.visibility = 'initial';
 	ID('bodies').style.visibility = 'initial';
 	if (EVO.one.ribosome){
-		copy('exotic','protein');
 		ID('protein').removeAttribute("onclick");
 		ID('exotics').style.visibility = 'initial';
 	}
-	if (EVO.two.biofilm){copy('stage','EPS');}
-	copy('game','combat','beforebegin');
-	ID('combat').classList.replace('red','purple');
-	ID('talents').style.display = 'none';
-	ID('boost').style.display = 'none';
 	ID('hlth').style.display = 'none';
 	ID('stmn').style.display = 'none';
 	ID('rtrt').style.display = 'initial';
@@ -56,23 +27,20 @@ const start =()=>{
 	css('body',EVO.two.body);
 	body.stat.data();
 	body.eps();
+	if(EVO.combat.talent > 0){
+		css('experience',Math.floor(EVO.combat.exp));
+		ID('experience').classList.replace('red','purple');
+		ID('experience').removeAttribute("onclick");
+	}
 	evolution.xcross.setup();
 	evolution.stage.setup();
 	evolution();
-	/*Offline Progression*/
-	let offline = Date.now() - EVO.game.date;
-	if (offline > clock.day){offline = clock.day;}
-	speedup(offline);
-	EVO.game.date = Date.now();
-	save(Date.now());
-	start.check = true;
-	/*Initialize Program*/
+}
+start.InitializeProgram =()=>{
 	if (ID("basic")){ID("basic").id = EVO.one.metabolism.type;}
 	foods.update();
 	updateFood();
-	css('current',(EVO.enviro.current/10));
-	css('ph',(EVO.enviro.ph/10));
-	css('salinity',EVO.enviro.salinity);
+	enviro.css();
 	css('protein',EVO.protein.whole);
 	css('EPS',EVO.three.EPS);
 	css('rtrt',EVO.combat.rtrt);
@@ -264,29 +232,13 @@ stage.setup =()=>{
 	evolution.stage.start();
 }
 stage.start =()=>{
+	let x = true;
 	for (let id in EVO.three){
-		if (id.match(/^(sex|peristalsis|circular|radial|bilateral)$/)){
-			copy('struc',evolution.stage.data[id].id);
-		}
-		else if (id.match(/^(|)$/)){
-			copy('stage',evolution.stage.data[id].id);
-		}
-		else if (id.match(/^(|)$/)){
-			copy('game',evolution.stage.data[id].id);
-		}
-		else if (id.match(/^(diet|skeleton|boost)$/)){
-			copy('devone',id);
-			ID(id).firstChild.id = EVO.three[id];
-		}
-		else if (body.stat.match(id)){
-			copy('body',evolution.stage.data[id].id);
+		if (x && body.stat.match(id)){
 			cbtstat();
+			x = false;
 		}
-		else if (!ID('size') && EVO.size.game > 0){
-			ID('boost').style.display = 'initial';
-			copy('bstevo','size');
-			css('size',EVO.size.game);
-		}
+		else if (EVO.size.game > 0){css('size',EVO.size.game);}
 		if (evolution.stage.data[id]){
 			if (typeof EVO.three[id] === 'object'){css(evolution.stage.data[id].id,EVO.three[id].val);}
 			else {css(evolution.stage.data[id].id,EVO.three[id]);}
@@ -299,13 +251,14 @@ stage.evo =(x,y)=>{
 		if (x == 'herb'){y = 'plant';}
 		if (!ID(y)){
 			if (EVO.stage.mineral){
-				EVO.stage.meat = EVO.stage.mineral;
+				EVO.stage[y] = EVO.stage.mineral;
 				delete EVO.stage.mineral;
 				fun.food = y;
-				ID('mineral').id = y;
+				let a = EVO.echo.stage;
+				a.splice(a.indexOf('mineral'),1,y);
 				css('foodtype',y.charAt(0).toUpperCase() + y.slice(1));
-				copy('devone','diet');
-				ID('diet').firstChild.id = EVO.three.diet;
+				EVO.echo.develop.push(EVO.three.diet);
+				echo('develop','develop');
 				ID('hlth').style.display = 'initial';
 				css('hlth',EVO.combat.hlth);
 				ID('stmn').style.display = 'initial';
@@ -321,27 +274,36 @@ stage.evo =(x,y)=>{
 	EVO.evo.evolved += evolution.stage.data[x].cost();
 	if (!x.match(/^(size|fish)$/) && evolution.stage.data[x] && evolution.stage.data[x].dat){EVO.three[x] = evolution.stage.data[x].dat(z);}
 	if (x.match(/^(sex|peristalsis|circular|radial|bilateral)$/)){
-		copy('struc',evolution.stage.data[x].id);
+		EVO.echo.struc.push(x);
+		echo('struc','struc');
 	}
 	else if (x.match(/^(|)$/)){
-		copy('stage',evolution.stage.data[x].id);
+		EVO.echo.stage.splice(-1,0,x);
+		echo('stagebox','stage');
 	}
 	else if (x.match(/^(|)$/)){
-		copy('game',evolution.stage.data[x].id);
+		let y = EVO.echo.game,
+			z = y.indexOf('experience');
+		z < 0 ? y.push(x) : y.splice(y,1,x);
+		echo('gamebox','game');
 	}
 	else if (x.match(/^(diet|skeleton|boost)$/)){
-		copy('devone',x);
-		ID(x).firstChild.id = EVO.three[x];
+		EVO.echo.develop.push(x);
+		echo('develop','develop');
 	}
 	else if (body.stat.match(x)){
 		EVO.three.specialized++;
-		copy('body',evolution.stage.data[x].id);
+		EVO.echo.body.push(x);
+		echo('bodybox','body');
 		cbtstat();
 	}
 	else if (x == 'size'){
+		if (EVO.echo.boost.indexOf('size') < 0){
+			ID('boost').style.display = 'initial';
+			EVO.echo.boost.push(x);
+			echo('boost','boost');
+		}
 		evolution.stage.data.size.dat();
-		ID('boost').style.display = 'initial';
-		if (!ID('size')){copy('bstevo','size');}
 		css('size',EVO.size.game);
 	}
 	else if (x == 'fish'){evolution.stage.data[x].dat();}
@@ -365,7 +327,7 @@ stage.statevo =(x)=>{
 stage.data = {
 	"sex":{
 		"id": 'sex',
-		"evo":()=>{if (EVO.two.sex && evolution.creations() >= evolution.stage.data.sex.cost()){evolution.stage.copy('sex');}},
+		"evo":()=>{if (EVO.two.sex && evolution.creations() >= evolution.stage.data.sex.cost()){evolution.evo.push('sex');}},
 		"dat":()=>{
 			EVO.evo.cost = (EVO.evo.cost-0.05).toFixed(2);
 			return true;
@@ -374,15 +336,15 @@ stage.data = {
 	},
 	"peristalsis":{
 		"id": 'peristalsis',
-		"evo":()=>{if (EVO.two.specialized + EVO.three.specialized > 7 && evolution.creations() >= evolution.stage.data.peristalsis.cost()){evolution.stage.copy('peristalsis');}},
+		"evo":()=>{if (EVO.two.specialized + EVO.three.specialized > 7 && evolution.creations() >= evolution.stage.data.peristalsis.cost()){evolution.evo.push('peristalsis');}},
 		"dat":()=>({"val": 0, "learn": 0}),
 		"cost":()=>(3),
 	},
 	"diet":{
 		"id": 'diet',
 		"evo":()=>{if (EVO.three.bilateral && evolution.creations() >= evolution.stage.data.diet.cost()){
-				evolution.stage.copy('carn');
-				evolution.stage.copy('herb');
+				evolution.evo.push('carn');
+				evolution.evo.push('herb');
 			}
 		},
 		"dat":(x)=>{
@@ -396,8 +358,8 @@ stage.data = {
 	"skeleton":{
 		"id": 'skeleton',
 		"evo":()=>{if (EVO.three.diet && evolution.creations() >= evolution.stage.data.skeleton.cost()){
-				evolution.stage.copy('endo');
-				evolution.stage.copy('exo');
+				evolution.evo.push('endo');
+				evolution.evo.push('exo');
 			}
 		},
 		"dat":(x)=>(x),
@@ -406,10 +368,10 @@ stage.data = {
 	"boost":{
 		"id": 'boost',
 		"evo":()=>{if (EVO.three.diet && evolution.creations() >= evolution.stage.data.boost.cost()){
-				evolution.stage.copy('camo');
-				evolution.stage.copy('terri');
-				evolution.stage.copy('roam');
-				evolution.stage.copy('hyper');
+				evolution.evo.push('camo');
+				evolution.evo.push('terri');
+				evolution.evo.push('roam');
+				evolution.evo.push('hyper');
 			}
 		},
 		"dat":(x)=>(x),
@@ -422,7 +384,7 @@ stage.data = {
 	},
 	"radial":{
 		"id": 'radial',
-		"evo":()=>{if (EVO.three.circular && EVO.two.specialized+EVO.three.specialized == 8 && body.cell.total() >= 30+(EVO.three.specialized*10) && evolution.creations() >= evolution.stage.data.radial.cost()){evolution.stage.copy('radial');}},
+		"evo":()=>{if (EVO.three.circular && EVO.two.specialized+EVO.three.specialized == 8 && body.cell.total() >= 30+(EVO.three.specialized*10) && evolution.creations() >= evolution.stage.data.radial.cost()){evolution.evo.push('radial');}},
 		"dat":()=>{
 			delete EVO.three.circular;
 			ID('structure').removeChild(ID('circular'));
@@ -432,7 +394,7 @@ stage.data = {
 	},
 	"bilateral":{
 		"id": 'bilateral',
-		"evo":()=>{if (EVO.three.radial && EVO.two.specialized+EVO.three.specialized == 10 && body.cell.total() >= 30+(EVO.three.specialized*10) && evolution.creations() >= evolution.stage.data.bilateral.cost()){evolution.stage.copy('bilateral');}},
+		"evo":()=>{if (EVO.three.radial && EVO.two.specialized+EVO.three.specialized == 10 && body.cell.total() >= 30+(EVO.three.specialized*10) && evolution.creations() >= evolution.stage.data.bilateral.cost()){evolution.evo.push('bilateral');}},
 		"dat":()=>{
 			delete EVO.three.radial;
 			ID('structure').removeChild(ID('radial'));
@@ -442,7 +404,7 @@ stage.data = {
 	},
 	"fish":{
 		"id": 'fish',
-		"evo":()=>{if (false){evolution.stage.copy('fish');}},
+		"evo":()=>{if (false){evolution.evo.push('fish');}},
 		"dat":()=>{;},
 		"cost":()=>(20),
 	},
@@ -452,7 +414,7 @@ stage.data = {
 		"evo":()=>{
 			if (EVO.stage.num > EVO.size.stage && false && evolution.creations() >= evolution.stage.data.size.cost()){
 				css('size1',evolution.stage.data.size.cost());
-				evolution.stage.copy('size');
+				evolution.evo.push('size');
 			}
 		},
 		"dat":()=>{

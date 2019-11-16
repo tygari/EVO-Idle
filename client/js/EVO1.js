@@ -7,16 +7,7 @@ const fun = {
 	"move": 0,
 };
 
-const start =()=>{
-	copy('struc','bubbleless');
-	/*HTML Setup*/
-	if (EVO.one.metabolism){
-		copy('devone','metabolize');
-		ID('metabolize').firstChild.id = EVO.one.metabolism.type;
-	}
-	copy('stage','ATP');
-	ID('talents').style.display = 'none';
-	ID('boost').style.display = 'none';
+start.HTMLSetup =()=>{
 	ID('stat').style.display = 'none';
 	ID('hlth').style.display = 'none';
 	ID('stmn').style.display = 'none';
@@ -25,14 +16,8 @@ const start =()=>{
 	evolution.xcross.setup();
 	evolution.stage.setup();
 	evolution();
-	/*Offline Progression*/
-	let offline = Date.now() - EVO.game.date;
-	if (offline > clock.day){offline = clock.day;}
-	speedup(offline);
-	EVO.game.date = Date.now();
-	save(Date.now());
-	start.check = true;
-	/*Initialize Program*/
+}
+start.InitializeProgram =()=>{
 	foods.update();
 	updateFood();
 	setTimeout(enviro.loop,clock.minute);
@@ -46,7 +31,6 @@ const start =()=>{
 	swirly.start();
 	leak();
 }
-start.check = false;
 
 const leak =()=>{
 	if (!EVO.one.metabolism){
@@ -129,46 +113,25 @@ let stage = evolution.stage;
 stage.setup =()=>{evolution.stage.start();}
 stage.start =()=>{
 	for (let id in EVO.one){
-		if (id.match(/^(membraneScore|cytoskeleton|nucleus)$/)){
-			if (id == 'membraneScore'){
-				let a = EVO.one.membraneScore;
-				let membrane = ID('structure').firstElementChild;
-				if (a == 0){membrane.id = 'bubble';}
-				if (a == 1){membrane.id = 'doublebubble';}
-				if (a == 2){membrane.id = 'phospholipid';}
-				if (a == 3){membrane.id = 'cellwall';}
-			}
-			else {copy('struc',evolution.stage.data[id].id);}
+		if (id.match(/^(ribosome)$/)){
+			ID('natural').style.visibility = 'initial';
+			ID('exotics').style.visibility = 'initial';
+			echo('exoticbox','exotic');
+			ID('protein').removeAttribute('onclick');
+			css('protein',EVO.protein.whole);
+			setTimeout(RNA,clock.minute);
+			setTimeout(protein,clock.minute);
+			setTimeout(ribosome,clock.hour);
 		}
-		else if (id.match(/^(RNA|DNA)$/)){copy('stage',evolution.stage.data[id].id);}
-		else if (id == 'metabolism' && EVO.one.metabolism && EVO.one.metabolism.val !== undefined){copy('game',evolution.stage.data[id].id);}
-		else if (id.match(/^(mitosis|cytoplasm|cilia|flagellum|ribosome|voracious|glucose|mitochondria|endoplasmic|golgi)$/)){
-			copy('game',evolution.stage.data[id].id);
-			if (id == 'ribosome'){
-				ID('natural').style.visibility = 'initial';
-				ID('exotics').style.visibility = 'initial';
-				copy('exotic','protein');
-				ID('protein').removeAttribute('onclick');
-				//for (let i = 0; i < REC.exotic.length; i++){copy('exotic',exotic.evo[i]);}
-				css('protein',EVO.protein.whole);
-				setTimeout(RNA,clock.minute);
-				setTimeout(protein,clock.minute);
-				setTimeout(ribosome,clock.hour);
-			}
-		}
-		else if (!ID('size') && EVO.size.game > 0){
-			ID('boost').style.display = 'initial';
-			copy('bstevo','size');
-			css('size',EVO.size.game);
-		}
+		else if (EVO.size.game > 0){css('size',EVO.size.game);}
 		if (evolution.stage.data[id]){
-			if (typeof EVO.one[id] === 'object'){
-				if (id == 'ribosome'){css(id,ribosome.add());}
-				else if (id == 'mitosis'){css(id,EVO.one.mitosis.chance);}
-				else if (id == 'RNA'){css(id,RNA.RNA());}
-				else if (id == 'DNA'){css(id,fun.DNA());}
-				else {css(evolution.stage.data[id].id,EVO.one[id].val);}
-			} else {css(evolution.stage.data[id].id,EVO.one[id]);}
+			typeof EVO.one[id] === 'object'?
+				id == 'ribosome'?css(id,ribosome.add())
+				:id == 'mitosis'?css(id,EVO.one.mitosis.chance)
+				:id == 'RNA'?css(id,RNA.RNA())
+				:id == 'DNA'?css(id,fun.DNA())
+				:css(evolution.stage.data[id].id,EVO.one[id].val)
+			:css(evolution.stage.data[id].id,EVO.one[id]);
 		}
 	}
 }
@@ -180,26 +143,29 @@ stage.evo =(x)=>{
 	if (!x.match(/^(size|multicelluar)$/) && evolution.stage.data[x] && evolution.stage.data[x].dat){EVO.one[x] = evolution.stage.data[x].dat(z);}
 	if (x.match(/^(bubble|doublebubble|phospholipid|cellwall|cytoskeleton|nucleus)$/)){
 		if (x.match(/^(bubble|doublebubble|phospholipid|cellwall)$/)){
-			EVO.one.membraneScore++;
-			let a = EVO.one.membraneScore;
-			let b = ID('structure').firstElementChild;
-			if (a == 0){b.id = 'bubble';}
-			if (a == 1){b.id = 'doublebubble';}
-			if (a == 2){b.id = 'phospholipid';}
-			if (a == 3){b.id = 'cellwall';}
+			EVO.one.membraneScore++
+			let a = EVO.echo.struc,
+				b = ['bubble','doublebubble','phospholipid','cellwall'];
+			a.splice(a.indexOf(b[EVO.one.membraneScore-1]||'bubbleless'),1,b[EVO.one.membraneScore]);
 		}
-		else {copy('struc',evolution.stage.data[x].id);}
+		else {EVO.echo.struc.push(x);}
+		echo('struc','struc');
 	}
 	else if (x.match(/^(RNA|DNA)$/)){
-		copy('stage',evolution.stage.data[x].id);
+		EVO.echo.stage.splice(-1,0,x);
+		echo('stagebox','stage');
 	}
 	else if (x.match(/^(mitosis|cytoplasm|cilia|flagellum|ribosome|metabolism|voracious|glucose|mitochondria|endoplasmic|golgi)$/)){
-		copy('game',evolution.stage.data[x].id);
+		EVO.echo.game.push(x);
+		echo('gamebox','game');
 	}
 	else if (x == 'size'){
+		if (EVO.echo.boost.indexOf('size') < 0){
+			ID('boost').style.display = 'initial';
+			EVO.echo.boost.push(x);
+			echo('boost','boost');
+		}
 		evolution.stage.data.size.dat();
-		ID('boost').style.display = 'initial';
-		if (!ID('size')){copy('bstevo','size');}
 		css('size',EVO.size.game);
 	}
 	else if (x == 'multicelluar'){evolution.stage.data[x].dat();}
@@ -245,34 +211,34 @@ stage.data = {
 	//Membranes
 	"bubble":{
 		"id": 'bubble',
-		"evo":()=>{if(!EVO.one.metabolism){evolution.stage.copy('bubble');}},
+		"evo":()=>{if(!EVO.one.metabolism){evolution.evo.push('bubble');}},
 		"cost":()=>{
 			EVO.one.membraneScore = -1;
 			EVO.one.metabolism = {"type": 'basic',};
-			copy('devone','metabolize');
-			ID('metabolize').firstChild.id = EVO.one.metabolism.type;
+			EVO.echo.develop.push('basic');
+			echo('develop','develop');
 			return 0;
 		},
 	},
 	"doublebubble":{
 		"id": 'doublebubble',
-		"evo":()=>{if (EVO.one.membraneScore == 0 && evolution.creations() >= evolution.stage.data.doublebubble.cost()){evolution.stage.copy('doublebubble');}},
+		"evo":()=>{if (EVO.one.membraneScore == 0 && evolution.creations() >= evolution.stage.data.doublebubble.cost()){evolution.evo.push('doublebubble');}},
 		"cost":()=>(1),
 	},
 	"phospholipid":{
 		"id": 'phospholipid',
-		"evo":()=>{if (EVO.one.membraneScore == 1 && evolution.creations() >= evolution.stage.data.phospholipid.cost()){evolution.stage.copy('phospholipid');}},
+		"evo":()=>{if (EVO.one.membraneScore == 1 && evolution.creations() >= evolution.stage.data.phospholipid.cost()){evolution.evo.push('phospholipid');}},
 		"cost":()=>(2),
 	},
 	"cellwall":{
 		"id": 'cellwall',
-		"evo":()=>{if (EVO.one.membraneScore == 2 && EVO.one.cytoskeleton && evolution.creations() >= evolution.stage.data.cellwall.cost()){evolution.stage.copy('cellwall');}},
+		"evo":()=>{if (EVO.one.membraneScore == 2 && EVO.one.cytoskeleton && evolution.creations() >= evolution.stage.data.cellwall.cost()){evolution.evo.push('cellwall');}},
 		"cost":()=>(6),
 	},
 	//Currency
 	"RNA":{
 		"id": 'RNA',
-		"evo":()=>{if (EVO.one.metabolism && evolution.creations() >= evolution.stage.data.RNA.cost()){evolution.stage.copy('RNA');}},
+		"evo":()=>{if (EVO.one.metabolism && evolution.creations() >= evolution.stage.data.RNA.cost()){evolution.evo.push('RNA');}},
 		"math":(x)=>(math('RNA',RNA.cost,x)),
 		"buy":(x,y,z)=>{
 			y = (y > 1 ? 10-(RNA.RNA()%10) : 1);
@@ -303,7 +269,7 @@ stage.data = {
 	},
 	"DNA":{
 		"id": 'DNA',
-		"evo":()=>{if (EVO.one.membraneScore > 1 && EVO.one.RNA && evolution.creations() >= evolution.stage.data.DNA.cost()){evolution.stage.copy('DNA');}},
+		"evo":()=>{if (EVO.one.membraneScore > 1 && EVO.one.RNA && RNA.RNA() > 10 && evolution.creations() >= evolution.stage.data.DNA.cost()){evolution.evo.push('DNA');}},
 		"math":(x)=>(math('DNA',RNA.cost,x)),
 		"buy":(x,y,z)=>{
 			y = (y > 1 ? 10-(fun.DNA()%10) : 1);
@@ -336,13 +302,15 @@ stage.data = {
 	//1k Evolutions
 	"mitosis":{
 		"id": 'mitosis',
-		"evo":()=>{if (EVO.one.RNA && EVO.one.membraneScore > 1 && evolution.creations() >= evolution.stage.data.mitosis.cost()){evolution.stage.copy('mitosis');}},
+		"evo":()=>{if (EVO.one.RNA && EVO.one.membraneScore > 1 && evolution.creations() >= evolution.stage.data.mitosis.cost()){evolution.evo.push('mitosis');}},
 		"math":()=>(math('mitosis',1.1)),
 		"buy":(z)=>{
 			z = evolution.stage.data.mitosis.math();
 			if (EVO.stage[fun.food] >= z && EVO.one.mitosis.val < 1000){
 				EVO.stage[fun.food] -= z;
 				EVO.one.mitosis.val += 1;
+				EVO.one.RNA.rRNA += Math.floor(EVO.one.mitosis.val/20);
+				css('RNA',RNA.RNA());
 				evoChance();
 			}
 		},
@@ -359,7 +327,7 @@ stage.data = {
 	},
 	"cytoplasm":{
 		"id": 'cytoplasm',
-		"evo":()=>{if (EVO.one.membraneScore > 0 && evolution.creations() >= evolution.stage.data.cytoplasm.cost()){evolution.stage.copy('cytoplasm');}},
+		"evo":()=>{if (EVO.one.membraneScore > 0 && evolution.creations() >= evolution.stage.data.cytoplasm.cost()){evolution.evo.push('cytoplasm');}},
 		"math":(x)=>(math('cytoplasm',1.1,x)),
 		"buy":(x,y)=>{evolution.stage.thousand(x,y);},
 		"dat":()=>(0),
@@ -382,7 +350,7 @@ stage.data = {
 	},
 	"cilia":{
 		"id": 'cilia',
-		"evo":()=>{if (EVO.one.cytoskeleton && EVO.one.membraneScore > 1 && evolution.creations() >= evolution.stage.data.cilia.cost()){evolution.stage.copy('cilia');}},
+		"evo":()=>{if (EVO.one.cytoskeleton && EVO.one.membraneScore > 1 && evolution.creations() >= evolution.stage.data.cilia.cost()){evolution.evo.push('cilia');}},
 		"math":(x)=>(math('cilia',1.1,x)),
 		"buy":(x,y)=>{evolution.stage.thousand(x,y);},
 		"dat":()=>(0),
@@ -405,7 +373,7 @@ stage.data = {
 	},
 	"flagellum":{
 		"id": 'flagellum',
-		"evo":()=>{if (EVO.one.cytoskeleton && EVO.one.membraneScore > 1 && evolution.creations() >= evolution.stage.data.flagellum.cost()){evolution.stage.copy('flagellum');}},
+		"evo":()=>{if (EVO.one.cytoskeleton && EVO.one.membraneScore > 1 && evolution.creations() >= evolution.stage.data.flagellum.cost()){evolution.evo.push('flagellum');}},
 		"math":(x)=>(math('flagellum',1.1,x)),
 		"buy":(x,y)=>{evolution.stage.thousand(x,y);},
 		"dat":()=>(0),
@@ -428,8 +396,8 @@ stage.data = {
 	},
 	"ribosome":{
 		"id": 'ribosome',
-		"evo":()=>{if (EVO.one.RNA && RNA.RNA() > 199 && evolution.creations() >= evolution.stage.data.ribosome.cost()){evolution.stage.copy('ribosome');}},
-		"math":()=>(math('ribosome',1.25)),
+		"evo":()=>{if (EVO.one.RNA && RNA.RNA() > 499 && evolution.creations() >= evolution.stage.data.ribosome.cost()){evolution.evo.push('ribosome');}},
+		"math":()=>(math('ribosome',1.5)),
 		"buy":()=>{
 			x = evolution.stage.data.ribosome.math();
 			if (EVO.stage[fun.food] >= x*3 && RNA.RNA() >= x && EVO.one.ribosome.val < 1000){
@@ -443,16 +411,13 @@ stage.data = {
 		"dat":()=>{
 			ID('natural').style.visibility = 'initial';
 			ID('exotics').style.visibility = 'initial';
-			copy('exotic','protein');
-			ID('protein').removeAttribute('onclick');
-			//for (let i = 0; i < REC.exotic.length; i++){copy('exotic',exotic.evo[i]);}
 			css('protein',EVO.protein.whole);
 			setTimeout(RNA,clock.minute);
 			setTimeout(protein,clock.minute);
 			setTimeout(ribosome,clock.hour);
 			return {"val": 0, "bonus": 0, "partial": 0,};
 		},
-		"cost":()=>(4),
+		"cost":()=>(5),
 		"color":(x)=>{
 			let clr = ID('ribosome').classList;
 			x = evolution.stage.data.ribosome.math();
@@ -467,9 +432,9 @@ stage.data = {
 	//100 Evolutions
 	"metabolism":{
 		"id": 'metabolism',
-		"evo":()=>{if (EVO.one.metabolism && !EVO.one.metabolism.val && EVO.one.RNA && !ID('aerob') && !ID('photo') && EVO.one.RNA.val > 9 && evolution.creations() >= evolution.stage.data.metabolism.cost()){
-				evolution.stage.copy('aerob');
-				evolution.stage.copy('photo');
+		"evo":()=>{if (EVO.one.metabolism && !EVO.one.metabolism.val && EVO.one.RNA && ID('basic') && EVO.one.RNA.val > 9 && evolution.creations() >= evolution.stage.data.metabolism.cost()){
+				evolution.evo.push('aerob');
+				evolution.evo.push('photo');
 			}
 		},
 		"math":()=>(math('metabolism',1.5)),
@@ -483,7 +448,9 @@ stage.data = {
 			}
 		},
 		"dat":(x)=>{
-			ID('metabolize').firstChild.id = x;
+			let a = EVO.echo.develop;
+			a.splice(a.indexOf('basic'),1,x);
+			echo('develop','develop');
 			if (x == 'photo'){setTimeout(growth.photosynth,clock.second);}
 			return {"val": 0, "type": x,};
 		},
@@ -498,7 +465,7 @@ stage.data = {
 	},
 	"mitochondria":{
 		"id": 'mitochondria',
-		"evo":()=>{if (EVO.one.DNA && evolution.creations() >= evolution.stage.data.mitochondria.cost()){evolution.stage.copy('mitochondria');}},
+		"evo":()=>{if (EVO.one.DNA && EVO.one.metabolism.type !== 'basic' && evolution.creations() >= evolution.stage.data.mitochondria.cost()){evolution.evo.push('mitochondria');}},
 		"math":()=>(math('mitochondria',1.5)),
 		"buy":()=>{
 			x = evolution.stage.data.mitochondria.math();
@@ -519,7 +486,7 @@ stage.data = {
 	},
 	"voracious":{
 		"id": 'voracious',
-		"evo":()=>{if (EVO.one.metabolism && EVO.one.metabolism.val && EVO.one.metabolism.type == 'aerob' && EVO.one.metabolism.val > clock.metacycle(25) && evolution.creations() >= evolution.stage.data.voracious.cost()){evolution.stage.copy('voracious');}},
+		"evo":()=>{if (EVO.one.metabolism && EVO.one.metabolism.val && EVO.one.metabolism.type == 'aerob' && EVO.one.metabolism.val > clock.metacycle(25) && evolution.creations() >= evolution.stage.data.voracious.cost()){evolution.evo.push('voracious');}},
 		"math":()=>(math('voracious',1.5)),
 		"buy":()=>{evolution.stage.metamo('voracious',3);},
 		"dat":()=>(0),
@@ -537,7 +504,7 @@ stage.data = {
 	},
 	"glucose":{
 		"id": 'glucose',
-		"evo":()=>{if (EVO.one.metabolism && EVO.one.metabolism.val && EVO.one.metabolism.type == 'photo' && EVO.one.metabolism.val > clock.metacycle(25) && evolution.creations() >= evolution.stage.data.glucose.cost()){evolution.stage.copy('glucose');}},
+		"evo":()=>{if (EVO.one.metabolism && EVO.one.metabolism.val && EVO.one.metabolism.type == 'photo' && EVO.one.metabolism.val > clock.metacycle(25) && evolution.creations() >= evolution.stage.data.glucose.cost()){evolution.evo.push('glucose');}},
 		"math":()=>(math('glucose',1.5)),
 		"buy":()=>{evolution.stage.metamo('glucose',3);},
 		"dat":()=>(0),
@@ -555,7 +522,7 @@ stage.data = {
 	},
 	"endoplasmic":{
 		"id": 'endoplasmic',
-		"evo":()=>{if (EVO.one.ribosome && EVO.one.nucleus && evolution.creations() >= evolution.stage.data.endoplasmic.cost()){evolution.stage.copy('endoplasmic');}},
+		"evo":()=>{if (EVO.one.ribosome && EVO.one.nucleus && evolution.creations() >= evolution.stage.data.endoplasmic.cost()){evolution.evo.push('endoplasmic');}},
 		"math":()=>(math('endoplasmic',1.5)),
 		"buy":()=>{evolution.stage.protein('endoplasmic');},
 		"dat":()=>(0),
@@ -574,7 +541,7 @@ stage.data = {
 	},
 	"golgi":{
 		"id": 'golgi',
-		"evo":()=>{if (EVO.one.endoplasmic && evolution.creations() >= evolution.stage.data.golgi.cost()){evolution.stage.copy('golgi');}},
+		"evo":()=>{if (EVO.one.endoplasmic && evolution.creations() >= evolution.stage.data.golgi.cost()){evolution.evo.push('golgi');}},
 		"math":()=>(math('golgi',1.5)),
 		"buy":()=>{evolution.stage.protein('golgi');},
 		"dat":()=>(0),
@@ -594,19 +561,19 @@ stage.data = {
 	//Gate Evolutions
 	"cytoskeleton":{
 		"id": 'cytoskeleton',
-		"evo":()=>{if (EVO.one.membraneScore > 0 && evolution.creations() >= evolution.stage.data.cytoskeleton.cost()){evolution.stage.copy('cytoskeleton');}},
+		"evo":()=>{if (EVO.one.membraneScore > 0 && evolution.creations() >= evolution.stage.data.cytoskeleton.cost()){evolution.evo.push('cytoskeleton');}},
 		"dat":()=>(true),
 		"cost":()=>(1),
 	},
 	"nucleus":{
 		"id": 'nucleus',
-		"evo":()=>{if (EVO.one.mitochondria && evolution.creations() >= evolution.stage.data.nucleus.cost()){evolution.stage.copy('nucleus');}},
+		"evo":()=>{if (false && EVO.one.mitochondria && evolution.creations() >= evolution.stage.data.nucleus.cost()){evolution.evo.push('nucleus');}},
 		"dat":()=>(true),
 		"cost":()=>(6),
 	},
 	"multicelluar":{
 		"id": 'multicelluar',
-		"evo":()=>{if (EVO.one.metabolism && EVO.one.metabolism.val && EVO.one.mitosis && evolution.creations() >= evolution.stage.data.multicelluar.cost() && EVO.stage[fun.food]/2 > 10000){evolution.stage.copy('multicelluar');}},
+		"evo":()=>{if (EVO.one.metabolism && EVO.one.metabolism.val && EVO.one.mitosis && evolution.creations() >= evolution.stage.data.multicelluar.cost() && EVO.stage[fun.food]/2 > 10000){evolution.evo.push('multicelluar');}},
 		"dat":()=>{
 			EVO.stage.num++;
 			EVO.stage.food = EVO.stage.food/2;
@@ -614,6 +581,50 @@ stage.data = {
 			delete EVO.stage[fun.food];
 			EVO.one.mitosis = EVO.one.mitosis.val;
 			EVO.size.stage = 0;
+			EVO.echo.stage = ['nutrient','colony','evolution'];
+			EVO.echo.game = [];
+			EVO.echo.struc = [];
+			EVO.two = {
+				"colony": 0,
+				"body": 0,
+				"bodyPart": 0,
+				"specialized": 1,
+			};
+			EVO.enviro = {
+				"sun":{
+					"shift": EVO.enviro.sun.shift,
+					"position": EVO.enviro.sun.position,
+				},
+				"virus": [1 ,0, 0, 0],
+				"current": 50,
+				"currentDamage": 0,
+				"ph": 70,
+				"phd": 0,
+				"salinity": 35,
+				"salt": 0,
+				"toxin": 0,
+			};
+			EVO.combat = {
+				"talent": 0,
+				"cbtevo": [],
+				"mhp": 0,
+				"hp": 0,
+				"msp": 0,
+				"sp": 0,
+				"exp": 0,
+				"scar": 0,
+				"offense": 0,
+				"defense": 0,
+				"speed": 0,
+				"special": 0,
+				"body": 0,
+				"soul": 0,
+				"wind": 0,
+				"expert": 0,
+				"coward": 0,
+				"survivor": 0,
+				"rtrt": 100,
+			};
 			localStorage.setItem('EVO', JSON.stringify(EVO));
 			location.reload(true);
 		},
@@ -625,7 +636,7 @@ stage.data = {
 		"evo":()=>{
 			if (EVO.one.metabolism && EVO.one.metabolism.val && EVO.stage.num > EVO.size.stage && evolution.creations() >= evolution.stage.data.size.cost() && EVO.one.cytoplasm > 99){
 				css('size1',evolution.stage.data.size.cost());
-				evolution.stage.copy('size');
+				evolution.evo.push('size');
 			}
 		},
 		"dat":()=>{

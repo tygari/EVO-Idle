@@ -113,7 +113,7 @@ copyright{
     bottom: 0%;
 }
 copyright::after{
-	content: '\00A9  Tygari Davis 2018';
+	content: '\00A9  Tailed Beast Games LLC 2018';
 }
 .title::before{
 	content: 'EVO Idle';
@@ -174,18 +174,18 @@ container label{
 	white-space: pre-wrap;
 	content:	'\a'' '
 				'\a'' '
+				'\a''Tailed Beast Games LLC'
+				'\a'
 				'\a''Designer & Programmer'
 				'\a''Tygari Davis'
 				'\a'
 				'\a''System Administrator'
 				'\a''Kent Taylor'
 				'\a'
-				'\a''Artists'
-				'\a''Bobneson (Art not yet used)'
-				'\a'
 				'\a''Other'
 				'\a''Nova Labs - http://www.nova-labs.org'
-				'\a''Nova Labs taught me to program and allows me to use their facility to work at.'
+				'\a''Nova Labs taught me to program and allowed me to use their facility to work at for 2 years and 4 months.'
+				'\a''Nova Labs passed new rules severely restricting Homeless people to the point I could no longer study there.'
 }
 .donators::before{
 	white-space: pre-wrap;
@@ -207,6 +207,12 @@ container label{
 .links::before{
 	white-space: pre-wrap;
 	content:	'\a'' ';
+}
+.patreon::before{
+	content: 'Patreon';
+}
+.discord::before{
+	content: 'Discord';
 }
 .reddit::before{
 	content: 'Reddit';

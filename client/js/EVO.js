@@ -1,3 +1,20 @@
+const start =()=>{
+	ID('talents').style.display = (EVO.echo.talents.length > 0 ? 'initial' : 'none');
+	ID('boost').style.display = (EVO.echo.boost.length > 0 ? 'initial' : 'none');
+	start.HTMLSetup();
+	start.OfflineProgression();
+	start.InitializeProgram();
+}
+start.OfflineProgression =()=>{
+	let offline = Date.now() - EVO.game.date;
+	if (offline > clock.day){offline = clock.day;}
+	speedup(offline);
+	EVO.game.date = Date.now();
+	save(Date.now());
+	start.check = true;
+}
+start.check = false;
+
 const gift =()=>{
 	ID('gift').style.display = 'none';
 	EVO.stage.food += EVO.stage.num * 200;
@@ -11,25 +28,23 @@ const gift =()=>{
 
 const foods = {
 	"check":()=>{
-		let type;
 		let check =(x)=>(EVO.stage.food > foods[x].amount());
-		if (check('immeasurable')){type = 'immeasurable';}
-		else if (check('copious')){type = 'copious';}
-		else if (check('bountiful')){type = 'bountiful';}
-		else if (check('abundant')){type = 'abundant';}
-		else if (check('plentiful')){type = 'plentiful';}
-		else if (check('adequate')){type = 'adequate';}
-		else if (check('sparse')){type = 'sparse';}
-		else if (check('scant')){type = 'scant';}
-		else if (check('scarce')){type = 'scarce';}
-		else {type = 'none';}
-		return type;
+		return check('immeasurable')?'immeasurable'
+			:check('copious')?'copious'
+			:check('bountiful')?'bountiful'
+			:check('abundant')?'abundant'
+			:check('plentiful')?'plentiful'
+			:check('adequate')?'adequate'
+			:check('sparse')?'sparse'
+			:check('scant')?'scant'
+			:check('scarce')?'scarce'
+			:'none';
 	},
 	"update":()=>{
 		let x = ID('food');
 		x.classList.replace(x.className,foods.check());
 		x = ID('swirl').style;
-		(EVO.stage[fun.food] >= move.cost() ? x.display = 'initial' : x.display = 'none');
+		EVO.stage[fun.food] >= move.cost() ? x.display = 'initial' : x.display = 'none';
 	},
 	"max":()=>{
 		let onek =(stg,mov,num)=>{
@@ -50,9 +65,9 @@ const foods = {
 				*body.stat.mul('muscle',1);
 	},
 	"min":()=>{
-		return (100*EVO.cross.foodmin+EVO.size.game+body.stat.add('digestive')||1)
+		return (100*EVO.cross.foodmin+10*EVO.size.game+body.stat.add('digestive')||0)
 			*(1+(EVO.cross.foodmin||0)/10)
-			*(1+EVO.size.game/40)
+			*(1+EVO.size.game/50)
 			*body.stat.mul('digestive',1);
 	},
 	"hunt":()=>((EVO.three.diet ? (EVO.three.diet == 'herb' ? 100 : 10) : 1)),
@@ -265,34 +280,31 @@ move.learn =()=>{
 const evolution =()=>{
 	let t0 = performance.now();
 	
-	let creation = evolution.creations();
-	css('evolution',creation);
-	let off =()=>(nav.classList.replace('gold','taboff'));
-	let on =()=>(nav.classList.replace('taboff','gold'));
-	let mouse = ' onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" ';
+	css('evolution',evolution.creations());
+	let nav,evo,
+		get =(x,y)=>{
+			nav = ID(x);
+			evo = ID(y);
+			evolution.evo.length = 0;
+		},
+		set =()=>{
+			evo.setAttribute('echo',evolution.evo.join(' '));
+			(evolution.evo.length == 0 ? nav.classList.replace('gold','taboff') : nav.classList.replace('taboff','gold'));
+		};
 	
-	let nav = ID('stagenavevo');
-	let evo = ID('stageUpgrade');
-	let html = '<p class="evolutions gold"></p><p id="stageevo"'+mouse+'onclick="evolution.stage.evo(this.id)"></p>';
-	evo.innerHTML = html;
+	get('stagenav','stageUpgrade');
 	evolution.stage();
-	(evo.innerHTML == html ? off() : on());
+	set();
 	
 	if(EVO.stage.num > 1){
-		nav = ID('combatnavevo');
-		evo = ID('combatUpgrade');
-		html = '<p class="combats gold"></p><p id="combatevo"'+mouse+'onclick="combat(this.id)"></p>';
-		evo.innerHTML = html;
+		get('combatnav','combatUpgrade');
 		evolution.combat();
-		(evo.innerHTML == html ? off() : on());
+		set();
 	}
 	
-	nav = ID('crossnavevo');
-	evo = ID('crossUpgrade');
-	html = '<p class="xcross gold"></p><p id="xcrossevo"'+mouse+'onclick="evolution.xcross.evo(this.id)"></p>';
-	evo.innerHTML = html;
+	get('crossnav','crossUpgrade');
 	evolution.xcross();
-	(evo.innerHTML == html ? off() : on());
+	set();
 	
 	//evolution.exotic();
 	
@@ -300,9 +312,12 @@ const evolution =()=>{
 	console.log("Evolution call took " + (t1 - t0) + " milliseconds.");
 }
 evolution.creations =()=>{return EVO.evo.evolution - EVO.evo.evolved + EVO.evo.bonus + REC.bonus;}
+evolution.evo = [];
 evolution.stage =()=>{
 	for (let id in evolution.stage.data){
-	if ((!EVO[fun.wrd][id] || id.match(/^(metabolism)$/)) && (!ID(id) || id.match(/^(size)$/))){evolution.stage.data[id].evo();}
+		let x = EVO[fun.wrd][id];
+		if (typeof x === 'number'){x = true;}
+		if (!x || id.match(/^(metabolism)$/)){evolution.stage.data[id].evo();}
 	}
 }
 evolution.stage.copy =(x)=>{copy('stageevo',x);}
@@ -314,10 +329,13 @@ const enviro = {
 			enviro.effect('current',x);
 			enviro.effect('ph',x);
 			enviro.effect('salinity',x);
-			if (body.cell.total()+EVO.two.body > EVO.one.cytoplasm/10 && EVO.two.body > 0){enviro.toxin(x);}
+			if (start.check){enviro.css();}
+			if (body.cell.total()+EVO.two.body > EVO.one.cytoplasm/10 && EVO.two.body > 0){enviro.toxin();}
 			enviro.adhesion(x);
 		}
-		if (start.check){setTimeout(enviro.loop,enviro.time());}
+		if (start.check){
+			setTimeout(enviro.loop,enviro.time());
+		}
 	},
 	"current":{
 		"hi": 100,
@@ -335,13 +353,13 @@ const enviro = {
 		let z = Math.floor(Math.random()*3);
 		if (z == 0 && EVO.enviro[x] < enviro[x].hi){EVO.enviro[x]++;}
 		if (z == 1 && EVO.enviro[x] > enviro[x].lo){EVO.enviro[x]--;}
-		if (x.match(/^(current|ph)$/)){
-			if (start.check){css(x,(EVO.enviro[x]/10));}
-			if (x == 'ph'){enviro.phDmg();}
-		} else {
-			if (start.check){css(x,EVO.enviro[x]);}
-			if (x == 'salinity'){enviro.salt();}
-		}
+		if (x == 'ph'){enviro.phDmg();}
+		if (x == 'salinity'){enviro.salt();}
+	},
+	"css":()=>{
+		css('current',(EVO.enviro.current/10));
+		css('ph',(EVO.enviro.ph/10));
+		css('salinity',EVO.enviro.salinity);
 	},
 	"adhesion":(x,y)=>{
 		if (EVO.two.adhesion){y = EVO.two.adhesion.val;}
@@ -418,16 +436,16 @@ const enviro = {
 		let calc = (total/10)*(1+(body.stat.add('digestive')-tox)/100);
 		return [calc,total,rndm];
 	},
-	"toxin":(x)=>{
+	"toxin":()=>{
 		let tox = enviro.toxcalc();
-		EVO.toxin += tox[0];
-		while (EVO.toxin > tox[1]){
-			EVO.toxin -= tox[1];
+		EVO.enviro.toxin += tox[0];
+		while (EVO.enviro.toxin > tox[1]){
+			EVO.enviro.toxin -= tox[1];
 			if (tox[2].length > 0){
 				tox[2] = tox[2][Math.floor(Math.random()*tox[2].length)];
 				if (tox[2] == 'body'){
 					EVO.two.body--;
-					if (start.check){css('body',EVO.two.body);}
+					if (start.check && EVO.two.quorum || EVO.stage.num > 2){css('body',EVO.two.body);}
 				} else {
 					EVO.cross['gen'+tox[2]].val--;
 					if (start.check){css('xgen'+tox[2],EVO.cross['gen'+tox[2]].val);}
@@ -450,7 +468,7 @@ const enviro = {
 				}
 			}
 		}
-		if (EVO.toxin < 0){EVO.toxin = 0;}
+		if (EVO.enviro.toxin < 0){EVO.enviro.toxin = 0;}
 	},
 	"sun":()=>{
 		let a = EVO.enviro.sun;
@@ -556,7 +574,7 @@ const body = {
 				EVO.two.bodyPart -= y;
 				EVO.two.body++;
 			}
-			if (start.check){css('body',EVO.two.body);}
+			if (start.check && EVO.two.quorum || EVO.stage.num > 2){css('body',EVO.two.body);}
 			let b =(z)=>{
 				if (EVO.cross[z]){
 					EVO.cross[z].part += body.stat.add(z.substring(3))*(1+(EVO.one.mitosis/1000))*(1-((100-EVO.two.generation)/100));
@@ -660,7 +678,7 @@ const body = {
 					css('xgen'+x,EVO.cross['gen'+x].val);
 				}
 				EVO.two.body -= cost;
-				css('body',EVO.two.body);
+				if (EVO.two.quorum || EVO.stage.num > 2){css('body',EVO.two.body);}
 				y = x;
 				if (loc == 'cross'){y = 'x'+y;}
 				css(y,EVO[loc][x]);
@@ -669,15 +687,16 @@ const body = {
 				if (x == 'sight'){enviro.bgcolor();}
 			}
 		},
+		"evocost":()=>(EVO.two.specialized*(EVO.stage.num+2)),
 		"data":()=>{
 			let x =(y)=>{
 				evolution.stage.data[y] = {
 					"id": y,
-					"evo":()=>{if (evolution.stage.statevo(y)){evolution.stage.copy(y);}},
+					"evo":()=>{if (evolution.stage.statevo(y)){evolution.evo.push(y);}},
 					"math":()=>(math(y,1.5)),
 					"buy":()=>{body.stat.buy(y)},
 					"dat":()=>(0),
-					"cost":()=>(EVO.two.specialized * 5),
+					"cost":()=>(body.stat.evocost()),
 					"color":()=>{
 						let clr = ID(y).classList;
 						(EVO.stage[fun.food] >= evolution.stage.data[y].math() && body.cell.body(y) > body.stat.add(y)+1 ? clr.replace('green','red') : clr.replace('red','green'));
@@ -810,10 +829,11 @@ const swirly =(v,w,x,y,z)=>{
 swirly.start =()=>{setTimeout(swirly,30,2,2,~~(Math.random()*window.innerWidth)-50,~~(Math.random()*window.innerHeight)-50,0);}
 
 const tip =(x,y)=>{
-	if (x == 'swirl'){css('cost-swirl',move.cost());}
-	else if (x == 'evolution'){css('cost-evolution',math('evolution',EVO.evo.cost));}
-	else if (EVO[fun.wrd][x] !== undefined && evolution.stage.data[x].tip){evolution.stage.data[x].tip(y);}
-	else if (EVO.cross[x.substring(1)] !== undefined && evolution.xcross.data[x.substring(1)].tip){evolution.xcross.data[x.substring(1)].tip(y);}
+	x == 'swirl'?css('cost-swirl',move.cost())
+	:x == 'evolution'?css('cost-evolution',math('evolution',EVO.evo.cost))
+	:EVO[fun.wrd][x] !== undefined && evolution.stage.data[x].tip?evolution.stage.data[x].tip(y)
+	:EVO.cross[x.substring(1)] !== undefined && evolution.xcross.data[x.substring(1)].tip?evolution.xcross.data[x.substring(1)].tip(y)
+	:null;
 	let z = ID('tip');
 	z.classList.replace(z.className,x);
 	css('mouse','initial');
@@ -825,7 +845,7 @@ const tap =(x)=>{
 	css('mouse','none');
 }
 
-const save =(x)=>{
+const save =x=>{
 	cheat();
 	if (Date.now()-x > 20000){location.reload(true);}
 	else {
@@ -836,7 +856,7 @@ const save =(x)=>{
 }
 
 const cheat =()=>{
-	let key =(x)=>(Object.keys(EVO[x]).length == 0);
+	let key =x=>(Object.keys(EVO[x]).length == 0);
 	if (key('one')){
 		if (EVO.one.metabolism.val && EVO.one.metabolism > 100){hard();}
 		if (EVO.one.mitochondria && EVO.one.mitochondria > 100){hard();}

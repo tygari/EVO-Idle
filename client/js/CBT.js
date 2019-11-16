@@ -7,14 +7,14 @@ const gage =(x,y)=>{
 	css(x,gage);
 }
 
-const check =(x,y)=>{return x.combat.cbtevo.indexOf(y);}
+const check =(x,y)=>(x.combat.cbtevo.indexOf(y));
 
 evolution.combat =()=>{
-	let cbt = EVO.combat;
-	let evo =(x)=>{copy('combatevo',x);}
-	let num = EVO.stage.num;
-	let mod = num%2;
-	let chk,mul,cnt;
+	let cbt = EVO.combat,
+		evo =x=>{evolution.evo.push(x)},
+		num = EVO.stage.num,
+		mod = num%2,
+		chk,mul,cnt;
 	if ((EVO.stage.num > 2 || EVO.two.specialized > 1) && num%2 == 0 && num/2 > cbt.talent && evolution.creations() >= (cbt.talent + Math.floor(num/2))*10
 		&& cbt.talent*10 <= cbt.offense+cbt.defense+cbt.speed+cbt.special){
 		evo('talent');
@@ -65,8 +65,11 @@ evolution.combat =()=>{
 }
 evolution.combat.talent =()=>{
 	let cbt = EVO.combat;
-	if(cbt.talent > 0 && !ID('experience')){
-		copy('combat','experience');
+	if (cbt.talent > 0 && EVO.echo.game.indexOf('experience') < 0){
+		css('experience',Math.floor(EVO.combat.exp));
+		EVO.echo.game.push('experience');
+		echo('gamebox','game');
+		ID('experience').classList.replace('red','purple');
 		ID('experience').removeAttribute("onclick");
 	}
 	css('experience',Math.floor(cbt.exp));
@@ -90,7 +93,8 @@ evolution.combat.talent =()=>{
 		let exp = cbtMath(z);
 		if (Math.floor((x+y+((t-x-y)/2))/10) > cbt[z] && cbt.exp >= exp && ((cbt.talent*10 > off+def+spd+spl) || (cbt[z] < a && a > 0))){
 			if (!ID(z)){
-				copy('combat',z);
+				EVO.echo.game.push(z);
+				echo('gamebox','game');
 				css(z,exp);
 			}
 		} else if (ID(z)){ID(z).remove();}
@@ -99,19 +103,15 @@ evolution.combat.talent =()=>{
 	html('terri','vascular','excretion','defense');
 	html('roam','balance','nerve','speed');
 	html('hyper','sight','respiratory','special');
-	if (cbt.cbtevo.length > 0){
-		ID('talents').style.display = 'initial';
-		for (let i = 0; i < cbt.cbtevo.length; i++){
-			if(!ID(cbt.cbtevo[i])){copy('cbtevo',cbt.cbtevo[i]);}
-		}
-	}
 }
 
 const combat =(x)=>{
 	let cbt = EVO.combat;
 	let pc =()=>{
+		ID('talents').style.display = 'initial';
 		cbt.cbtevo.push(x);
-		copy('cbtevo',x);
+		EVO.echo.talents.push(x);
+		echo('talents','talents');
 	}
 	if (x == 'talent'){
 		cbt.talent += 1;
@@ -134,7 +134,7 @@ const combat =(x)=>{
 	evolution();
 }
 
-const cbtMath =(x)=>{return Math.floor(10*(2**EVO.combat[x]+(EVO.combat.offense+EVO.combat.defense+EVO.combat.speed+EVO.combat.special-EVO.combat[x])/2));}
+const cbtMath =(x)=>(Math.floor(10*(2**EVO.combat[x]+(EVO.combat.offense+EVO.combat.defense+EVO.combat.speed+EVO.combat.special-EVO.combat[x])/2)));
 
 const cbtupg =(x)=>{
 	let y = cbtMath(x);

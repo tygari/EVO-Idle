@@ -1,6 +1,6 @@
 var EVO = {
 	"game":{
-		"version": 0.45,
+		"version": 0.46,
 		"date": Date.now(),
 	},
 	"stage":{
@@ -9,13 +9,16 @@ var EVO = {
 		"atp": 0,
 		"ate": 0,
 	},
-	"load":{
-		'struc':['ATP', 'evolution',],
-		'stage':[],
-		'game':[],
+	"echo":{
+		'struc':['bubbleless'],
+		'develop':[],
+		'talents':[],
 		'boost':[],
+		'stage':['ATP','evolution'],
+		'game':[],
 		'body':[],
 		'cross':[],
+		'exotic':['protein'],
 	},
 	"evo":{
 		"evolution": 0,
@@ -52,7 +55,7 @@ var EVO = {
 };
 var REC = {"bonus": 0};
 
-const load =()=>{
+(()=>{
 	/*Save File load*/
 	if (localStorage.getItem('REC') !== null){REC = JSON.parse(localStorage.getItem('REC'));}
 	if (localStorage.getItem('EVO') !== null){EVO = JSON.parse(localStorage.getItem('EVO'));}
@@ -66,7 +69,7 @@ const load =()=>{
 	  let x = document.createElement('link');
 	  x.rel = 'stylesheet';
 	  x.type = 'text/css';
-	  x.href = 'css/'+href+'.css';
+	  x.href = 'css/'+href+'.css?version='+EVO.game.version;
 	  x.async = false;
 	  document.head.appendChild(x);
 	});
@@ -81,14 +84,11 @@ const load =()=>{
 	].forEach((src)=>{
 	  let x = document.createElement('script');
 	  x.type = 'text/javascript';
-	  x.src = 'js/'+src+'.js';
+	  x.src = 'js/'+src+'.js?version='+EVO.game.version;
 	  x.async = false;
 	  document.head.appendChild(x);
 	});
-};
-load.html =(x)=>{ID(x+'box').insertAdjacentHTML('afterbegin','<div class="button butcol red" id="'+x
-		+'" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="buy(this.id)"><c></c><b onmouseenter="tip(this.parentNode.id,11)" onmouseleave="tip(this.parentNode.id)" onclick="buy(this.parentNode.id,11); event.stopPropagation()"></b></div>');}
-load();
+})();
 
 const socket = io();
 
@@ -127,17 +127,45 @@ socket.on('donation',(data)=>{
 });
 
 window.addEventListener("load",()=>{
-	load.html('stage');
-	load.html('game');
-	load.html('body');
-	load.html('cross');
-	load.html('exotic');
-	let html =(x,y)=>{ID('ii').insertAdjacentHTML('beforeend','<span id="'+y+'"><span onmousedown="gage(\''+y+'\',-1)"></span><span id="'+x+'"></span><span onmousedown="gage(\''+y+'\',1)"></span></span>');}
-	html('health','hlth');
-	html('stamina','stmn');
-	html('retreat','rtrt');
-	copy('stage','evolution','beforebegin');
+	//Creates Evolution Side Navs
+	let A,
+		C=(x,y,z)=>{
+			x = ID(x).getElementsByTagName('echo-')[0];
+			x.id = y;
+			x.setAttribute('code','<p onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="'+z+'(this.id)"></p>');
+		};
+	C('stagenav','stageUpgrade','evolution.stage.evo');
+	C('combatnav','combatUpgrade','combat');			 
+	C('crossnav','crossUpgrade','evolution.xcross.evo');
+	//C('exoticnav','exoticUpgrade','exotic');
+	//Box Setups
+	C=x=>{
+		A = ID(x);
+		A.setAttribute('code','<span onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></span>');
+		A.setAttribute('echo',EVO.echo[x].join(' '));
+	}
+	C('struc');
+	C('develop');
+	C('talents');
+	C('boost');
+	//Creates Buttons
+	C=x=>{
+		A = ID(x+'box');
+		A.setAttribute('code','<div class="button butcol red" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="buy(this.id)"><c></c><b onmouseenter="tip(this.parentNode.id,11)" onmouseleave="tip(this.parentNode.id)" onclick="buy(this.parentNode.id,11); event.stopPropagation()"></b></div>');
+		A.setAttribute('echo',EVO.echo[x].join(' '));
+	}
+	C('stage');
+	C('game');
+	C('body');
+	C('cross');
+	C('exotic');
+	//Combat Assist HTML Code
+	C=(x,y)=>{ID('ii').insertAdjacentHTML('beforeend','<span id="'+y+'"><span onmousedown="gage(this.parentNode.id,-1)"></span><span id="'+x+'"></span><span onmousedown="gage(this.parentNode.id,1)"></span></span>');}
+	C('health','hlth');
+	C('stamina','stmn');
+	C('retreat','rtrt');
 	css('mouse','none');
+	ID('protein').removeAttribute('onclick');
 	setTimeout(start,clock.second);
 	ID('chat-form').onsubmit =(x)=>{
 		x.preventDefault();
@@ -156,12 +184,14 @@ document.addEventListener("mousemove",(mouse)=>{
 	css('mouseY',mouse.clientY+'px');
 });
 
-const ID =(x)=>(document.getElementById(x));
+const ID =x=>(document.getElementById(x));
 
 const css =(x,y)=>{
 	if (!x.match(/^(mouse|mouseX|mouseY|bg-color|swirl-left|swirl-top|swirl-transform)$/)){y = '"'+y+'"';}
 	return document.documentElement.style.setProperty('--'+x,y);
 }
+
+const echo =(x,y)=>{ID(x).setAttribute('echo',EVO.echo[y].join(' '))};
 
 const copy =(loc,id,pos)=>{
 	if (!Array.isArray(id)){id = [id];}
@@ -174,11 +204,9 @@ const copy =(loc,id,pos)=>{
 	}
 }
 
-const clock =(t,c,r,i)=>{
+const clock =(t)=>{
 	//Only pass t a number for milliseconds
-	c=()=>(i>0||r!=='');
-	r='';
-	i=~~(t/clock.day);
+	let c=()=>(i>0||r!==''),r='',i=~~(t/clock.day);
 	if(c()){r+=i+':'};
 	i=~~((t/clock.hour)%24);
 	if(c()){r+=(i>9?i+':':(r!==''?'0'+i+':':i+':'))};

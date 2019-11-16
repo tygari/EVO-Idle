@@ -13,8 +13,11 @@
 	--text-glucose: 'Cost: 'var(--cost-3-glucose)' 'var(--foodtype)' & 'var(--cost-glucose)' RNA''\a';
 	--text-mitochondria: 'Cost: 'var(--cost-mitochondria)' DNA''\a';
 }
-#structure::before {
-	content: 'Cell Structures';
+#struc::before {
+	content: 'Cell Structures''\a';
+}
+#basic::before{
+	content: '\a''Metabolism: ';
 }
 #basic::after {
 	content: 'Basic';
@@ -39,7 +42,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	display: none;
 }
 #bubble::after {
-	content: 'Bubble';
+	content: '\a''Bubble';
 }
 .bubble::before {
 	content:	'Your creature\'s first evolution.'
@@ -47,7 +50,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 				'\a''This ceases the loss of ATP gathered.';
 }
 #doublebubble::after {
-	content: 'Double Bubble';
+	content: '\a''Double Bubble';
 }
 .doublebubble::before {
 	content:	'Double bubble wall was the second evolution of cells.'
@@ -55,7 +58,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 				'\a''Slightly speeds up auto ATP gathering.';
 }
 #phospholipid::after {
-	content: 'Phospholipid';
+	content: '\a''Phospholipid';
 }
 .phospholipid::before {
 	content:	'Phospholipid membranes are aligned amphipathic molecule chains.'
@@ -63,7 +66,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 				'\a''Slightly speeds up auto ATP gathering.';
 }
 #cellwall::after {
-	content: 'Cell Wall';
+	content: '\a''Cell Wall';
 }
 .cellwall::before {
 	content:	'Cell Wall is a thick hard shell around a cells Phospholipid membrane.'
@@ -257,9 +260,6 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 				'Improve your cell\'s mitochondria.'
 				'\a''Mitochondria costs DNA to improve.'
 				'\a''Metabolic Evolutionary Path +1% per upgrade.';
-}
-p#photo::after {
-	content: '';
 }
 #multicelluar::before {
 	content: 'Multicelluar';

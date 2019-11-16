@@ -7,67 +7,13 @@ const fun = {
 	"move": 0,
 };
 
-const start =()=>{
-	if (Object.keys(EVO.two).length == 0){
-		EVO.two = {
-			"colony": 0,
-			"body": 0,
-			"bodyPart": 0,
-			"specialized": 1,
-		};
-		EVO.enviro = {
-			"sun":{
-				"shift": EVO.enviro.sun.shift,
-				"position": EVO.enviro.sun.position,
-			},
-			"virus": [1 ,0, 0, 0],
-			"current": 50,
-			"currentDamage": 0,
-			"ph": 70,
-			"phd": 0,
-			"salinity": 35,
-			"salt": 0,
-			"toxin": 0,
-		};
-		EVO.combat = {
-			"talent": 0,
-			"cbtevo": [],
-			"mhp": 0,
-			"hp": 0,
-			"msp": 0,
-			"sp": 0,
-			"exp": 0,
-			"scar": 0,
-			"offense": 0,
-			"defense": 0,
-			"speed": 0,
-			"special": 0,
-			"body": 0,
-			"soul": 0,
-			"wind": 0,
-			"expert": 0,
-			"coward": 0,
-			"survivor": 0,
-			"rtrt": 100,
-		};
-		localStorage.setItem('EVO', JSON.stringify(EVO));
-	}
-	/*HTML Setup*/
-	copy('devone','metabolize');
-	ID('metabolize').firstChild.id = EVO.one.metabolism.type;
-	copy('stage','nutrient');
+start.HTMLSetup =()=>{
 	ID('nutrient').removeAttribute("onclick");
 	if (EVO.one.ribosome){
-		copy('exotic','protein');
 		ID('protein').removeAttribute("onclick");
 		ID('natural').style.visibility = 'initial';
 		ID('exotics').style.visibility = 'initial';
 	}
-	copy('stage','colony');
-	copy('game','combat','beforebegin');
-	ID('combat').classList.replace('red','purple');
-	ID('talents').style.display = 'none';
-	ID('boost').style.display = 'none';
 	ID('stat').style.display = 'none';
 	ID('hlth').style.display = 'none';
 	ID('stmn').style.display = 'none';
@@ -76,22 +22,19 @@ const start =()=>{
 	body.stat.data();
 	body.eps();
 	fun.cell = (1.1-(EVO.one.mitosis/2000)).toFixed(4);
+	if(EVO.combat.talent > 0){
+		css('experience',Math.floor(EVO.combat.exp));
+		ID('experience').classList.replace('red','purple');
+		ID('experience').removeAttribute("onclick");
+	}
 	evolution.xcross.setup();
 	evolution.stage.setup();
 	evolution();
-	/*Offline Progression*/
-	let offline = Date.now() - EVO.game.date;
-	if (offline > clock.day){offline = clock.day;}
-	speedup(offline);
-	EVO.game.date = Date.now();
-	save(Date.now());
-	start.check = true;
-	/*Initialize Program*/
+}
+start.InitializeProgram =()=>{
 	foods.update();
 	updateFood();
-	css('current',(EVO.enviro.current/10));
-	css('ph',(EVO.enviro.ph/10));
-	css('salinity',EVO.enviro.salinity);
+	enviro.css();
 	enviro.bgcolor();
 	setTimeout(enviro.loop,clock.minute);
 	setTimeout(growth.autoClick,growth.autotime());
@@ -106,7 +49,6 @@ const start =()=>{
 	ID('load').style.display = 'none';
 	swirly.start();
 }
-start.check = false;
 
 const speedup =(x)=>{
 	let t0 = performance.now();
@@ -196,32 +138,20 @@ stage.setup =()=>{
 	evolution.stage.start();
 }
 stage.start =()=>{
+	let x = true;
 	for (let id in EVO.two){
-		if (id.match(/^(sex|adhesion|communication|organization|quorum|biofilm|osmoregulation|motility|generation|specialization|circular|dependency|radial)$/)){
-			copy('struc',evolution.stage.data[id].id);
-			if (id == 'quorum'){body.cell.colony();}
-			if (id == 'generation'){setTimeout(body.cell.cell,body.cell.timer());}
-		}
-		else if (id.match(/^(|EPS)$/)){
-			copy('stage',evolution.stage.data[id].id);
-		}
-		else if (id.match(/^(rapacious|fructose)$/)){
-			copy('game',evolution.stage.data[id].id);
-		}
-		else if (body.stat.match(id)){
-			copy('body',evolution.stage.data[id].id);
+		if (id == 'quorum'){body.cell.colony();}
+		else if (id == 'generation'){setTimeout(body.cell.cell,body.cell.timer());}
+		else if (x && body.stat.match(id)){
 			ID('stat').style.display = 'initial';
 			ID('rtrt').style.display = 'initial';
 			css('rtrt',EVO.combat.rtrt);
 			ID('natural').style.visibility = 'initial';
 			ID('bodies').style.visibility = 'initial';
 			cbtstat();
+			x = false;
 		}
-		else if (!ID('size') && EVO.size.game > 0){
-			ID('boost').style.display = 'initial';
-			copy('bstevo','size');
-			css('size',EVO.size.game);
-		}
+		else if (EVO.size.game > 0){css('size',EVO.size.game);}
 		if (evolution.stage.data[id]){
 			if (typeof EVO.two[id] === 'object'){css(evolution.stage.data[id].id,EVO.two[id].val);}
 			else {css(evolution.stage.data[id].id,EVO.two[id]);}
@@ -233,31 +163,42 @@ stage.evo =(x)=>{
 	EVO.evo.evolved += evolution.stage.data[x].cost();
 	if (!x.match(/^(size|worm)$/) && evolution.stage.data[x] && evolution.stage.data[x].dat){EVO.two[x] = evolution.stage.data[x].dat();}
 	if (x.match(/^(sex|adhesion|communication|organization|quorum|biofilm|osmoregulation|motility|generation|specialization|circular|dependency|radial)$/)){
-		copy('struc',evolution.stage.data[x].id);
 		if (x == 'quorum'){body.cell.colony();}
 		if (x == 'generation'){setTimeout(body.cell.cell,body.cell.timer());}
+		EVO.echo.struc.push(x);
+		echo('struc','struc');
 	}
 	else if (x.match(/^(|)$/)){
-		copy('stage',evolution.stage.data[x].id);
+		EVO.echo.stage.splice(-1,0,x);
+		echo('stagebox','stage');
 	}
 	else if (x.match(/^(rapacious|fructose)$/)){
-		copy('game',evolution.stage.data[x].id);
+		let y = EVO.echo.game,
+			z = y.indexOf('experience');
+		z < 0 ? y.push(x) : y.splice(y,1,x);
+		echo('gamebox','game');
 	}
 	else if (body.stat.match(x)){
 		EVO.two.specialized++;
-		copy('body',evolution.stage.data[x].id);
-		ID('stat').style.display = 'initial';
-		ID('rtrt').style.display = 'initial';
-		css('rtrt',EVO.combat.rtrt);
-		ID('natural').style.visibility = 'initial';
-		ID('bodies').style.visibility = 'initial';
+		EVO.echo.body.push(x);
+		echo('bodybox','body');
 		cbtstat();
-		if (EVO.two.specialized == 2){setTimeout(heal, heal.timer());}
+		if (EVO.two.specialized == 2){
+			ID('stat').style.display = 'initial';
+			ID('rtrt').style.display = 'initial';
+			css('rtrt',EVO.combat.rtrt);
+			ID('natural').style.visibility = 'initial';
+			ID('bodies').style.visibility = 'initial';
+			setTimeout(heal, heal.timer());
+		}
 	}
 	else if (x == 'size'){
+		if (EVO.echo.boost.indexOf('size') < 0){
+			ID('boost').style.display = 'initial';
+			EVO.echo.boost.push(x);
+			echo('boost','boost');
+		}
 		evolution.stage.data.size.dat();
-		ID('boost').style.display = 'initial';
-		if (!ID('size')){copy('bstevo','size');}
 		css('size',EVO.size.game);
 	}
 	else if (x == 'worm'){evolution.stage.data[x].dat();}
@@ -291,7 +232,7 @@ stage.data = {
 	//MultiCell Evolutions
 	"sex":{
 		"id": 'sex',
-		"evo":()=>{if (EVO.two.body >= 1 && evolution.creations() >= evolution.stage.data.sex.cost()){evolution.stage.copy('sex');}},
+		"evo":()=>{if (EVO.two.body >= 1 && evolution.creations() >= evolution.stage.data.sex.cost()){evolution.evo.push('sex');}},
 		"dat":()=>{
 			EVO.evo.cost = (EVO.evo.cost-0.05).toFixed(2);
 			return true;
@@ -300,42 +241,43 @@ stage.data = {
 	},
 	"adhesion":{
 		"id": 'adhesion',
-		"evo":()=>{if (EVO.two.body >= 1 && evolution.creations() >= evolution.stage.data.adhesion.cost()){evolution.stage.copy('adhesion');}},
+		"evo":()=>{if (EVO.two.body >= 1 && evolution.creations() >= evolution.stage.data.adhesion.cost()){evolution.evo.push('adhesion');}},
 		"dat":()=>({"val": 0, "learn": 0}),
 		"cost":()=>(1),
 	},
 	"quorum":{
 		"id": 'quorum',
-		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 40 && evolution.creations() >= evolution.stage.data.quorum.cost()){evolution.stage.copy('quorum');}},
+		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 40 && evolution.creations() >= evolution.stage.data.quorum.cost()){evolution.evo.push('quorum');}},
 		"dat":()=>(true),
-		"cost":()=>(2),
+		"cost":()=>(3),
 	},
 	"biofilm":{
 		"id": 'biofilm',
-		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 20 && evolution.creations() >= evolution.stage.data.biofilm.cost()){evolution.stage.copy('biofilm');}},
+		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 20 && evolution.creations() >= evolution.stage.data.biofilm.cost()){evolution.evo.push('biofilm');}},
 		"dat":()=>{
 			EVO.two.EPS = 0;
-			copy('stage','EPS');
+			EVO.echo.stage.splice(-1,0,'EPS');
+			echo('stagebox','stage');
 			css('EPS',EVO.two.EPS);
 			return true;
 		},
-		"cost":()=>(2),
+		"cost":()=>(4),
 	},
 	"generation":{
 		"id": 'generation',
-		"evo":()=>{if (EVO.two.organization && EVO.two.body >= 100 && evolution.creations() >= evolution.stage.data.generation.cost()){evolution.stage.copy('generation');}},
+		"evo":()=>{if (EVO.two.organization && EVO.two.body >= 100 && evolution.creations() >= evolution.stage.data.generation.cost()){evolution.evo.push('generation');}},
 		"dat":()=>({"val": 0, "learn": 0}),
 		"cost":()=>(4),
 	},
 	"osmoregulation":{
 		"id": 'osmoregulation',
-		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 20 && evolution.creations() >= evolution.stage.data.osmoregulation.cost()){evolution.stage.copy('osmoregulation');}},
+		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 20 && evolution.creations() >= evolution.stage.data.osmoregulation.cost()){evolution.evo.push('osmoregulation');}},
 		"dat":()=>({"val": 0, "learn": 0}),
-		"cost":()=>(2),
+		"cost":()=>(4),
 	},
 	"motility":{
 		"id": 'motility',
-		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 20 && evolution.creations() >= evolution.stage.data.motility.cost()){evolution.stage.copy('motility');}},
+		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 20 && evolution.creations() >= evolution.stage.data.motility.cost()){evolution.evo.push('motility');}},
 		"dat":()=>({"val": 0, "learn": 0}),
 		"cost":()=>(3),
 	},
@@ -373,7 +315,7 @@ stage.data = {
 	//100 Evolutions
 	"rapacious":{
 		"id": 'rapacious',
-		"evo":()=>{if (EVO.one.metabolism.type == 'aerob' && RNA.RNA() > 10 && EVO.one.metabolism.val > clock.metacycle(100) && evolution.creations() >= evolution.stage.data.rapacious.cost()){evolution.stage.copy('rapacious');}},
+		"evo":()=>{if (EVO.one.metabolism.type == 'aerob' && RNA.RNA() > 10 && EVO.one.metabolism.val > clock.metacycle(100) && evolution.creations() >= evolution.stage.data.rapacious.cost()){evolution.evo.push('rapacious');}},
 		"math":()=>(math('rapacious',1.5)),
 		"buy":()=>{evolution.stage.metamo('rapacious',3);},
 		"dat":()=>(0),
@@ -391,7 +333,7 @@ stage.data = {
 	},
 	"fructose":{
 		"id": 'fructose',
-		"evo":()=>{if (EVO.one.metabolism.type == 'photo' && RNA.RNA() > 10 && EVO.one.metabolism.val > clock.metacycle(100) && evolution.creations() >= evolution.stage.data.fructose.cost()){evolution.stage.copy('fructose');}},
+		"evo":()=>{if (EVO.one.metabolism.type == 'photo' && RNA.RNA() > 10 && EVO.one.metabolism.val > clock.metacycle(100) && evolution.creations() >= evolution.stage.data.fructose.cost()){evolution.evo.push('fructose');}},
 		"math":()=>(math('fructose',1.5)),
 		"buy":(x)=>{evolution.stage.metamo(x,3);},
 		"dat":()=>(0),
@@ -410,53 +352,71 @@ stage.data = {
 	//Gate Evolutions
 	"communication":{
 		"id": 'communication',
-		"evo":()=>{if (EVO.two.adhesion && EVO.two.body >= 10 && evolution.creations() >= evolution.stage.data.communication.cost()){evolution.stage.copy('communication');}},
+		"evo":()=>{if (EVO.two.adhesion && EVO.two.body >= 10 && evolution.creations() >= evolution.stage.data.communication.cost()){evolution.evo.push('communication');}},
 		"dat":()=>(true),
-		"cost":()=>(2),
+		"cost":()=>(1),
 	},
 	"organization":{
 		"id": 'organization',
-		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 20 && evolution.creations() >= evolution.stage.data.organization.cost()){evolution.stage.copy('organization');}},
+		"evo":()=>{if (EVO.two.communication && EVO.two.body >= 20 && evolution.creations() >= evolution.stage.data.organization.cost()){evolution.evo.push('organization');}},
 		"dat":()=>(true),
-		"cost":()=>(3),
+		"cost":()=>(2),
 	},
 	"specialization":{
 		"id": 'specialization',
-		"evo":()=>{if (EVO.two.organization && EVO.two.body >= 30 && evolution.creations() >= evolution.stage.data.specialization.cost()){evolution.stage.copy('specialization');}},
+		"evo":()=>{if (EVO.two.organization && EVO.two.body >= 30 && evolution.creations() >= evolution.stage.data.specialization.cost()){evolution.evo.push('specialization');}},
 		"dat":()=>(true),
-		"cost":()=>(4),
+		"cost":()=>(2),
 	},
 	"circular":{
 		"id": 'circular',
-		"evo":()=>{if (EVO.two.specialized == 3 && body.cell.total() >= 30+(EVO.two.specialized*10) && evolution.creations() >= evolution.stage.data.circular.cost()){evolution.stage.copy('circular');}},
+		"evo":()=>{if (EVO.two.specialized == 3 && body.cell.total() >= 30+(EVO.two.specialized*10) && evolution.creations() >= evolution.stage.data.circular.cost()){evolution.evo.push('circular');}},
 		"dat":()=>(true),
-		"cost":()=>(EVO.two.specialized * 5),
+		"cost":()=>(body.stat.evocost()),
 	},
 	"dependency":{
 		"id": 'dependency',
-		"evo":()=>{if (EVO.two.circular && EVO.two.specialized == 5 && body.cell.total() >= 30+(EVO.two.specialized*10) && evolution.creations() >= evolution.stage.data.dependency.cost()){evolution.stage.copy('dependency');}},
+		"evo":()=>{if (EVO.two.circular && EVO.two.specialized == 5 && body.cell.total() >= 30+(EVO.two.specialized*10) && evolution.creations() >= evolution.stage.data.dependency.cost()){evolution.evo.push('dependency');}},
 		"dat":()=>(true),
-		"cost":()=>(EVO.two.specialized * 5),
+		"cost":()=>(body.stat.evocost()),
 	},
 	"radial":{
 		"id": 'radial',
-		"evo":()=>{if (EVO.two.dependency && EVO.two.specialized == 7 && body.cell.total() >= 30+(EVO.two.specialized*10) && evolution.creations() >= evolution.stage.data.radial.cost()){evolution.stage.copy('radial');}},
+		"evo":()=>{if (EVO.two.dependency && EVO.two.specialized == 7 && body.cell.total() >= 30+(EVO.two.specialized*10) && evolution.creations() >= evolution.stage.data.radial.cost()){evolution.evo.push('radial');}},
 		"dat":()=>{
-			delete EVO.two.circular;
-			ID('structure').removeChild(ID('circular'));
+			let a = EVO.echo.struc;
+			a.splice(a.indexOf('circular'),1,'radial');
 			return true;
 		},
-		"cost":()=>(EVO.two.specialized * 5),
+		"cost":()=>(body.stat.evocost()),
 	},
 	"worm":{
 		"id": 'worm',
-		"evo":()=>{if (EVO.two.dependency && EVO.two.quorum && evolution.creations() >= evolution.stage.data.worm.cost()){evolution.stage.copy('worm');}},
+		"evo":()=>{if (false && EVO.two.dependency && EVO.two.quorum && evolution.creations() >= evolution.stage.data.worm.cost()){evolution.evo.push('worm');}},
 		"dat":()=>{
 			EVO.stage.num++;
 			EVO.stage.food = EVO.stage.food/2;
 			EVO.stage.mineral = EVO.stage[fun.food]/2;
 			delete EVO.stage[fun.food];
 			EVO.size.stage = 0;
+			EVO.echo.stage = ['mineral','evolution'];
+			if (EVO.echo.boost.indexOf('size') > -1){EVO.echo.stage.splice(-1,0,'EPS')};
+			EVO.echo.game = ['experience'];
+			EVO.echo.develop.push('cells');
+			EVO.three = {"huntcycle": 0,"specialized": 1,};
+			EVO.combat.hlth = 100;
+			EVO.combat.stmn = 100;
+			for (let id in EVO.two){
+				if (body.stat.match(id)){EVO.three[id] = 0;}//Adds evolved stage two stats to stage three evolutions
+				if (id.match(/^(circular|radial)$/)){
+					EVO.three[id] = true;
+					delete EVO.two[id];
+				}
+				if (id = 'EPS'){
+					EVO.three.EPS = EVO.two.EPS;
+					delete EVO.two.EPS;
+				}
+			}
 			localStorage.setItem('EVO', JSON.stringify(EVO));
 			location.reload(true);
 		},
@@ -468,7 +428,7 @@ stage.data = {
 		"evo":()=>{
 			if (EVO.stage.num > EVO.size.stage && EVO.two.body >= (EVO.size.stage+1)*200 && evolution.creations() >= evolution.stage.data.size.cost()){
 				css('size1',evolution.stage.data.size.cost());
-				evolution.stage.copy('size');
+				evolution.evo.push('size');
 			}
 		},
 		"dat":()=>{

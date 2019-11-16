@@ -8,8 +8,8 @@
 	--text-xexcretion: 'Cost: 'var(--cost-xexcretion)' 'var(--foodtype)' 'var(--body-excretion)' body''\a';
 	--text-xsight: 'Cost: 'var(--cost-xsight)' 'var(--foodtype)' 'var(--body-sight)' body''\a';
 	--text-xefficient: 'Cost: 'var(--cost-xefficient)' Ribosome''\a';
-	--text-xfoodmax: 'Cost: 'var(--cost-foodmax)' Evolution Points''\a';
-	--text-xfoodmin: 'Cost: 'var(--cost-foodmin)' Evolution Points''\a';
+	--text-xfoodmax: 'Cost: 'var(--cost-foodmax)' Evolution Points and 'var(--food-toeat)' food eaten''\a';
+	--text-xfoodmin: 'Cost: 'var(--cost-foodmin)' Evolution Points and 'var(--food-toeat)' food eaten''\a';
 }
 #xbalance::before {
 	content: '\a''Cross Balance';
@@ -274,7 +274,7 @@
 }
 .xfoodmin::before {
 	content:	var(--text-xfoodmin,'')
-				'Increases min potential food +10%.'
+				'Increases min potential food +100 +10%.'
 				'\a''This evolution costs Evolution Points to upgrade.'
 				'\a''This evolution is linked with Food Max';
 }
