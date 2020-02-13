@@ -187,6 +187,12 @@ content:not(#tab1-content) echo- div{
 	white-space: pre-wrap;
 	content: var(--event-two);
 }
+#bounce{
+	will-change: transform;
+	position: absolute;
+	left: -2%;
+	top: -2%;
+}
 #swirl{
 	background-image: var(--img-swirl);
 	background-repeat: no-repeat;
@@ -196,10 +202,19 @@ content:not(#tab1-content) echo- div{
 	z-index: 2;
 	height: 50px;
 	width: 50px;
-	left: var(--swirl-left);
-	top: var(--swirl-top);
-	transform: rotate(var(--swirl-transform));
+	transform: translate3d(var(--swirl-x),var(--swirl-y),0px) rotate(var(--swirl-r));
 	display: none;
+}
+#timestrand{
+	background-image: url(../img/DNA2.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	position: absolute;
+	z-index: 2;
+	height: 50px;
+	width: 50px;
+	transform: translate3d(var(--timestrand-x),var(--timestrand-y),0px) rotate(var(--timestrand-r));
 }
 tab{
 	border-style: hidden;
@@ -208,7 +223,6 @@ tab{
 }
 .taboff{
 	display:none;
-	/*color: var(--bg-color);*/
 }
 nav{
 	position: fixed;
@@ -239,6 +253,7 @@ nav:hover{
 #stagenav:not(.taboff):hover > nav,
 #combatnav:not(.taboff):hover > nav,
 #crossnav:not(.taboff):hover > nav,
+#temporalnav:not(.taboff):hover > nav,
 #exoticnav:not(.taboff):hover > nav,
 #chat:not(.taboff):hover > #gameChat,
 #info:not(.taboff):hover > #gameInfo{
@@ -271,22 +286,26 @@ container label{
 #tab1:checked ~ #tab1-content,
 #tab2:checked ~ #tab2-content,
 #tab3:checked ~ #tab3-content,
-#tab4:checked ~ #tab4-content{
+#tab4:checked ~ #tab4-content,
+#tab5:checked ~ #tab5-content{
 	display:block;
 }
 #tab1-content,
 #tab2-content,
 #tab3-content,
-#tab4-content{
+#tab4-content,
+#tab5-content{
 	margin-top: 10px;
 }
 #bodybox > div:nth-child(2n),
 #crossbox > div:nth-child(2n),
+#temporalbox > div:nth-child(2n),
 #exoticbox > div:nth-child(2n){
 	float: right;
 }
 #bodybox > div:nth-child(2n+1),
 #crossbox > div:nth-child(2n+1),
+#temporalbox > div:nth-child(2n+1),
 #exoticbox > div:nth-child(2n+1){
 	float: left;
 }
@@ -304,6 +323,9 @@ container label{
 }
 #xcross::before{
 	content: 'Cross';
+}
+#temporals::before{
+	content: 'Temporal';
 }
 #exotics::before{
 	content: 'Exotic';
@@ -362,6 +384,21 @@ container label{
 #crossUpgrade{
 	color:green;
 }
+
+
+#temporalnav::before{
+	white-space: pre-wrap;
+	content: '\a''T''\a''e''\a''m''\a''p''\a''o''\a''r''\a''a''\a''l';
+}
+#temporalnav div::before{
+	content: 'Temporal Evolutions';
+	font-weight: bold;
+}
+#temporalUpgrade{
+	color:green;
+}
+
+
 #exoticnav::before{
 	white-space: pre-wrap;
 	content: '\a''E''\a''x''\a''o''\a''t''\a''i''\a''c';
@@ -417,16 +454,6 @@ container label{
 .food::before{
 	content:	'Food is the basic building block to grow and evolve.'
 				'\a''The quantity of food determines the speed and amount of food that can be gathered.';
-}
-#gifts::before{
-	content: var(--timer-gift);
-}
-#gift::before{
-	content: 'Gift';
-}
-.gift::before{
-	content:	'A divine gift of 'var(--gift)' food for emergency use.'
-				'\a''This adds food for your creature to gather and eat.';
 }
 .swirl::before{
 	content:	'Cost: 'var(--cost-swirl)' 'var(--foodtype)
@@ -651,13 +678,29 @@ span#size::after{
 	word-break: break-word;
 }
 /*chat*/
+.chat{
+	float: left;
+	width: 100%;
+}
+.chat.txtL{
+	background: darkblue;
+}
+.chat.txtR{
+	background: darkred;
+}
+.chat [data-name]::before{
+	content: attr(data-time)' 'attr(data-name);
+}
+.chat [data-message]::before{
+	content: attr(data-message);
+}
 #chat-switch::before{
 	content: var(--chat-switch,'\2A01');
 	font-size: large;
 	float: right;
 }
 #chat-text::before{
-	content: var(--chat);
+	content: 'Hello! Welcome to EVO Idle!''\a';
 }
 #chat-text{
 	width: 100%;
@@ -677,14 +720,47 @@ span#size::after{
 	background-color: black;
 	opacity: 0.5;
 	z-index: 8;
+	top: -1px;
+	left: -1px;
 }
 .layoff{
 	height: 0%;
 	width: 0%;
 }
 .layon{
-	height: 100%;
-	width: 100%;
+	height: 101%;
+	width: 101%;
+}
+player{
+	display: none;
+	position: absolute;
+	z-index: 9;
+	height: 200px;
+	width: 400px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	background-color: white;
+	white-space: pre-wrap;
+}
+name{
+	display: none;
+	transform: translate(0px,-30px);
+	color: black;
+	text-align: center;
+}
+name:before{
+	content:	'Welcome my name is Gaia.'
+				'\a''You are named 'var(--player-id)
+				'\a''But that is not a good name'
+				'\a''What might you like to be called?'
+				'\a';
+}
+name input{
+	    transform: translate(-50%,0%);
+}
+name div::before{
+	content: 'Submit';
 }
 #carnate{
 	position: absolute;

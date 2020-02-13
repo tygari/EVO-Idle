@@ -8,24 +8,24 @@ evolution.xcross =()=>{
 let xcross = evolution.xcross;
 xcross.setup =()=>{
 	let z = evolution.xcross.data;
-	let x =(a)=>{
+	let x =a=>{
 		z[a] = {
 			"id": 'x'+a,
 			"evo":()=>{
-				if (evolution.creations() >= evolution.xcross.cost() && body.stat.add(a) > 99){
+				if (evolution.creations() >= evolution.xcross.cost() && core.body.stat.add(a) > 99){
 					evolution.evo.push('x'+a);
 				}
 			},
-			"buy":()=>{body.stat.buy('x'+a);},
+			"buy":()=>{core.body.stat.buy('x'+a);},
 			"dat":()=>(0),
 			"color":()=>{
 				let clr = ID('x'+a);
-				if (EVO.stage[fun.food] >= math('x'+a,2) && body.cell.body(a) > body.stat.add(a)+1){clr.classList.replace('green','red');}
+				if (EVO.stage[fun.food] >= core.math('x'+a,2) && core.body.cell.body(a) > core.body.stat.add(a)+1){clr.classList.replace('green','red');}
 				else {clr.classList.replace('red','green');}
 			},
 			"tip":()=>{
-				css('cost-x'+a,math('x'+a,2));
-				css('body-'+a,body.stat.add(a)+1);
+				css('cost-x'+a,core.math('x'+a,2));
+				css('body-'+a,core.body.stat.add(a)+1);
 			},
 		};
 		z['gen'+a] = {
@@ -49,7 +49,7 @@ xcross.setup =()=>{
 	x =(a,b,c)=>{
 		z[a] = {
 			"id": 'x'+a,
-			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && body.stat.mul(b,1)*body.stat.mul(c,1) >= 5){evolution.evo.push('x'+a);}},
+			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && core.body.stat.mul(b,1)*core.body.stat.mul(c,1) >= 5){evolution.evo.push('x'+a);}},
 			"dat":()=>('on'),
 		};
 	}
@@ -63,7 +63,7 @@ xcross.setup =()=>{
 			"id": 'x'+a,
 			"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.combat !== undefined && EVO.combat[a] > 99){evolution.evo.push('x'+a);}},
 			"buy":()=>{
-				let c = math('x'+a,2);
+				let c = core.math('x'+a,2);
 				if (EVO.combat.exp > c && EVO.combat[b] > EVO.cross[a]+1 && EVO.cross[a] < 100){
 					EVO.combat.exp -= c;
 					EVO.cross[a]++;
@@ -74,7 +74,7 @@ xcross.setup =()=>{
 			"dat":()=>(0),
 			"color":()=>{
 				let clr = ID('x'+a);
-				if (EVO.combat.exp > math('x'+a,2) && EVO.combat[b] > EVO.cross[a]+1 && EVO.cross[a] < 100){clr.classList.replace('green','red');}
+				if (EVO.combat.exp > core.math('x'+a,2) && EVO.combat[b] > EVO.cross[a]+1 && EVO.cross[a] < 100){clr.classList.replace('green','red');}
 				else {clr.classList.replace('red','green');}
 			},
 		};
@@ -126,7 +126,6 @@ xcross.setup =()=>{
 	evolution.xcross.start();
 }
 xcross.start =()=>{
-	echo('crossbox','cross');
 	for (let id in EVO.cross){typeof EVO.cross[id] === 'object'
 		? css(evolution.xcross.data[id].id,EVO.cross[id].val)
 		: css(evolution.xcross.data[id].id,EVO.cross[id]);}
@@ -189,7 +188,7 @@ xcross.data = {
 	"detox": {
 		"id": 'xdetoxification',
 		"evo":()=>{
-			if (EVO.stage.num > 1 && evolution.creations() >= evolution.xcross.cost() && enviro.toxcalc()[0]/10 > 99){
+			if (EVO.stage.num > 1 && evolution.creations() >= evolution.xcross.cost() && core.enviro.toxcalc()[0]/10 > 99){
 				evolution.evo.push('xdetox');
 			}
 		},

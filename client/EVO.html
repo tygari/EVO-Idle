@@ -9,22 +9,31 @@
 			name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<script id="socket" type="text/javascript" src="/socket.io/socket.io.js" sync></script>
 		<script id="echo" type="text/javascript" src="https://cdn.jsdelivr.net/gh/tygari/echo-js/echo.js" sync></script>
+		<script id="jsoncrush" type="text/javascript" src="https://cdn.jsdelivr.net/gh/KilledByAPixel/JSONCrush/JSONCrush.min.js" async></script>
 		<script id="evoload" type="text/javascript" src="js/load.js" async></script>
 	</head>
 	<body oncontextmenu="return false">
 		<figure id="load"></figure>
 		<overlay id="lay" class="layoff"></overlay>
+		<figure id="player">
+			<player>
+				<name>
+					<input id="pname" name="pname" type="text" oninput="core.name(this.id)">
+					<div onclick="core.name.submit('pname')"></div>
+				</name>
+			</player>
+		</figure>
 		<figure id="carnate" class="hidden">
 			<div id="box">
 				<p></p>
-				<carnate id="nocarnate" onclick="rec.nocarnate()"></carnate>
-				<carnate id="recarnate" onclick="rec.recarnate()"></carnate>
+				<carnate id="nocarnate" onclick="core.rec.nocarnate()"></carnate>
+				<carnate id="recarnate" onclick="core.rec.recarnate()"></carnate>
 			</div>
 		</figure>
 		<figure id="mouse">
 			<div id="tip" class="empty"></div>
 		</figure>
-		<figure id="swirl" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="move()"></figure>
+		<echo- id="bounce" echo="swirl" code="<figure data-run='' onmouseenter='core.tip(this.id)' onmouseleave='core.tap()' onclick='core.bounce.route(this.id)'></figure>"></echo->
 		<tab class="stage txtC">
 			<div id="chat" class="ltr tabcht red">
 				<input id="chat-box" type="checkbox"></input>
@@ -41,15 +50,16 @@
 			</div>
 		</tab>
 		<tab class="game txtC">
-			<echo- echo="stagenav combatnav crossnav exoticnav" code="<div class='rtl taboff'><nav><br><div></div><echo-></echo-></nav></div>"></echo->
+			<echo- echo="stagenav combatnav crossnav temporalnav exoticnav" code="<div class='rtl taboff'><nav><br><div></div><echo-></echo-></nav></div>"></echo->
 		</tab>
 		<box class="box stage txtL orange">
 			<div id="environment"></div>
-			<p id="food" class="none" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)"></p>
+			<p id="food" class="none" onmouseenter="core.tip(this.id)" onmouseleave="core.tap()"></p>
 			<echo- id="struc"></echo->
 			<p id="ii" class="qq oo pp"></p>
 			<div>
-				<span id="gifts"><div id="gift" onmouseenter="tip(this.id)" onmouseleave="tap(this.id)" onclick="gift()"></div></span>
+				<!--<span id="gifts"><div id="gift" onmouseenter="core.tip(this.id)" onmouseleave="core.tap()" onclick="core.gift()"></div></span>-->
+				<div id="bless" onmouseenter="core.tip(this.id)" onmouseleave="core.tap()" onclick="core.bless()"></div>
 			</div>
 		</box>
 		<box class="box game txtR red">
@@ -76,7 +86,9 @@
 			<input id="tab3" type="radio" name="tabs">
 			<label id="xcross" for="tab3"></label>
 			<input id="tab4" type="radio" name="tabs">
-			<label id="exotics" for="tab4"></label>
+			<label id="temporals" for="tab4"></label>
+			<input id="tab5" type="radio" name="tabs">
+			<label id="exotics" for="tab5"></label>
 			<content id="tab1-content" class="tab">
 				<echo- id="stagebox" class="stage txtC"></echo->
 				<echo- id="gamebox" class="game txtC"></echo->
@@ -88,6 +100,9 @@
 				<echo- id="crossbox" class="txtC"></echo->
 			</content>
 			<content id="tab4-content" class="tab">
+				<echo- id="temporalbox" class="txtC"></echo->
+			</content>
+			<content id="tab5-content" class="tab">
 				<echo- id="exoticbox" class="txtC"></echo->
 			</content>
 		</container>

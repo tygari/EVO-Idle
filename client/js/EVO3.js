@@ -1,139 +1,37 @@
-const fun = {
-	"wrd": 'three',
-	"food": 'mineral',
-	"virus": [1 ,0, 0, 0],
-	"failtimer": 0,
-	"movement": 'peristalsis',
-	"move": 0,
-	"hunt": 0,
-};
-
-start.HTMLSetup =()=>{
+var three = {};
+three.HTMLSetup =()=>{
 	if (EVO.three.diet){
-		if (EVO.three.diet == 'carn'){fun.food = 'meat';}
-		if (EVO.three.diet == 'herb'){fun.food = 'plant';}
+		if (EVO.three.diet == 'carn'){EVO.stage.ftype = 'meat';}
+		if (EVO.three.diet == 'herb'){EVO.stage.ftype = 'plant';}
 	}
-	ID(fun.food).removeAttribute("onclick");
+	ID(EVO.stage.ftype).removeAttribute("onclick");
 	ID('natural').style.visibility = 'initial';
 	ID('bodies').style.visibility = 'initial';
-	if (EVO.one.ribosome){
-		ID('protein').removeAttribute("onclick");
-		ID('exotics').style.visibility = 'initial';
-	}
 	ID('hlth').style.display = 'none';
 	ID('stmn').style.display = 'none';
 	ID('rtrt').style.display = 'initial';
-	css('foodtype',fun.food);
+	css('foodtype',EVO.stage.ftype);
 	css('body',EVO.two.body);
-	body.stat.data();
-	body.eps();
+	core.body.stat.data();
+	core.body.eps();
 	if(EVO.combat.talent > 0){
 		css('experience',Math.floor(EVO.combat.exp));
 		ID('experience').classList.replace('red','purple');
 		ID('experience').removeAttribute("onclick");
 	}
-	evolution.xcross.setup();
-	evolution.stage.setup();
-	evolution();
 }
-start.InitializeProgram =()=>{
+three.InitializeProgram =()=>{
 	if (ID("basic")){ID("basic").id = EVO.one.metabolism.type;}
-	foods.update();
-	updateFood();
-	enviro.css();
-	css('protein',EVO.protein.whole);
+	core.enviro.css();
 	css('EPS',EVO.three.EPS);
 	css('rtrt',EVO.combat.rtrt);
-	enviro.bgcolor();
-	if (EVO.two.generation){setTimeout(body.cell.cell,body.cell.timer());}
+	core.enviro.bgcolor();
 	if (EVO.three.diet){
 		hunt.rehunt();
 		hunt.pred.timer = setTimeout(hunt.pred,hunt.pred.time());
 		hunt.graze.timer = setTimeout(hunt.graze,hunt.graze.time());
 	}
-	setTimeout(enviro.loop,clock.minute);
-	setTimeout(growth.autoClick,growth.autotime());
-	setTimeout(heal, heal.timer());
-	if (EVO.one.metabolism.type == 'photo'){setTimeout(growth.photosynth,growth.phototime());}
 	css('protein',EVO.protein.whole);
-	setTimeout(protein,clock.minute);
-	setTimeout(ribosome,clock.hour);
-	css('gift',EVO.stage.num*200);
-	//setTimeout(event, 300000);
-	ID('load').style.display = 'none';
-	swirly.start();
-}
-start.check = false;
-
-const speedup =(x)=>{
-	let t0 = performance.now();
-	let speedUp = new Array(10).fill(0);
-	let y,z;
-	while (x >= speedUp[0]){
-		z = 1;
-		y = speedUp[z] + growth.autotime();
-		if (speedUp[0] >= y){
-			growth.autoClick();
-			speedUp[z] = y;
-		}
-		z++;
-		y = speedUp[z] + growth.phototime();
-		if (EVO.one.metabolism.type == 'photo' && speedUp[0] >= y){
-			growth.photosynth();
-			speedUp[z] = y;
-		}
-		if (EVO.three.diet){
-			z++;
-			y = speedUp[z] + hunt.pred.time();
-			if (speedUp[0] >= y){
-				hunt.pred();
-				speedUp[z] = y;
-			}
-			z++;
-			y = speedUp[z] + hunt.graze.time();
-			if (speedUp[0] >= y){
-				hunt.graze();
-				speedUp[z] = y;
-			}
-		}
-		z++;
-		y = speedUp[z] + enviro.time();
-		if (speedUp[0] >= y){
-			enviro.loop();
-			speedUp[z] = y;
-		}
-		if (EVO.one.ribosome){
-			z++;
-			y = speedUp[z] + RNA.time();
-			if (speedUp[0] >= y){
-				RNA();
-				protein();
-				speedUp[z] = y;
-			}
-			z++;
-			y = speedUp[z] + ribosome.time();
-			if (speedUp[0] >= y){
-				ribosome();
-				speedUp[z] = y;
-			}
-		}
-		z++;
-		y = speedUp[z] + body.cell.timer();
-		if (EVO.two.generation && speedUp[0] >= y){
-			body.cell.cell();
-			speedUp[z] = y;
-		}
-		z++;
-		y = speedUp[z] + heal.timer();
-		if (speedUp[0] >= y){
-			heal();
-			speedUp[z] = y;
-		}
-		//Increment
-		speedUp[0] += 100;
-	}
-	let t1 = performance.now();
-	console.log("Speedup call took " + (t1 - t0) + " milliseconds for " + x + " milliseconds which is " + clock(x) + ".");
 }
 
 const hunt =()=>{
@@ -141,7 +39,7 @@ const hunt =()=>{
 		if (EVO.stage.food < 1 && EVO.three.diet && EVO.combat.hp >= Math.floor(EVO.combat.hlth*EVO.combat.mhp/100) && EVO.combat.sp >= Math.floor(EVO.combat.spcl*EVO.combat.msp/100)){
 			ID('event').style.display = 'initial';
 			hunt[EVO.three.diet](move.cost(),hunt.random(),(EVO.three.boost == 'camo' ? EVO.combat.offense : 0));
-			EVO.three.huntcycle += body.stat.mul('nerve',1);
+			EVO.three.huntcycle += core.body.stat.mul('nerve',1);
 		}
 		if (cbt.check){
 			hunt.rehunt();
@@ -172,8 +70,8 @@ hunt.herb =(res,fight,camo)=>{
 	if (EVO.area.field > 0){EVO.area.field -= 1;}
 }
 hunt.cbt =(res,opp)=>{
-	EVO.stage[fun.food] -= res;
-	updateFood();
+	EVO.stage[EVO.stage.ftype] -= res;
+	three.updateFood();
 	cbt.cbt(res,opp);
 }
 hunt.busy =()=>{(cbt.check ? hunt.rehunt() : setTimeout(hunt.busy,clock.second));}
@@ -198,7 +96,7 @@ hunt.pred =(x)=>{
 		if (fight < 61 && EVO.area.grazer > 0){EVO.area.grazer -= 1;}//60% chance a Predator eliminates a Grazer
 		if ((EVO.area.predator+1)*10 < EVO.area.grazer){EVO.area.predator += 1;}//Adds a Predator if a lot of Grazers and few Predators
 	}
-	if (start.check){hunt.pred.timer = setTimeout(hunt.pred,hunt.pred.time());}
+	if (core.start.check){hunt.pred.timer = setTimeout(hunt.pred,hunt.pred.time());}
 }
 hunt.pred.time =()=>(clock.minute*10+hunt.terri()-EVO.area.predator*clock.minute);
 hunt.graze =(x)=>{
@@ -210,38 +108,38 @@ hunt.graze =(x)=>{
 		if (EVO.area.field > 0){EVO.area.field -= 1;}//Grazers eliminate a Field
 		if ((EVO.area.grazer+1)*10 < EVO.area.field){EVO.area.grazer += 1;}//Adds a Field if a lot of Fields and few Gazers
 	}
-	if (start.check){hunt.graze.timer = setTimeout(hunt.graze,hunt.graze.time());}
+	if (core.start.check){hunt.graze.timer = setTimeout(hunt.graze,hunt.graze.time());}
 }
 hunt.graze.time =()=>(clock.minute*10+hunt.terri()-EVO.area.grazer*clock.second*6);
 hunt.terri =()=>((EVO.three.boost == 'terri' ? EVO.combat.defense*clock.second*6 : 0));
 hunt.random =()=>(Math.floor(Math.random()*100+1));
 
 
-const updateFood =()=>{
-	foods.update();
-	css(fun.food,Math.floor(EVO.stage[fun.food]));
+three.updateFood =()=>{
+	core.foods.update();
+	css(EVO.stage.ftype,Math.floor(EVO.stage[EVO.stage.ftype]));
 	let clr = ID('evolution').classList;
-	(EVO.stage[fun.food] >= math('evolution',EVO.evo.cost) ? clr.replace('green','red') : clr.replace('red','green'));
-	if (EVO.three.EPS !== undefined){evolution.stage.data.EPS.color();}
-	body.stat.update();
+	(EVO.stage[EVO.stage.ftype] >= core.math('evolution',evolution.cost()) ? clr.replace('green','red') : clr.replace('red','green'));
+	if (EVO.three.EPS !== undefined){evolution.three.data.EPS.color();}
+	core.body.stat.update();
 	for (let id in EVO.cross){if (evolution.xcross.data[id].color){evolution.xcross.data[id].color();}}
 }
 
-let stage = evolution.stage;
+let stage = evolution.three;
 stage.setup =()=>{
-	evolution.stage.start();
+	evolution.three.start();
 }
 stage.start =()=>{
 	let x = true;
 	for (let id in EVO.three){
-		if (x && body.stat.match(id)){
+		if (x && core.body.stat.match(id)){
 			cbtstat();
 			x = false;
 		}
 		else if (EVO.size.game > 0){css('size',EVO.size.game);}
-		if (evolution.stage.data[id]){
-			if (typeof EVO.three[id] === 'object'){css(evolution.stage.data[id].id,EVO.three[id].val);}
-			else {css(evolution.stage.data[id].id,EVO.three[id]);}
+		if (evolution.three.data[id]){
+			if (typeof EVO.three[id] === 'object'){css(evolution.three.data[id].id,EVO.three[id].val);}
+			else {css(evolution.three.data[id].id,EVO.three[id]);}
 		}
 	}
 }
@@ -253,7 +151,7 @@ stage.evo =(x,y)=>{
 			if (EVO.stage.mineral){
 				EVO.stage[y] = EVO.stage.mineral;
 				delete EVO.stage.mineral;
-				fun.food = y;
+				EVO.stage.ftype = y;
 				let a = EVO.echo.stage;
 				a.splice(a.indexOf('mineral'),1,y);
 				css('foodtype',y.charAt(0).toUpperCase() + y.slice(1));
@@ -271,8 +169,8 @@ stage.evo =(x,y)=>{
 	if (x.match(/^(carn|herb)$/)){x = 'diet';}
 	if (x.match(/^(endo|exo)$/)){x = 'skeleton';}
 	if (x.match(/^(camo|terri|roam|hyper)$/)){x = 'boost';}
-	EVO.evo.evolved += evolution.stage.data[x].cost();
-	if (!x.match(/^(size|fish)$/) && evolution.stage.data[x] && evolution.stage.data[x].dat){EVO.three[x] = evolution.stage.data[x].dat(z);}
+	EVO.evo.evolved += evolution.three.data[x].cost();
+	if (!x.match(/^(size|fish)$/) && evolution.three.data[x] && evolution.three.data[x].dat){EVO.three[x] = evolution.three.data[x].dat(z);}
 	if (x.match(/^(sex|peristalsis|circular|radial|bilateral)$/)){
 		EVO.echo.struc.push(x);
 		echo('struc','struc');
@@ -291,7 +189,7 @@ stage.evo =(x,y)=>{
 		EVO.echo.develop.push(x);
 		echo('develop','develop');
 	}
-	else if (body.stat.match(x)){
+	else if (core.body.stat.match(x)){
 		EVO.three.specialized++;
 		EVO.echo.body.push(x);
 		echo('bodybox','body');
@@ -303,12 +201,12 @@ stage.evo =(x,y)=>{
 			EVO.echo.boost.push(x);
 			echo('boost','boost');
 		}
-		evolution.stage.data.size.dat();
+		evolution.three.data.size.dat();
 		css('size',EVO.size.game);
 	}
-	else if (x == 'fish'){evolution.stage.data[x].dat();}
-	if (EVO.three[x] !== undefined && evolution.stage.data[x]){
-		(typeof EVO.three[x] === 'object' ? css(evolution.stage.data[x].id,EVO.three[x].val) : css(evolution.stage.data[x].id,EVO.three[x]));
+	else if (x == 'fish'){evolution.three.data[x].dat();}
+	if (EVO.three[x] !== undefined && evolution.three.data[x]){
+		(typeof EVO.three[x] === 'object' ? css(evolution.three.data[x].id,EVO.three[x].val) : css(evolution.three.data[x].id,EVO.three[x]));
 	}
 	evolution();
 }
@@ -317,7 +215,7 @@ stage.statevo =(x)=>{
 	if (!EVO.three[x]){
 		let body = 30+(EVO.three.specialized*10);
 		let creation = evolution.creations();
-		let special = evolution.stage.data[x].cost();
+		let special = evolution.three.data[x].cost();
 		let specialize = EVO.two.specialized + EVO.three.specialized;
 		if (EVO.three.radial && (specialize == 8 || specialize == 9) && creation >= special && EVO.two.body >= body){z = true;}
 		else if ((specialize == 6 || specialize == 7) && creation >= special && EVO.two.body >= body){z = true;}
@@ -327,7 +225,7 @@ stage.statevo =(x)=>{
 stage.data = {
 	"sex":{
 		"id": 'sex',
-		"evo":()=>{if (EVO.two.sex && evolution.creations() >= evolution.stage.data.sex.cost()){evolution.evo.push('sex');}},
+		"evo":()=>{if (false && EVO.two.sex && evolution.creations() >= evolution.three.data.sex.cost()){evolution.evo.push('sex');}},
 		"dat":()=>{
 			EVO.evo.cost = (EVO.evo.cost-0.05).toFixed(2);
 			return true;
@@ -336,13 +234,13 @@ stage.data = {
 	},
 	"peristalsis":{
 		"id": 'peristalsis',
-		"evo":()=>{if (EVO.two.specialized + EVO.three.specialized > 7 && evolution.creations() >= evolution.stage.data.peristalsis.cost()){evolution.evo.push('peristalsis');}},
+		"evo":()=>{if (EVO.two.specialized + EVO.three.specialized > 7 && evolution.creations() >= evolution.three.data.peristalsis.cost()){evolution.evo.push('peristalsis');}},
 		"dat":()=>({"val": 0, "learn": 0}),
 		"cost":()=>(3),
 	},
 	"diet":{
 		"id": 'diet',
-		"evo":()=>{if (EVO.three.bilateral && evolution.creations() >= evolution.stage.data.diet.cost()){
+		"evo":()=>{if (EVO.three.bilateral && evolution.creations() >= evolution.three.data.diet.cost()){
 				evolution.evo.push('carn');
 				evolution.evo.push('herb');
 			}
@@ -357,7 +255,7 @@ stage.data = {
 	},
 	"skeleton":{
 		"id": 'skeleton',
-		"evo":()=>{if (EVO.three.diet && evolution.creations() >= evolution.stage.data.skeleton.cost()){
+		"evo":()=>{if (EVO.three.diet && evolution.creations() >= evolution.three.data.skeleton.cost()){
 				evolution.evo.push('endo');
 				evolution.evo.push('exo');
 			}
@@ -367,14 +265,17 @@ stage.data = {
 	},
 	"boost":{
 		"id": 'boost',
-		"evo":()=>{if (EVO.three.diet && evolution.creations() >= evolution.stage.data.boost.cost()){
+		"evo":()=>{if (EVO.three.diet && evolution.creations() >= evolution.three.data.boost.cost()){
 				evolution.evo.push('camo');
 				evolution.evo.push('terri');
 				evolution.evo.push('roam');
 				evolution.evo.push('hyper');
 			}
 		},
-		"dat":(x)=>(x),
+		"dat":(x)=>{
+			if (x == 'roam'){EVO.timer.roam = clock.hour-EVO.combat.speed*10000;}
+			return x
+		},
 		"cost":()=>(20),
 	},
 	//Gate Evolutions
@@ -384,7 +285,7 @@ stage.data = {
 	},
 	"radial":{
 		"id": 'radial',
-		"evo":()=>{if (EVO.three.circular && EVO.two.specialized+EVO.three.specialized == 8 && body.cell.total() >= 30+(EVO.three.specialized*10) && evolution.creations() >= evolution.stage.data.radial.cost()){evolution.evo.push('radial');}},
+		"evo":()=>{if (EVO.three.circular && EVO.two.specialized+EVO.three.specialized == 8 && core.body.cell.total() >= 30+(EVO.three.specialized*10) && evolution.creations() >= evolution.three.data.radial.cost()){evolution.evo.push('radial');}},
 		"dat":()=>{
 			delete EVO.three.circular;
 			ID('structure').removeChild(ID('circular'));
@@ -394,7 +295,7 @@ stage.data = {
 	},
 	"bilateral":{
 		"id": 'bilateral',
-		"evo":()=>{if (EVO.three.radial && EVO.two.specialized+EVO.three.specialized == 10 && body.cell.total() >= 30+(EVO.three.specialized*10) && evolution.creations() >= evolution.stage.data.bilateral.cost()){evolution.evo.push('bilateral');}},
+		"evo":()=>{if (EVO.three.radial && EVO.two.specialized+EVO.three.specialized == 10 && core.body.cell.total() >= 30+(EVO.three.specialized*10) && evolution.creations() >= evolution.three.data.bilateral.cost()){evolution.evo.push('bilateral');}},
 		"dat":()=>{
 			delete EVO.three.radial;
 			ID('structure').removeChild(ID('radial'));
@@ -412,8 +313,8 @@ stage.data = {
 	"size":{
 		"id": 'size',
 		"evo":()=>{
-			if (EVO.stage.num > EVO.size.stage && false && evolution.creations() >= evolution.stage.data.size.cost()){
-				css('size1',evolution.stage.data.size.cost());
+			if (EVO.stage.num > EVO.size.stage && false && evolution.creations() >= evolution.three.data.size.cost()){
+				css('size1',evolution.three.data.size.cost());
 				evolution.evo.push('size');
 			}
 		},

@@ -6,14 +6,14 @@ const event =()=>{
 		swch = 'on';
 		css('event-one','You met a friendly cell. \\a Would you like to share genes?');
 		ID('eventtwo').innerHTML = '<p title="Horizontal Gene Transfer is the two single cell creatures meeting together and sharing genes." onclick="horizontal()"><b class="purple">HGT</b></p>';
-		fun.failtimer = setTimeout(eventEnd, (Math.floor((Math.random()*clock.minute*4)+1)));
+		EVO.event.failtimer = setTimeout(eventEnd, (Math.floor((Math.random()*clock.minute*4)+1)));
 	}
 	else if (EVO.stage.num == 1 && 10 < random && 20 >= random && EVO.RNASwitch == 'on'){
 		swch = 'on';
 		EVO.enviro.virus = [1 ,0, 0, 0];
 		css('event-one','You met a virus. \\a It has infected you.');
 		ID('eventtwo').innerHTML = '<p title="Click to fight the virus." onclick="antivirusM()"><b class="purple">Fight Virus</b></p>';
-		EVO.enviro.virus[1] = Math.floor(Math.random()*RNA.RNA()*100);
+		EVO.enviro.virus[1] = Math.floor(Math.random()*core.RNA.RNA()*100);
 		antivirusA();
 	}
 	else if (EVO.one.flagellum && 20 < random && 30 >= random){
@@ -22,11 +22,11 @@ const event =()=>{
 		EVO.stage.food += Math.floor((Math.random()*5000*(1+(EVO.one.flagellum/100)))+1);
 		setTimeout(eventEnd, clock.minute);
 	}
-	else if (EVO.stage.num > 1 && 90 < random && 100 >= random && EVO.specialized > 1 && body.cell.total()+EVO.two.body > 10 && EVO.stage[fun.food] >= 2000-EVO.two.motility-(EVO.two.muscle*10) && cbt.check){
+	else if (EVO.stage.num > 1 && 90 < random && 100 >= random && EVO.specialized > 1 && core.body.cell.total()+EVO.two.body > 10 && EVO.stage[fun.food] >= 2000-EVO.two.motility-(EVO.two.muscle*10) && cbt.check){
 		swch = 'on';
 		let res = move.cost();
 		EVO.stage[fun.food] -= res;
-		updateFood();
+		window[EVO.stage.wrd].updateFood();
 		css('event-one','An aggressive colony of cells has entered your area. \\a They are attacking you.');
 		cbt.cbt(res);
 		setTimeout(busy,clock.second);
@@ -38,8 +38,8 @@ const event =()=>{
 	}
 }
 const horizontal =()=>{
-	clearTimeout(fun.failtimer);
-	if ((15-(EVO.one.membraneScore*5))+(RNA.RNA()/100) > Math.floor((Math.random()*100)+1)){EVO.evo.bonus++;}
+	clearTimeout(EVO.event.failtimer);
+	if ((15-(EVO.one.membraneScore*5))+(core.RNA.RNA()/100) > Math.floor((Math.random()*100)+1)){EVO.evo.bonus++;}
 	eventEnd();
 }	
 const antivirusM =()=>{

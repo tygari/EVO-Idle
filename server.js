@@ -1,24 +1,24 @@
-const express = require('express');
+const express = require(`express`);
 const app = express();
-const path = require('path');
-app.get('/',(req,res)=>{
-	res.sendFile(path.join(__dirname,'client','index.html'));
+const path = require(`path`);
+app.get(`/`,(req,res)=>{
+	res.sendFile(path.join(__dirname,`client`,`index.html`));
 });
-app.use('/client/',express.static(path.join(__dirname,'client')));
-const serv = require('http').createServer(app);
-const io = require('socket.io')(serv,{
+app.use(`/client/`,express.static(path.join(__dirname,`client`)));
+const serv = require(`http`).createServer(app);
+const io = require(`socket.io`)(serv,{
 	pingInterval: 10000,
 	pingTimeout: 20000,
 	cookie: false,
 });
 serv.listen(process.env.PORT || 5000);
 
-const AWS = require('aws-sdk');
+const AWS = require(`aws-sdk`);
 let awsConfig = {
-	'region':'us-east-2',
-	'endpoint':'https://dynamodb.us-east-2.amazonaws.com',
-	'accessKeyId':'',
-	'secretAccessKey':'',
+	'region':`us-east-2`,
+	'endpoint':`https://dynamodb.us-east-2.amazonaws.com`,
+	'accessKeyId':``,
+	'secretAccessKey':``,
 }
 AWS.config.update(awsConfig);
 
@@ -26,44 +26,44 @@ let dyna = new AWS.DynamoDB.DocumentClient();
 const DB = {
 	'get':(key)=>{
 		let info = {
-			'TableName': 'TailedBeastGamesDB',
+			'TableName': `TailedBeastGamesDB`,
 			'Key': {'PlayerAccount' : key},
 		};
 		dyna.get(info,(err,data)=>{
-			if(err){console.log('Dyna Get Fail: '+JSON.stringify(err,null,2));}
-			else {console.log('Dyna Get Success: '+JSON.stringify(data,null,2));}
+			if(err){console.log(`Dyna Get Fail: ${JSON.stringify(err,null,2)}`);}
+			else {console.log(`Dyna Get Success: ${JSON.stringify(data,null,2)}`);}
 		});
 	},
 	'put':(key,loc,val)=>{
 		let info = {
-			'TableName': 'TailedBeastGamesDB',
+			'TableName': `TailedBeastGamesDB`,
 			'Item': {'PlayerAccount' : key, loc:val},
 		}
 		dyna.put(info,(err,data)=>{
-			if(err){console.log('Dyna Put Fail: '+JSON.stringify(err,null,2));}
-			else {console.log('Dyna Put Success');}
+			if(err){console.log(`Dyna Put Fail: ${JSON.stringify(err,null,2)}`);}
+			else {console.log(`Dyna Put Success`);}
 		});
 	},
 	'mod':(key,exp,val)=>{
 		let info = {
-			'TableName': 'TailedBeastGamesDB',
+			'TableName': `TailedBeastGamesDB`,
 			'Key': {'PlayerAccount' : key},
-			'UpdateExpression': 'set '+exp+' = :x',
+			'UpdateExpression': `set ${exp} = :x`,
 			'ExpressionAttributeValues':{':x': val},
 		}
 		dyna.update(info,(err,data)=>{
-			if(err){console.log('Dyna Mod Fail: '+JSON.stringify(err,null,2));}
-			else {console.log('Dyna Mod Success');}
+			if(err){console.log(`Dyna Mod Fail: ${JSON.stringify(err,null,2)}`);}
+			else {console.log(`Dyna Mod Success`);}
 		});
 	},
 	'del':(key)=>{
 		let info = {
-			'TableName': 'TailedBeastGamesDB',
+			'TableName': `TailedBeastGamesDB`,
 			'Key': {'PlayerAccount' : key},
 		};
 		dyna.delete(info,(err,data)=>{
-			if(err){console.log('Dyna Del Fail: '+JSON.stringify(err,null,2));}
-			else {console.log('Dyna Del Success');}
+			if(err){console.log(`Dyna Del Fail: ${JSON.stringify(err,null,2)}`);}
+			else {console.log(`Dyna Del Success`);}
 		});
 	},
 };
@@ -71,7 +71,7 @@ const DB = {
 
 
 //console.log(process.argv);
-console.log('Server started.');
+console.log(`Server started.`);
 
 const SOCKET_LIST = {};
 const CHAT = [];
@@ -80,51 +80,54 @@ var donation = {
 	'venti5': 25,
 }
 
-io.on('connection',(socket)=>{
-	let t = new Date();
-	console.log('socket connection: timestamp Y'+t.getFullYear()+':M'+t.getMonth()+':D'+t.getDate()
-				+':H'+t.getHours()+':M'+t.getMinutes()+':S'+t.getSeconds());
+io.on(`connection`,(socket)=>{
+	let t = new Date(),player;
+	console.log(`socket connection: timestamp Y${t.getFullYear()}:M${t.getMonth()}:D${t.getDate()}:H${t.getHours()}:M${t.getMinutes()}:S${t.getSeconds()}`);
 	
 	socket.player = {};
 	socket.id = Math.random();
-	socket.player.name = 'Guest'+(''+socket.id).slice(2,7);
+	socket.player.id = socket.id;
+	socket.player.name = `Guest${(``+socket.id).slice(2,7)}`;
 	SOCKET_LIST[socket.id] = socket;
-	socket.on('disconnect',()=>{
+	socket.on(`disconnect`,()=>{
 		delete SOCKET_LIST[socket.id];
 	});
-	socket.on('kong',(kong)=>{
-		if (typeof kong === 'string'){
-			if (typeof JSON.parse(kong) === 'object'){
-				let player = JSON.parse(kong);
-				if (typeof player.id === 'number' && player.id !== 0){socket.player.id = player.id;}
-				if (typeof player.name === 'string' && player.name !== 'Guest'){socket.player.name = player.name;}
+	socket.on(`playerInfo`,(player)=>{
+		if(!!player.id && !!player.name && typeof player.id == `number` && typeof player.name == `string`){
+			for (let i = 0; i < CHAT.length; i++){
+				if (CHAT[i].id === socket.player.id || CHAT[i].name === socket.player.name){
+					CHAT[i].id = player.id;
+					CHAT[i].name = player.name;
+				}
 			}
+			socket.player.id = player.id;
+			socket.player.name = player.name;
 		}
 	});
-	socket.emit('startChat',CHAT);
+	socket.emit(`startChat`,CHAT);
 	let don = 0;
-	for (let d in donation){
-		don += donation[d];
+	for (let i in donation){
+		don += donation[i];
 	}
-	socket.emit('donation',don);
-	socket.on('sendMsgToServer',(data)=>{
-		if (data == 'SYSTEMS ADMIN COMMAND CHAT RESET'){//FIX
-			CHAT.splice(0,CHAT.length);
-			for (let i in SOCKET_LIST){
-				SOCKET_LIST[i].emit('startChat',CHAT);
+	socket.emit(`donation`,don);
+	socket.on(`sendMsgToServer`,(data)=>{
+		if (typeof data == `object` && data != null && typeof data.game == `string` && typeof data.id == `number`
+			&& typeof data.name == `string` && typeof data.message == `string`){
+			if (data.message == `SYSTEMS ADMIN COMMAND CHAT RESET`){//FIX
+				CHAT.splice(0,CHAT.length);
+				for (let i in SOCKET_LIST){
+					SOCKET_LIST[i].emit(`startChat`,CHAT);
+				}
 			}
-		}
-		else {
-			let t = new Date();
-			data = '['+t.getHours()+':'+t.getMinutes()+'] '+socket.player.name+': '+data;
-			CHAT.push(data);
-			if (CHAT.length > 50){CHAT.shift();}
-			for (let i in SOCKET_LIST){
-				SOCKET_LIST[i].emit('addToChat',data);
+			else {
+				data.time = new Date();
+				CHAT.push(data);
+				if (CHAT.length > 50){CHAT.shift();}
+				for (let i in SOCKET_LIST){
+					SOCKET_LIST[i].emit(`addToChat`,data);
+				}
 			}
 		}
 	});
-	
-	//socket.on('buy',()=>{});
 });
 

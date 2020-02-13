@@ -1,5 +1,5 @@
 :root{
-	--text-mitosis: 'Cost: 'var(--cost-mitosis)' 'var(--foodtype)'\a';
+	--text-mitosis: 'Cost: 'var(--cost-mitosis)' 'var(--foodtype)' & RNA > 'var(--mitosis)'\a';
 	--text-cytoplasm: 'Cost: 'var(--cost-cytoplasm)' 'var(--foodtype)'\a';
 	--text-cilia: 'Cost: 'var(--cost-cilia)' 'var(--foodtype)'\a';
 	--text-flagellum: 'Cost: 'var(--cost-flagellum)' 'var(--foodtype)'\a';
@@ -91,7 +91,7 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	content: '\a''Mitosis';
 }
 #mitosis c::before {
-	content: '  (~'var(--mitosis)'%)';
+	content: '  (~'var(--mitosis-chance)'%)';
 }
 .mitosis::before {
 	content:	var(--text-mitosis,'')

@@ -1,5 +1,6 @@
 :root{
 	--donation: '+25%';
+	--save0: 'Click to Save to Clipboard';
 }
 title::before{
 	content: 'EVO Idle';
@@ -77,9 +78,6 @@ title::before{
 .wipe::before{
 	content: 'All Saves Wiped';
 }
-.game{
-	position: relative;
-}
 #bonus::before{
 	white-space: pre-wrap;
 	content:	'Donation Bonuses'
@@ -113,7 +111,7 @@ copyright{
     bottom: 0%;
 }
 copyright::after{
-	content: '\00A9  Tailed Beast Games LLC 2018';
+	content: '\00A9  Tailed Beast Games LLC 2020';
 }
 .title::before{
 	content: 'EVO Idle';
@@ -132,7 +130,7 @@ container{
 }
 label{
 	float: left;
-	width: 18%;
+	width: 14.9%;
 	text-align: center;
 }
 container label{
@@ -149,6 +147,9 @@ container label{
 }
 #links::before{
 	content: 'Links';
+}
+#save::before{
+	content: 'Save';
 }
 .link{
 	color: silver;
@@ -219,4 +220,21 @@ container label{
 }
 .github::before{
 	content: 'GitHub';
+}
+.save{
+	margin-top: 55px;
+	word-break: break-all;
+}
+.save0{
+	text-align: center;
+}
+.save0::before{
+	content: var(--save0)'\a''';
+}
+.save1::before{
+	content: var(--save1);
+}
+.save2::before{
+	content: var(--save2);
+	display: none;
 }

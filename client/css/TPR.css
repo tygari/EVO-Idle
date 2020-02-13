@@ -1,0 +1,174 @@
+:root{
+	--text-tredux: 'Cost: 'var(--cost-temp-tredux)' Motes & Purchased Evolution Points > 'var(--cost-tredux-evo)'\a';
+	--text-tauto: 'Cost: 'var(--cost-temp-tauto)' Motes';
+	--text-tphoto: 'Cost: 'var(--cost-temp-tphoto)' Motes';
+	--text-tRNA: 'Cost: 'var(--cost-temp-tRNA)' Motes';
+	--text-tribosome: 'Cost: 'var(--cost-temp-tribosome)' Motes';
+	--text-tprotein: 'Cost: 'var(--cost-temp-tprotein)' Motes';
+	--text-tgeneration: 'Cost: 'var(--cost-temp-tgeneration)' Motes';
+	--text-theal: 'Cost: 'var(--cost-temp-theal)' Motes';
+	--text-troam: 'Cost: 'var(--cost-temp-troam)' Motes';
+	--text-texpansion: 'Cost: 'var(--cost-temp-texpansion)' Motes';
+	--text-textention: 'Cost: 'var(--cost-temp-textention)' Motes';
+	--text-tcompression: 'Cost: 'var(--cost-temp-tcompression)' Motes';
+}
+#bless::before{
+	content: 'Blessing';
+}
+.blessed::after{
+	content: ': 'var(--timer-bless);
+}
+.bless::before{
+	content:	'A divine gift from the Goddess.'
+				'\a''This blesssing gives 'var(--bless)' of accelerated time.';
+}
+#gifts::before{
+	content: var(--timer-gift);
+}
+#gift::before{
+	content: 'Gift';
+}
+.gift::before{
+	content:	'A divine gift of 'var(--gift)' food for emergency use.'
+				'\a''This adds food for your creature to gather and eat.';
+}
+#mote::before{
+	content: '\a''Mote';
+}
+#mote c::before{
+	content: '  ('var(--mote)')  ';
+}
+.mote::before{
+	content:	'Next Mote: 'var(--mote-time,'')
+				'\a''A mote of condensed time.'
+				'\a''Used to acquire Temporal Evolutions.';
+}
+.timestrand::before{
+	content:	'This is an errant time strand.'
+				'\a''Collect all the time strands to unlock Temporal Evolution.'
+				'\a''Be warned, hunt time strands with care.'
+				'\a''Multiple time strands in close proximity can have chaotic results.'
+}
+#tredux::before{
+	content: '\a''Redux';
+}
+#tredux c::before{
+	content: '  ('var(--tredux)')  ';
+}
+.tredux::before{
+	content:	var(--text-redux,'')
+				'Evolution Cost Reduction.';
+}
+#tauto::before{
+	content: '\a''Aerobic Speed Up';
+}
+#tauto c::before{
+	content: '  ('var(--tauto)')  ';
+}
+.tauto::before{
+	content:	var(--text-tauto,'')
+				'Generate 'var(--foodtype)' faster.';
+}
+#tphoto::before{
+	content: '\a''Photosynthesis Speed Up';
+}
+#tphoto c::before{
+	content: '  ('var(--tphoto)')  ';
+}
+.tphoto::before{
+	content:	var(--text-tphoto,'')
+				'Generate 'var(--foodtype)' faster.';
+}
+#tRNA::before{
+	content: '\a''RNA Speed Up';
+}
+#tRNA c::before{
+	content: '  ('var(--tRNA)')  ';
+}
+.tRNA::before{
+	content:	var(--text-tRNA,'')
+				'Generate RNA faster.';
+}
+#tribosome::before{
+	content: '\a''Ribosome Speed Up';
+}
+#tribosome c::before{
+	content: '  ('var(--tribosome)')  ';
+}
+.tribosome::before{
+	content:	var(--text-tribosome,'')
+				'Generate Ribosomes faster.';
+}
+#tprotein::before{
+	content: '\a''Protein Speed Up';
+}
+#tprotein c::before{
+	content: '  ('var(--tprotein)')  ';
+}
+.tprotein::before{
+	content:	var(--text-tprotein,'')
+				'Generate Proteins faster.';
+}
+#tgeneration::before{
+	content: '\a''Generation Speed Up';
+}
+#tgeneration c::before{
+	content: '  ('var(--tgeneration)')  ';
+}
+.tgeneration::before{
+	content:	var(--text-tgeneration,'')
+				'Generate cells faster.';
+}
+#theal::before{
+	content: '\a''Heal Speed Up';
+}
+#theal c::before{
+	content: '  ('var(--theal)')  ';
+}
+.theal::before{
+	content:	var(--text-theal,'')
+				'Heal faster to more quickly be ready for the next battle.';
+}
+#troam::before{
+	content: '\a''Roam Speed Up';
+}
+#troam c::before{
+	content: '  ('var(--troam)')  ';
+}
+.troam::before{
+	content:	var(--text-troam,'')
+				'Roam sooner to move to new areas quicker.'
+				'\a''Resources to afford moving are still required and expended.';
+}
+#texpansion::before{
+	content: '\a''Expansion';
+}
+#texpansion c::before{
+	content: '  ('var(--texpansion)')  ';
+}
+.texpansion::before{
+	content:	var(--text-texpansion,'')
+				'Rush time is increased by +1%.'
+				'\a''Rush time to upgrade.';
+}
+#textention::before{
+	content: '\a''Extention';
+}
+#textention c::before{
+	content: '  ('var(--textention)')  ';
+}
+.textention::before{
+	content:	var(--text-textention,'')
+				'Extend Offline Progression by +12 minutes.';
+}
+#tcompression::before{
+	content: '\a''Compression';
+}
+#tcompression c::before{
+	content: '  ('var(--tcompression)')  ';
+}
+.tcompression::before{
+	content:	var(--text-tcompression,'')
+				'Reduce Blessing timer by 30 seconds.'
+				'\a''More blessings recieved grant more potential to be blessed.';
+}

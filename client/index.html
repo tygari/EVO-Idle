@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title></title>
+		<script id="jsoncrush" type="text/javascript" src="https://cdn.jsdelivr.net/gh/KilledByAPixel/JSONCrush/JSONCrush.min.js" sync></script>
 		<script id="load" type="text/javascript" src="client/js/index.js"></script>
 	</head>
 	<body oncontextmenu="return false">
@@ -37,6 +38,8 @@
 			<label id="donators" for="tab3"></label>
 			<input id="tab4" type="radio" name="tabs">
 			<label id="links" for="tab4"></label>
+			<input id="tab5" type="radio" name="tabs">
+			<label id="save" for="tab5"></label>
 			<content id="tab1-content" class="tab">
 				<div class="white txtC text"></div>
 			</content>
@@ -54,6 +57,13 @@
 					<p onclick="discord()" class="discord"></p>
 					<p onclick="reddit()" class="reddit"></p>
 					<p onclick="github()" class="github"></p>
+				</div>
+			</content>
+			<content id="tab5-content" class="tab">
+				<div class="white save">
+					<p class="save0"></p>
+					<p id="save1" class="save1" onclick="file('EVO')"></p>
+					<p id="save2" class="save2"></p>
 				</div>
 			</content>
 		</container>
