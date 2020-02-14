@@ -109,18 +109,20 @@ save.chk =x=>(localStorage.getItem(x));
 	else {save.set(`REC`);}
 	if (save.chk(`EVO`)){EVO = save.get(`EVO`);}
 	else {save.set(`EVO`);}
-	let num = EVO.stage.num;
+	let num = EVO.stage.num,
+		chk =x=>(window.location.origin == 'https://evoidle.tailedbeastgames.cyberpascal.io'),
+		loc =(x,y)=>(`${chk()?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/client/':''}${x}/${y}${chk()?'.min':''}.${x}?version=${EVO.game.version}`);
 	[	`EVO`,
 		`EVO${num}`,
 		`CBT`,
 		`CRS`,
 		`TPR`,
-		`EXO`,
+		//`EXO`,
 	].forEach((href)=>{
 	  let x = document.createElement(`link`);
 	  x.rel = `stylesheet`;
 	  x.type = `text/css`;
-	  x.href = `css/${href}.css?version=${EVO.game.version}`;
+	  x.href = loc(`css`,href);
 	  x.async = false;
 	  document.head.appendChild(x);
 	});
@@ -130,13 +132,13 @@ save.chk =x=>(localStorage.getItem(x));
 		`CBT`,
 		`CRS`,
 		`TPR`,
-		`EXO`,
+		//`EXO`,
 		`VNT`,
 		//`depth`,
 	].forEach((src)=>{
 	  let x = document.createElement(`script`);
 	  x.type = `text/javascript`;
-	  x.src = `js/${src}.js?version=${EVO.game.version}`;
+	  x.src = loc(`js`,src);
 	  x.async = false;
 	  document.head.appendChild(x);
 	});

@@ -14,8 +14,7 @@ temporal.setup=()=>{
 			"con":()=>(con!==undefined?con():true && evolution.temporal.mote()>EVO.temporal[id]+1),
 			"buy":()=>{
 				if(evolution.temporal.data[id].con()){
-					EVO.temporal[id]++;
-					EVO.temporal.smote += EVO.temporal[id];
+					EVO.temporal.smote += ++EVO.temporal[id];
 					css(`t${id}`,EVO.temporal[id]);
 					css(`mote`,evolution.temporal.mote());
 					evolution.temporal.data[id].tip();

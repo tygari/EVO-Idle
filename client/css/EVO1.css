@@ -293,3 +293,9 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 				'\a''Newbie Tip'
 				'\a''To reach auto click evolve Double Bubble, Phospholipid, and Cytoskeleton.';
 }
+#evotut{
+	display: var(--evotut,none);
+}
+#evotut::before{
+	content: 'Hover Over The Evolution Tab ----->';
+}

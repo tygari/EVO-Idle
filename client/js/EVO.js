@@ -176,16 +176,6 @@ core.timer.heal =x=>{
 		EVO.timer.heal += clock.minute;
 	} else {EVO.timer.heal = clock.minute;}
 }
-core.timer.leak =x=>{
-	EVO.timer.leak -= x;
-	if (EVO.timer.leak < 1){
-		let a = Math.floor(EVO.stage.atp/2);
-		EVO.stage.food += EVO.stage.atp-a;
-		EVO.stage.atp = a;
-		one.updateFood();
-		EVO.timer.leak += clock.second;
-	}
-}
 core.timer.cell =x=>{
 	if (EVO.stage.num == 2){
 		if (EVO.two.colony > 0 && EVO.two.colony >= core.body.cell.total()){
@@ -445,8 +435,7 @@ core.move.learn =()=>{
 		let a = EVO[EVO.stage.wrd][EVO.stage.mtype];
 		a.learn += core.body.stat.mul(`nerve`,1);
 		if (a.learn > a.val && a.val < 1000){
-			a.val++;
-			a.learn -= a.val;
+			a.learn -= ++a.val;
 			css(EVO.stage.mtype,a.val);
 		}
 	}
@@ -457,8 +446,7 @@ core.move.learn =()=>{
 		if (EVO.two.motility && EVO.two.motility.val > x){x = EVO.two.motility.val;}
 		if (EVO.three.peristalsis && EVO.three.peristalsis.val > x){x = EVO.three.peristalsis.val;}
 		if (EVO.cross.traveler.exp > (EVO.cross.traveler.val+1)*10 && x > EVO.cross.traveler.val && EVO.cross.traveler.val < 1000){
-			EVO.cross.traveler.val++;
-			EVO.cross.traveler.exp -= EVO.cross.traveler.val*10;
+			EVO.cross.traveler.exp -= (++EVO.cross.traveler.val)*10;
 			css(`xtraveler`,EVO.cross.traveler.val);
 		}
 	}
@@ -574,8 +562,7 @@ core.enviro = {
 				if (EVO.stage.num == 2 && EVO.two.adhesion){
 					EVO.two.adhesion.learn += core.body.stat.mul(`nerve`,1);
 					if (EVO.two.adhesion.learn > EVO.two.adhesion.val){
-						EVO.two.adhesion.val++;	
-						EVO.two.adhesion.learn -= EVO.two.adhesion.val;
+						EVO.two.adhesion.learn -= ++EVO.two.adhesion.val;
 						if (core.start.check){css(`adhesion`,EVO.two.adhesion.val);}
 					}
 				}
@@ -607,8 +594,7 @@ core.enviro = {
 			if (EVO.stage.num == 2 && EVO.two.osmoregulation && EVO.two.osmoregulation.val > -1){
 				EVO.two.osmoregulation.learn += core.body.stat.mul(`nerve`,1);
 				if (EVO.two.osmoregulation.learn > EVO.two.osmoregulation.val){
-					EVO.two.osmoregulation.val++;
-					EVO.two.osmoregulation.learn -= EVO.two.osmoregulation.val;
+					EVO.two.osmoregulation.learn -= ++EVO.two.osmoregulation.val;
 					css(`osmoregulation`,EVO.two.osmoregulation.val);
 				}
 			}

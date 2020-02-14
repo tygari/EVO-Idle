@@ -8,6 +8,19 @@ one.HTMLSetup =()=>{
 }
 one.InitializeProgram =()=>{}
 
+one.leakevo = 0;
+core.timer.leak =x=>{
+	EVO.timer.leak -= x;
+	if (EVO.timer.leak < 1){
+		let a = ~~(EVO.stage.atp/2);
+		EVO.stage.food += EVO.stage.atp-a;
+		EVO.stage.atp = a;
+		one.updateFood();
+		EVO.timer.leak += clock.second;
+		if (++one.leakevo > 10){css(`evotut`,`initial`);}
+	}
+}
+
 one.updateFood =()=>{
 	core.foods.update();
 	css('ATP',Math.floor(EVO.stage[EVO.stage.ftype]));
@@ -46,7 +59,7 @@ stage.start =()=>{
 		}
 	}
 }
-stage.evo =(x)=>{
+stage.evo =x=>{
 	ID(x).removeAttribute('id');
 	let z = x;
 	if (x.match(/^(aerob|photo)$/)){x = 'metabolism';}
@@ -107,7 +120,7 @@ stage.metamo =(x,y)=>{
 		css('RNA',core.RNA.RNA());
 	}
 }
-stage.protein =(x)=>{
+stage.protein =x=>{
 	z = evolution.one.data[x].math();
 	if (EVO.stage[EVO.stage.ftype] >= z*3 && core.RNA.RNA() >= z && EVO.one[x] < 100 && core.ribosome.add() > EVO.one[x]){
 		EVO.stage[EVO.stage.ftype] -= z*3;
@@ -130,6 +143,8 @@ stage.data = {
 			EVO.echo.develop.push('basic');
 			echo('develop','develop');
 			delete EVO.timer.leak;
+			let id = ID(`evotut`);
+			id.parentNode.removeChild(id);
 			return 0;
 		},
 	},
@@ -583,10 +598,8 @@ stage.data = {
 one.evoChance =()=>{
 	let mit = EVO.one.mitosis;
 	if ((Math.floor(Math.random()*100)+1) > mit.chance){
-		mit.learn++;
-		if (mit.learn > mit.chance){
-			mit.chance++;
-			mit.learn -= mit.chance;
+		if (++mit.learn > mit.chance){
+			mit.learn -= ++mit.chance;
 		}
 	} else {
 		EVO.evo.bonus++;

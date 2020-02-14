@@ -17,7 +17,6 @@ two.HTMLSetup =()=>{
 two.InitializeProgram =()=>{
 	core.enviro.css();
 	core.enviro.bgcolor();
-	
 }
 
 two.updateFood =()=>{
@@ -58,7 +57,7 @@ stage.start =()=>{
 	}
 	core.body.cell.colony();
 }
-stage.evo =(x)=>{
+stage.evo =x=>{
 	ID(x).removeAttribute('id');
 	EVO.evo.evolved += evolution.two.data[x].cost();
 	if (!x.match(/^(size|worm)$/) && evolution.two.data[x] && evolution.two.data[x].dat){EVO.two[x] = evolution.two.data[x].dat();}
@@ -116,7 +115,7 @@ stage.metamo =(x,y)=>{
 		css(x,EVO.two[x]);
 	}
 }
-stage.statevo =(x)=>{
+stage.statevo =x=>{
 	let y = evolution.creations() >= evolution.two.data[x].cost() && EVO.two.body >= 30+(EVO.two.specialized*10),
 		z =(a,b)=>(EVO.two.specialized == a || EVO.two.specialized == b);
 	return EVO.two.radial && y && z(7,8) ? true
@@ -348,7 +347,7 @@ stage.data = {
 	},
 };
 
-two.generation =(z)=>{
+two.generation =z=>{
 	EVO.two.generation.learn += z*core.body.stat.mul('nerve',1);
 	if (EVO.two.generation.learn >= (EVO.two.generation.val+1)*10 && EVO.two.generation.val < 100){
 		EVO.two.generation.val++;

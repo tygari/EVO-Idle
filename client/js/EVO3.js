@@ -88,7 +88,7 @@ hunt.move =()=>{
 	hunt.pred.timer = setTimeout(hunt.pred,hunt.pred.time());
 	hunt.graze.timer = setTimeout(hunt.graze,hunt.graze.time());
 }
-hunt.pred =(x)=>{
+hunt.pred =x=>{
 	if (EVO.area.predator + (EVO.area.grazer*4) > hunt.random()){
 		let fight = hunt.random();//d100 Roll
 		if (EVO.area.grazer < 1){EVO.area.predator -= 1;}//Subtracts a Predator if no Grazers
@@ -99,7 +99,7 @@ hunt.pred =(x)=>{
 	if (core.start.check){hunt.pred.timer = setTimeout(hunt.pred,hunt.pred.time());}
 }
 hunt.pred.time =()=>(clock.minute*10+hunt.terri()-EVO.area.predator*clock.minute);
-hunt.graze =(x)=>{
+hunt.graze =x=>{
 	if (((EVO.area.predator*4) + Math.floor(EVO.area.grazer/4)) > hunt.random()){
 		let fight = hunt.random();//d100 Roll
 		if (EVO.area.field < 1){EVO.area.grazer -= 1;}//Subtracts a Grazer if no Fields
@@ -210,7 +210,7 @@ stage.evo =(x,y)=>{
 	}
 	evolution();
 }
-stage.statevo =(x)=>{
+stage.statevo =x=>{
 	let z = false;
 	if (!EVO.three[x]){
 		let body = 30+(EVO.three.specialized*10);
@@ -241,7 +241,7 @@ stage.data = {
 	"diet":{
 		"id": 'diet',
 		"evo":()=>{if (EVO.three.bilateral && evolution.creations() >= evolution.three.data.diet.cost()){
-				evolution.evo.push('carn');
+				evolution.evo.push('carn');//FIX
 				evolution.evo.push('herb');
 			}
 		},
@@ -256,7 +256,7 @@ stage.data = {
 	"skeleton":{
 		"id": 'skeleton',
 		"evo":()=>{if (EVO.three.diet && evolution.creations() >= evolution.three.data.skeleton.cost()){
-				evolution.evo.push('endo');
+				evolution.evo.push('endo');//FIX
 				evolution.evo.push('exo');
 			}
 		},
@@ -266,7 +266,7 @@ stage.data = {
 	"boost":{
 		"id": 'boost',
 		"evo":()=>{if (EVO.three.diet && evolution.creations() >= evolution.three.data.boost.cost()){
-				evolution.evo.push('camo');
+				evolution.evo.push('camo');//FIX
 				evolution.evo.push('terri');
 				evolution.evo.push('roam');
 				evolution.evo.push('hyper');

@@ -8,9 +8,13 @@
 			name="author" content="Tygari Davis"
 			name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<script id="socket" type="text/javascript" src="/socket.io/socket.io.js" sync></script>
-		<script id="echo" type="text/javascript" src="https://cdn.jsdelivr.net/gh/tygari/echo-js/echo.js" sync></script>
-		<script id="jsoncrush" type="text/javascript" src="https://cdn.jsdelivr.net/gh/KilledByAPixel/JSONCrush/JSONCrush.min.js" async></script>
-		<script id="evoload" type="text/javascript" src="js/load.js" async></script>
+		<script id="echo" type="text/javascript" src="https://cdn.jsdelivr.net/gh/tygari/echo-js/echo.min.js" sync></script>
+		<script id="jsoncrush" type="text/javascript" src="https://cdn.jsdelivr.net/gh/KilledByAPixel/JSONCrush/JSONCrush.min.js" sync></script>
+		<script id="evoload" type="text/javascript" async></script>
+		<script>
+			let evoload = window.location.origin === 'https://evoidle.tailedbeastgames.cyberpascal.io';
+			document.getElementById("evoload").src = `${evoload?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/client/':''}js/load${evoload?'.min':''}.js`;
+		</script>
 	</head>
 	<body oncontextmenu="return false">
 		<figure id="load"></figure>
@@ -63,7 +67,8 @@
 			</div>
 		</box>
 		<box class="box game txtR red">
-		<echo- echo="develop talents boost" code="<echo-></echo->"></echo->
+			<echo- echo="develop talents boost" code="<echo-></echo->"></echo->
+			<div id="evotut" class="schism"></div>
 		</box>
 		<event id="event">
 			<p id="eventone"></p>

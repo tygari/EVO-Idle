@@ -384,8 +384,6 @@ container label{
 #crossUpgrade{
 	color:green;
 }
-
-
 #temporalnav::before{
 	white-space: pre-wrap;
 	content: '\a''T''\a''e''\a''m''\a''p''\a''o''\a''r''\a''a''\a''l';

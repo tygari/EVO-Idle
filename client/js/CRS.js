@@ -135,7 +135,7 @@ xcross.start =()=>{
 	}
 }
 xcross.cost =()=>(5*(Object.keys(EVO.cross).length+1));
-xcross.evo =(x)=>{
+xcross.evo =x=>{
 	ID(x).removeAttribute('id');
 	x = x.substring(1);
 	if (evolution.xcross.data[x].buy){
@@ -155,8 +155,7 @@ xcross.evo =(x)=>{
 xcross.cntLrn =(x,y)=>{
 	EVO.cross[x].exp += y;
 	if (EVO.cross[x].exp > (EVO.cross[x].val+1)*100 && EVO.cross[x].val < 100){
-		EVO.cross[x].val++;
-		EVO.cross[x].exp -= EVO.cross[x].val*100;
+		EVO.cross[x].exp -= (++EVO.cross[x].val)*100;
 	}
 }
 xcross.data = {
@@ -173,8 +172,7 @@ xcross.data = {
 		"evo":()=>{if (evolution.creations() >= evolution.xcross.cost() && EVO.two.EPS > 999){evolution.evo.push('xshell');}},
 		"buy":()=>{
 			if (EVO.two.EPS >= 1000*(EVO.cross.shell+1)){
-				EVO.cross.shell++;
-				EVO.two.EPS -= 1000*EVO.cross.shell;
+				EVO.two.EPS -= 1000*(++EVO.cross.shell);
 				css('xshell',EVO.cross.shell);
 			}
 		},
@@ -204,8 +202,7 @@ xcross.data = {
 		"buy":()=>{
 			if (EVO.one.ribosome+EVO.one.ribosomeBonus > EVO.cross.efficient && (EVO.cross.efficient < EVO.one.metabolism.val
 				|| EVO.cross.efficient < EVO.one.mitochondria)){
-				EVO.cross.efficient++;
-				EVO.one.ribosomeBonus -= EVO.cross.efficient;
+				EVO.one.ribosomeBonus -= ++EVO.cross.efficient;
 				css('xefficient',EVO.cross.efficient);
 			}
 		},
