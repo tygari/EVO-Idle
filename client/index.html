@@ -3,7 +3,11 @@
 	<head>
 		<title></title>
 		<script id="jsoncrush" type="text/javascript" src="https://cdn.jsdelivr.net/gh/KilledByAPixel/JSONCrush/JSONCrush.min.js" sync></script>
-		<script id="load" type="text/javascript" src="client/js/index.js"></script>
+		<script id="load" type="text/javascript"></script>
+		<script>
+			let load = window.location.origin === 'https://evoidle.tailedbeastgames.cyberpascal.io';
+			document.getElementById("load").src = `${load?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/':''}client/js/index${load?'.min':''}.js`;
+		</script>
 	</head>
 	<body oncontextmenu="return false">
 		<box class="box stage txtL red">

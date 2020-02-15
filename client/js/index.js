@@ -55,15 +55,17 @@ if (save.chk('EVO') !== null){
 }
 
 (()=>{
+	let chk =x=>(window.location.origin == 'https://evoidle.tailedbeastgames.cyberpascal.io'),
+		loc =(x,y)=>(`${chk()?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/':''}client/${x}/${y}${chk()?'.min':''}.${x}`);
 	[	'EVO',
 		'index',
 	].forEach((href)=>{
-	  let x = document.createElement('link');
-	  x.rel = 'stylesheet';
-	  x.type = 'text/css';
-	  x.href = 'client/css/'+href+'.css';
+	  let x = document.createElement(`link`);
+	  x.rel = `stylesheet`;
+	  x.type = `text/css`;
+	  x.href = loc(`css`,href);
 	  x.async = false;
-	  document.head.insertBefore(x,document.getElementsByTagName("script")[0]);
+	  document.head.appendChild(x);
 	});
 })();
 
