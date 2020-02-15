@@ -1,5 +1,6 @@
-var EVO;
-var REC = {"bonus": 0};
+var EVO,
+	REC,
+	VER = 0.48;
 const rec =(x)=>{
 	let sav = x;
 	//Stage 1
@@ -56,7 +57,7 @@ if (save.chk('EVO') !== null){
 
 (()=>{
 	let chk =x=>(window.location.origin == 'https://evoidle.tailedbeastgames.cyberpascal.io'),
-		loc =(x,y)=>(`${chk()?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/':''}client/${x}/${y}${chk()?'.min':''}.${x}`);
+		loc =(x,y)=>(`${chk()?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/':''}client/${x}/${y}${chk()?'.min':''}.${x}${x}?version=${VER}`);
 	[	'EVO',
 		'index',
 	].forEach((href)=>{
@@ -71,8 +72,8 @@ if (save.chk('EVO') !== null){
 
 window.addEventListener(`load`,()=>{
 	document.getElementsByTagName(`body`)[0].style.overflow = `auto`;
-	css(`date`,`7/16/2018`);
-	css(`version`,0.48);
+	css(`date`,`2/14/2020`);
+	css(`version`,VER);
 	
 	if(save.chk(`EVO`)){css(`save1`,save.chk(`EVO`));}
 	else {css(`save0`,`No Save File Located`);}
