@@ -1,6 +1,6 @@
 :root{
 	--bg-color: rgb(0%,0%,0%);
-	--img-swirl: url(../img/swirl.png);
+	--img-swirl: url(https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/client/img/swirl.png);
 	--text-eps: 'Cost: 'var(--cost-EPS)' 'var(--foodtype);
 	--text-balance: 'Cost: 'var(--cost-balance)' 'var(--foodtype)' 'var(--body-balance)' body''\a';
 	--text-nerve: 'Cost: 'var(--cost-nerve)' 'var(--foodtype)' 'var(--body-nerve)' body''\a';
@@ -206,7 +206,7 @@ content:not(#tab1-content) echo- div{
 	display: none;
 }
 #timestrand{
-	background-image: url(../img/DNA2.png);
+	background-image: url(https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/client/img/DNA2.png);
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
