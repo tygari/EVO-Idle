@@ -110,8 +110,8 @@ save.chk =x=>(localStorage.getItem(x));
 	if (save.chk(`EVO`)){EVO = save.get(`EVO`);}
 	else {save.set(`EVO`);}
 	let num = EVO.stage.num,
-		chk =x=>(window.location.origin == 'https://evoidle.tailedbeastgames.cyberpascal.io'),
-		loc =(x,y)=>(`${chk()?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/client/':''}${x}/${y}${chk()?'.min':''}.${x}?version=${EVO.game.version}`);
+		chk =x=>(window.location.origin == 'http://localhost:5000'),
+		loc =(x,y)=>(`${chk()?'':'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/client/'}${x}/${y}${chk()?'':'.min'}.${x}?version=${EVO.game.version}`);
 	[	`EVO`,
 		`EVO${num}`,
 		`CBT`,
