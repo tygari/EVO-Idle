@@ -12,8 +12,8 @@
 		<script id="jsoncrush" type="text/javascript" src="https://cdn.jsdelivr.net/gh/KilledByAPixel/JSONCrush/JSONCrush.min.js" sync></script>
 		<script id="evoload" type="text/javascript" async></script>
 		<script>
-			let evoload = window.location.origin === 'https://evoidle.tailedbeastgames.cyberpascal.io';
-			document.getElementById("evoload").src = `${evoload?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/client/':''}js/load${evoload?'.min':''}.js`;
+			let evoload = window.location.origin === 'http://localhost:5000';
+			document.getElementById('evoload').src = `${evoload?'':'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/client/'}js/load${evoload?'':'.min'}.js`;
 		</script>
 	</head>
 	<body oncontextmenu="return false">

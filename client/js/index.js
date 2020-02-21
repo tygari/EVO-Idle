@@ -57,7 +57,7 @@ if (save.chk('EVO') !== null){
 
 (()=>{
 	let chk =x=>(window.location.origin == 'https://evoidle.tailedbeastgames.cyberpascal.io'),
-		loc =(x,y)=>(`${chk()?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/':''}client/${x}/${y}${chk()?'.min':''}.${x}${x}?version=${VER}`);
+		loc =(x,y)=>(`${chk()?'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/':''}client/${x}/${y}${chk()?'.min':''}.${x}?version=${VER}`);
 	[	'EVO',
 		'index',
 	].forEach((href)=>{
