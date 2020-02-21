@@ -75,15 +75,17 @@ console.log(`Server started.`);
 
 const SOCKET_LIST = {};
 const CHAT = [];
+CHAT.id = 0;
 var donation = {
 	'SpecialWES': 225,
 	'venti5': 25,
 }
 
 io.on(`connection`,(socket)=>{
-	let t = new Date(),player;
-	console.log(`socket connection: timestamp Y${t.getFullYear()}:M${t.getMonth()}:D${t.getDate()}:H${t.getHours()}:M${t.getMinutes()}:S${t.getSeconds()}`);
-	
+	{
+		let t = new Date(),player;
+		console.log(`socket connection: timestamp Y${t.getFullYear()}:M${t.getMonth()}:D${t.getDate()}:H${t.getHours()}:M${t.getMinutes()}:S${t.getSeconds()}`);
+	}
 	socket.player = {};
 	socket.id = Math.random();
 	socket.player.id = socket.id;
@@ -95,35 +97,47 @@ io.on(`connection`,(socket)=>{
 	socket.on(`playerInfo`,(player)=>{
 		if(!!player.id && !!player.name && typeof player.id == `number` && typeof player.name == `string`){
 			for (let i = 0; i < CHAT.length; i++){
-				if (CHAT[i].id === socket.player.id || CHAT[i].name === socket.player.name){
-					CHAT[i].id = player.id;
+				if (CHAT[i].pid === socket.player.id || CHAT[i].name === socket.player.name){
+					CHAT[i].pid = player.id;
 					CHAT[i].name = player.name;
 				}
 			}
 			socket.player.id = player.id;
 			socket.player.name = player.name;
+			let chat = [];
+			for (let i=0;i<CHAT.length;i++){
+				chat[i] = Object.assign({},CHAT[i]);
+				chat[i].txta = socket.player.id === CHAT[i].pid ? `R` : `L`;
+				delete chat[i].pid;
+			}
+			socket.emit(`startChat`,chat);
 		}
 	});
-	socket.emit(`startChat`,CHAT);
-	let don = 0;
-	for (let i in donation){
-		don += donation[i];
+	{
+		let don = 0;
+		for (let i in donation){
+			don += donation[i];
+		}
+		socket.emit(`donation`,don);
 	}
-	socket.emit(`donation`,don);
 	socket.on(`sendMsgToServer`,(data)=>{
-		if (typeof data == `object` && data != null && typeof data.game == `string` && typeof data.id == `number`
+		if (typeof data == `object` && data != null && typeof data.game == `string` && typeof data.pid == `number`
 			&& typeof data.name == `string` && typeof data.message == `string`){
 			if (data.message == `SYSTEMS ADMIN COMMAND CHAT RESET`){//FIX
-				CHAT.splice(0,CHAT.length);
+				CHAT.length = 0;
 				for (let i in SOCKET_LIST){
 					SOCKET_LIST[i].emit(`startChat`,CHAT);
 				}
 			}
 			else {
 				data.time = new Date();
+				data.mid = ++CHAT.id;
 				CHAT.push(data);
 				if (CHAT.length > 50){CHAT.shift();}
 				for (let i in SOCKET_LIST){
+					data = Object.assign({},data);
+					data.txta = socket.player.id === data.pid ? `R` : `L`;
+					delete data.pid;
 					SOCKET_LIST[i].emit(`addToChat`,data);
 				}
 			}

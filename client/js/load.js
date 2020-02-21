@@ -162,10 +162,12 @@ const chat = {
 	},
 };
 chat.name =x=>{
-	let y = ID(`chat-input`);
-	y.value += `${y.value==0?'':' '}@${x} `;
+	if (x !== REC.player.name){
+		let y = ID(`chat-input`);
+		y.value += `${y.value==0?'':' '}@${x} `;
+	}
 };
-chat.html =x=>(`<div class="chat ${REC.player.id===x.id?'txtR':'txtL'}" data-id="${``+x.id}" onclick="chat.name(this.firstChild.dataset.name)"><p data-game="${x.game}" data-time="[${x.time.getHours()}:${x.time.getMinutes()}]" data-name="${x.name}"></p><p data-message="${x.message}"></p><div>`);
+chat.html =x=>(`<div class="chat ${x.txta==='R'?'txtR':'txtL'}" data-mid="${``+x.mid}" onclick="chat.name(this.firstChild.dataset.name)"><p data-game="${x.game}" data-time="[${x.time.getHours()}:${x.time.getMinutes()}]" data-name="${x.name}"></p><p data-message="${x.message}"></p><div>`);
 socket.on(`startChat`,(data)=>{
 	let id = ID(`chat-text`);
 	for (let i=0;i<data.length;i++){
@@ -174,6 +176,7 @@ socket.on(`startChat`,(data)=>{
 	}
 	chat.array = data;
 	id.scrollTo(0,id.scrollHeight);
+	ID(`chat-input`).disabled = false;
 });
 socket.on(`addToChat`,(data)=>{
 	chat.array.push(data);
@@ -239,7 +242,7 @@ window.addEventListener("load",()=>{
 		x.preventDefault();
 		id = ID(`chat-input`);
 		if(id.value.length > 0){
-			socket.emit(`sendMsgToServer`,{'game':'evoidle','id':REC.player.id,'name':REC.player.name,'message':id.value});
+			socket.emit(`sendMsgToServer`,{'game':'evoidle','pid':REC.player.id,'name':REC.player.name,'message':id.value});
 			id.value = ``;
 		}
 	}
