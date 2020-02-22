@@ -110,7 +110,7 @@ io.on(`connection`,(socket)=>{
 				chat[i].txta = socket.player.id === CHAT[i].pid ? `R` : `L`;
 				delete chat[i].pid;
 			}
-			socket.emit(`startChat`,chat);
+			SOCKET_LIST[socket.id].emit(`startChat`,chat);
 		}
 	});
 	{
@@ -135,10 +135,10 @@ io.on(`connection`,(socket)=>{
 				CHAT.push(data);
 				if (CHAT.length > 50){CHAT.shift();}
 				for (let i in SOCKET_LIST){
-					data = Object.assign({},data);
-					data.txta = socket.player.id === data.pid ? `R` : `L`;
-					delete data.pid;
-					SOCKET_LIST[i].emit(`addToChat`,data);
+					dat = Object.assign({},data);
+					dat.txta = SOCKET_LIST[i].player.id === dat.pid ? `R` : `L`;
+					delete dat.pid;
+					SOCKET_LIST[i].emit(`addToChat`,dat);
 				}
 			}
 		}

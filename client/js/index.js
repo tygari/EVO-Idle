@@ -82,12 +82,12 @@ window.addEventListener(`load`,()=>{
 
 const css =(x,y)=>(document.body.style.setProperty('--'+x,'"'+y+'"'));
 
-const play =()=>{window.location.assign('client/EVO.html')}
-const donate =()=>{window.open('https://www.paypal.me/tygari')}
-const patreon =()=>{window.open('https://www.patreon.com/tailedbeastgames')}
-const discord =()=>{window.open('https://discord.gg/EmnM7zp')}
-const reddit =()=>{window.open('https://www.reddit.com/r/incremental_games/comments/aw1o07/evo_idle_ver_045_released/')}
-const github =()=>{window.open('https://github.com/tygari/EVO-Idle')}
+const play =()=>{window.location.assign('client/EVO.html')},
+donate =()=>{window.open('https://www.paypal.me/tygari')},
+patreon =()=>{window.open('https://www.patreon.com/tailedbeastgames')},
+discord =()=>{window.open('https://discord.gg/EmnM7zp')},
+reddit =()=>{window.open('https://www.reddit.com/r/incremental_games/comments/aw1o07/evo_idle_ver_045_released/')},
+github =()=>{window.open('https://github.com/tygari/EVO-Idle')};
 
 const file =(x)=>{
 	clearTimeout(file.time);
@@ -104,10 +104,9 @@ file.time;
 const soft =()=>{
 	localStorage.removeItem('EVO');
 	location.reload(true);
-}
-
-const hard =()=>{
+},
+hard =()=>{
 	localStorage.removeItem('EVO');
 	localStorage.removeItem('REC');
 	location.reload(true);
-}
+};
