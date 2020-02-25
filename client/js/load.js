@@ -164,7 +164,7 @@ const chat = {
 chat.name =x=>{
 	if (x !== REC.player.name){
 		let y = ID(`chat-input`);
-		y.value += `${y.value==0?'':' '}@${x} `;
+		y.value += `${y.value==0||y.value.endsWith(' ')?'':' '}@${x} `;
 	}
 };
 chat.html =x=>(`<div class="chat ${x.txta==='R'?'txtR':'txtL'} ${x.message.includes('@'+REC.player.name)?'tome':''}" data-mid="${``+x.mid}" onclick="chat.name(this.firstChild.dataset.name)">`

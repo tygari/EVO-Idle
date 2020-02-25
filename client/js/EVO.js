@@ -261,51 +261,51 @@ core.foods = {
 	"immeasurable": {
 		"amount":()=>(core.foods.amount(20000)),
 		"multi": 2.5,
-		"timer": 80,
+		"timer": 90,
 	},
 	"copious": {
 		"amount":()=>(core.foods.amount(17500)),
 		"multi": 2.2,
-		"timer": 70,
+		"timer": 80,
 	},
 	"bountiful": {
 		"amount":()=>(core.foods.amount(15000)),
 		"multi": 1.9,
-		"timer": 60,
+		"timer": 70,
 	},
 	"abundant": {
 		"amount":()=>(core.foods.amount(12500)),
 		"multi": 1.6,
-		"timer": 50,
+		"timer": 60,
 	},
 	"plentiful": {
 		"amount":()=>(core.foods.amount(10000)),
 		"multi": 1.3,
-		"timer": 45,
+		"timer": 50,
 	},
 	"adequate": {
 		"amount":()=>(core.foods.amount(7500)),
 		"multi": 1,
-		"timer": 40,
+		"timer": 45,
 	},
 	"sparse": {
 		"amount":()=>(core.foods.amount(5000)),
 		"multi": 0.8,
-		"timer": 35,
+		"timer": 40,
 	},
 	"scant": {
 		"amount":()=>(core.foods.amount(2500)),
 		"multi": 0.6,
-		"timer": 30,
+		"timer": 35,
 	},
 	"scarce": {
 		"amount":()=>(core.foods.amount(0)),
 		"multi": 0.4,
-		"timer": 25,
+		"timer": 30,
 	},
 	"none": {
 		"multi": 0.2,
-		"timer": 20,
+		"timer": 25,
 	},
 };
 

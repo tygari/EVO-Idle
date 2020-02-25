@@ -72,7 +72,7 @@ if (save.chk('EVO') !== null){
 
 window.addEventListener(`load`,()=>{
 	document.getElementsByTagName(`body`)[0].style.overflow = `auto`;
-	css(`date`,`2/14/2020`);
+	css(`date`,`2/24/2020`);
 	css(`version`,VER);
 	
 	if(save.chk(`EVO`)){css(`save1`,save.chk(`EVO`));}
@@ -99,7 +99,6 @@ const file =(x)=>{
 	file.time = setTimeout(()=>{css(`save0`,`Click to Save to Clipboard`);},10000);
 }
 file.time;
-
 
 const soft =()=>{
 	localStorage.removeItem('EVO');
