@@ -167,7 +167,9 @@ chat.name =x=>{
 		y.value += `${y.value==0?'':' '}@${x} `;
 	}
 };
-chat.html =x=>(`<div class="chat ${x.txta==='R'?'txtR':'txtL'}" data-mid="${``+x.mid}" onclick="chat.name(this.firstChild.dataset.name)"><p data-game="${x.game}" data-time="[${x.time.getHours()}:${x.time.getMinutes()}]" data-name="${x.name}"></p><p data-message="${x.message}"></p></div>`);
+chat.html =x=>(`<div class="chat ${x.txta==='R'?'txtR':'txtL'} ${x.message.includes('@'+REC.player.name)?'tome':''}" data-mid="${``+x.mid}" onclick="chat.name(this.firstChild.dataset.name)">`
+				+`<p data-game="${x.game}" data-time="${Date.now()-x.time>clock.day?'['+x.time.toDateString()+']':''}[${x.time.getHours()}:${x.time.getMinutes()}]" data-name="${x.name}"></p>`
+				+`<p data-message="${x.message}"></p></div>`);
 socket.on(`startChat`,(data)=>{
 	let id = ID(`chat-text`);
 	for (let i=0;i<data.length;i++){

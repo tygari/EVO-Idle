@@ -680,11 +680,14 @@ span#size::after{
 	float: left;
 	width: 100%;
 }
-.chat.txtL{
+.chat.txtL:not(.tome){
 	background: darkblue;
 }
-.chat.txtR{
+.chat.txtR:not(.tome){
 	background: darkred;
+}
+.chat.tome{
+	background: darkviolet;
 }
 .chat [data-name]::before{
 	content: attr(data-time)' 'attr(data-name);
