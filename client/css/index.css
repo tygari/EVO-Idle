@@ -239,3 +239,27 @@ container label{
 	content: var(--save2);
 	display: none;
 }
+web{
+	display: none;
+	position: absolute;
+	z-index: 9;
+	height: 200px;
+	width: 400px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	background-color: white;
+	white-space: pre-wrap;
+}
+comp{
+	display: block;
+	transform: translate(0px,-30px);
+	color: black;
+	text-align: center;
+}
+comp:before{
+	content:	'EVO Idle uses Web Components.'
+				'\a''This browser currenctly has Web Components Disabled.'
+				'\a''Please Enable Web Components in this browsers configuration.'
+				'\a''Then reload the game.';
+}

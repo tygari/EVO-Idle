@@ -77,7 +77,7 @@ const SOCKET_LIST = {};
 const CHAT = [];
 CHAT.id = 0;
 var donation = {
-	'SpecialWES': 225,
+	'SpecialWES': 250,
 	'venti5': 25,
 }
 

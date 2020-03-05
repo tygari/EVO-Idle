@@ -1,4 +1,4 @@
-:root{
+:root{ 
 	--bg-color: rgb(0%,0%,0%);
 	--img-swirl: url(https://cdn.jsdelivr.net/gh/tygari/EVO-Idle/client/img/swirl.png);
 	--text-eps: 'Cost: 'var(--cost-EPS)' 'var(--foodtype);
@@ -701,7 +701,7 @@ span#size::after{
 	float: right;
 }
 #chat-text::before{
-	content: 'Hello! Welcome to EVO Idle!''\a';
+	content: 'Hello' var(--player-name,'')'! Welcome to EVO Idle!''\a';
 }
 #chat-text{
 	width: 100%;
@@ -745,7 +745,7 @@ player{
 	white-space: pre-wrap;
 }
 name{
-	display: none;
+	display: block;
 	transform: translate(0px,-30px);
 	color: black;
 	text-align: center;

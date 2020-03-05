@@ -1,6 +1,13 @@
 var EVO,
 	REC,
 	VER = 0.48;
+
+save =x=>{}
+save.set =x=>(localStorage.setItem(x,JSONCrush(JSON.stringify(window[x]))));
+save.get =x=>(JSON.parse(JSONUncrush(decodeURIComponent(save.chk(x)))));
+save.del =x=>(localStorage.removeItem(x));
+save.chk =x=>(localStorage.getItem(x));
+	
 const rec =(x)=>{
 	let sav = x;
 	//Stage 1
@@ -29,16 +36,10 @@ const rec =(x)=>{
 	bonus = Math.floor(bonus/10);
 	REC.bonus += bonus;
 	if(EVO.game.version < 0.48){
-		localStorage.setItem("REC",JSON.stringify(REC));
-		localStorage.removeItem("EVO");
+		save.set(`REC`);
+		localStorage.removeItem(`EVO`);
 	}
 }
-
-save =x=>{}
-save.set =x=>(localStorage.setItem(x,JSONCrush(JSON.stringify(window[x]))));
-save.get =x=>(JSON.parse(JSONUncrush(decodeURIComponent(save.chk(x)))));
-save.del =x=>(localStorage.removeItem(x));
-save.chk =x=>(localStorage.getItem(x));
 
 if (save.chk('EVO') !== null){
 	try {
@@ -82,7 +83,14 @@ window.addEventListener(`load`,()=>{
 
 const css =(x,y)=>(document.body.style.setProperty('--'+x,'"'+y+'"'));
 
-const play =()=>{window.location.assign('client/EVO.html')},
+const play =()=>{
+	if(!!window.customElements){
+		window.location.assign('client/EVO.html');
+	} else {
+		document.getElementById('lay').classList.replace('layoff','layon');
+		document.getElementsByTagName(`web`)[0].style.display = `block`;
+	}
+},
 donate =()=>{window.open('https://www.paypal.me/tygari')},
 patreon =()=>{window.open('https://www.patreon.com/tailedbeastgames')},
 discord =()=>{window.open('https://discord.gg/EmnM7zp')},

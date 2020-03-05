@@ -91,11 +91,11 @@ var REC = {
 
 save =x=>{
 	core.cheat();
-	if (Date.now()-x > 20000){location.reload(true);}
+	if (Date.now()-x > clock.second*20){location.reload(true);}
 	else {
 		EVO.game.date = Date.now();
 		save.set(`EVO`);
-		setTimeout(core.save,10000,Date.now());
+		setTimeout(core.save,clock.second*10,Date.now());
 	}
 }
 save.set =x=>(localStorage.setItem(x,JSONCrush(JSON.stringify(window[x]))));
@@ -160,16 +160,16 @@ const chat = {
 			css(`chat-switch`,`\\2A02`);
 		}
 	},
-};
-chat.name =x=>{
-	if (x !== REC.player.name){
-		let y = ID(`chat-input`);
-		y.value += `${y.value==0||y.value.endsWith(' ')?'':' '}@${x} `;
-	}
-};
-chat.html =x=>(`<div class="chat ${x.txta==='R'?'txtR':'txtL'} ${x.message.includes('@'+REC.player.name)?'tome':''}" data-mid="${``+x.mid}" onclick="chat.name(this.firstChild.dataset.name)">`
+	"name":x=>{
+		if (x !== REC.player.name){
+			let y = ID(`chat-input`);
+			y.value += `${y.value==0||y.value.endsWith(' ')?'':' '}@${x} `;
+		}
+	},
+	"html":x=>(`<div class="chat ${x.txta==='R'?'txtR':'txtL'} ${x.message.includes('@'+REC.player.name)?'tome':''}" data-mid="${``+x.mid}" onclick="chat.name(this.firstChild.dataset.name)">`
 				+`<p data-game="${x.game}" data-time="${Date.now()-x.time>clock.day?'['+x.time.toDateString()+']':''}[${x.time.getHours()}:${x.time.getMinutes()}]" data-name="${x.name}"></p>`
-				+`<p data-message="${x.message}"></p></div>`);
+				+`<p data-message="${x.message}"></p></div>`),
+};
 socket.on(`startChat`,(data)=>{
 	let id = ID(`chat-text`);
 	for (let i=0;i<data.length;i++){

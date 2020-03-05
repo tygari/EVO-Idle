@@ -1,5 +1,6 @@
 var core = {};
 core.start =()=>{
+	css(`player-name`,` `+REC.player.name)
 	ID(`talents`).style.display = (EVO.echo.talents.length > 0 ? `initial` : `none`);
 	ID(`boost`).style.display = (EVO.echo.boost.length > 0 ? `initial` : `none`);
 	
@@ -50,7 +51,6 @@ core.start =()=>{
 		ID('lay').classList.replace('layoff','layon');
 		css(`player-id`,(``+REC.player.id).slice(2));
 		document.getElementsByTagName(`player`)[0].style.display = `block`;
-		document.getElementsByTagName(`name`)[0].style.display = `block`;
 	}
 }
 core.start.check = false;
