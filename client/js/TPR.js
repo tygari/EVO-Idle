@@ -48,6 +48,7 @@ temporal.setup=()=>{
 	x(`roam`,1,()=>(EVO.three.boost == `roam`));
 	x(`expansion`,5,()=>(EVO.stage.rushed > clock.day),()=>(EVO.stage.rushed > clock.day*(EVO.temporal.expansion+1)));
 	x(`extention`,1,()=>(true));
+	evolution.temporal.data.extention.time = 10.8;
 	x(`compression`,3,()=>(EVO.stage.blessed>9),()=>(EVO.stage.blessed>EVO.temporal.compression*10));
 	
 	

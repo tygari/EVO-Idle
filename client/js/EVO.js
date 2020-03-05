@@ -28,8 +28,8 @@ core.start =()=>{
 	evolution();
 	
 	let time = Date.now() - EVO.game.date,
-		max = 12*clock.minute*(EVO.temporal.extention||0)
-			+(EVO.temporal.lock?8:Object.values(EVO.temporal).filter(t=>t===true).length)*clock.hour;
+		max = evolution.temporal.data.extention.time*clock.minute*(EVO.temporal.extention||0)
+			+clock.hour*((EVO.temporal.lock?8:Object.values(EVO.temporal).filter(t=>t===true).length)+4);
 	if (time > max){time = max;}
 	core.timer.rush(time);
 	EVO.game.date = Date.now();
