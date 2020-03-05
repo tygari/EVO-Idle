@@ -1,6 +1,7 @@
 var EVO,
 	REC,
-	VER = 0.48;
+	VER = 0.48,
+	DATE = `3/4/2020`;
 
 save =x=>{}
 save.set =x=>(localStorage.setItem(x,JSONCrush(JSON.stringify(window[x]))));
@@ -73,7 +74,7 @@ if (save.chk('EVO') !== null){
 
 window.addEventListener(`load`,()=>{
 	document.getElementsByTagName(`body`)[0].style.overflow = `auto`;
-	css(`date`,`2/24/2020`);
+	css(`date`,DATE);
 	css(`version`,VER);
 	
 	if(save.chk(`EVO`)){css(`save1`,save.chk(`EVO`));}
