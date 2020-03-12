@@ -1,11 +1,11 @@
 var EVO,
 	REC,
 	VER = 0.48,
-	DATE = `3/4/2020`;
+	DATE = `3/11/2020`;
 
 save =x=>{}
-save.set =x=>(localStorage.setItem(x,JSONCrush(JSON.stringify(window[x]))));
-save.get =x=>(JSON.parse(JSONUncrush(decodeURIComponent(save.chk(x)))));
+save.set =x=>(localStorage.setItem(x,JSON.stringify(window[x])));
+save.get =x=>(JSON.parse(save.chk(x)));
 save.del =x=>(localStorage.removeItem(x));
 save.chk =x=>(localStorage.getItem(x));
 	
@@ -36,25 +36,36 @@ const rec =(x)=>{
 	if (sav.combat){bonus += (sav.combat.offense||0) + (sav.combat.defense||0) + (sav.combat.speed||0) + (sav.combat.special||0);}
 	bonus = Math.floor(bonus/10);
 	REC.bonus += bonus;
-	if(EVO.game.version < 0.48){
+	if(EVO.game.version < VER){
 		save.set(`REC`);
-		localStorage.removeItem(`EVO`);
+		save.del(`EVO`);
 	}
 }
 
-if (save.chk('EVO') !== null){
-	try {
-		if(JSON.parse(save.chk('EVO')) && JSON.parse(save.chk('EVO')).game && JSON.parse(save.chk('EVO')).game.version < 0.48){
-			if (save.chk('REC')){REC = JSON.parse(save.chk('REC'));}
-			else {localStorage.setItem("REC", JSON.stringify(REC));}
-			if (!REC.player){REC.player = {'id':Math.random()};}
-			if (save.chk('EVO')){EVO = JSON.parse(save.chk('EVO'));}
-			if (EVO.game.version < 0.47){rec(EVO);}
-			if (EVO){save.set(`EVO`);}
-			if (REC){save.set(`REC`);}
-		}
+try {
+	if (save.chk(`EVO`) !== null){
+		let chk = JSON.parse(JSONUncrush(decodeURIComponent(save.chk(`EVO`))));
+		typeof chk != `object` ? save.del(`EVO`) : save.set(`EVO`);
 	}
-	catch(error){}
+}
+catch(e){
+	try {
+		if (typeof save.get(`EVO`) !== `object`){save.del(`EVO`);}
+	}
+	catch(e){}
+}
+
+try {
+	let chk = JSON.parse(JSONUncrush(decodeURIComponent(save.chk(`REC`))));
+	if (typeof chk == `object` && chk != null){save.set(`REC`)};
+}
+catch(e){
+	try {
+		if (typeof save.get(`REC`) !== `object`){throw 'ERROR: Contact developer if you see this line.'};
+	}
+	catch(e){
+		console.log(`Contact developer if you see this line.`);
+	}
 }
 
 (()=>{
@@ -77,9 +88,11 @@ window.addEventListener(`load`,()=>{
 	css(`date`,DATE);
 	css(`version`,VER);
 	
+	/*
 	if(save.chk(`EVO`)){css(`save1`,save.chk(`EVO`));}
 	else {css(`save0`,`No Save File Located`);}
 	css(`save2`,save.chk(`REC`));
+	*/
 });
 
 const css =(x,y)=>(document.body.style.setProperty('--'+x,'"'+y+'"'));
@@ -99,6 +112,7 @@ reddit =()=>{window.open('https://www.reddit.com/r/incremental_games/comments/aw
 github =()=>{window.open('https://github.com/tygari/EVO-Idle')};
 
 const file =(x)=>{
+	/*
 	clearTimeout(file.time);
 	navigator.clipboard.writeText(save.chk(x)).then(()=>{
 	  css(`save0`,`File Successfully Saved to Clipboard`);
@@ -106,6 +120,7 @@ const file =(x)=>{
 	  css(`save0`,`File Failed to Saved to Clipboard`);
 	});
 	file.time = setTimeout(()=>{css(`save0`,`Click to Save to Clipboard`);},10000);
+	*/
 }
 file.time;
 

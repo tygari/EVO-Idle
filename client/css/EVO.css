@@ -51,8 +51,8 @@ body{
 	background-color: var(--bg-color);
 	user-select: none;
 	cursor: crosshair;
-	height: 100%;
-	width: 100%;
+	height: 100vh;
+	width: 97vw;
 	overflow: hidden;
 }
 #load{
@@ -272,15 +272,15 @@ label{
 }
 input[name=tabs] + label{
 	font-weight:bold;
-	padding:5px;
-	border-radius:5px;
+	padding:0.25vw;
+	border-radius:1vw;
 	color:white;
 }
 input[name=tabs]:checked + label{
-	border:solid 2px white;
+	border:solid 0.15vw white;
 }
 container label{
-	margin: 10px;
+	margin: 0.5vw;
 	visibility: hidden;
 }
 #tab1:checked ~ #tab1-content,

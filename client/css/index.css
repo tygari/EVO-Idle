@@ -125,13 +125,13 @@ copyright::after{
 	font-weight: bold;
 }
 container{
-	margin-top: 3%;
-    width: 52%;
+	margin-top: 5vh;
+    width: 50vw;
     float: left;
 }
 label{
 	float: left;
-	width: 14.9%;
+	width: 8vw;
 	text-align: center;
 }
 container label{

@@ -98,51 +98,49 @@ save =x=>{
 		setTimeout(core.save,clock.second*10,Date.now());
 	}
 }
-save.set =x=>(localStorage.setItem(x,JSONCrush(JSON.stringify(window[x]))));
-save.get =x=>(JSON.parse(JSONUncrush(decodeURIComponent(save.chk(x)))));
+save.set =x=>(localStorage.setItem(x,JSON.stringify(window[x])));
+save.get =x=>(JSON.parse(save.chk(x)));
 save.del =x=>(localStorage.removeItem(x));
 save.chk =x=>(localStorage.getItem(x));
 
-(()=>{
-	/*Save File load*/
-	if (save.chk(`REC`)){REC = save.get(`REC`);}
-	else {save.set(`REC`);}
-	if (save.chk(`EVO`)){EVO = save.get(`EVO`);}
-	else {save.set(`EVO`);}
-	let num = EVO.stage.num,
-		chk =x=>(window.location.origin == 'http://localhost:5000'),
-		loc =(x,y)=>(`${chk()?'':'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle@latest/client/'}${x}/${y}${chk()?'':'.min'}.${x}`);
-	[	`EVO`,
-		`EVO${num}`,
-		`CBT`,
-		`CRS`,
-		`TPR`,
-		//`EXO`,
-	].forEach((href)=>{
-	  let x = document.createElement(`link`);
-	  x.rel = `stylesheet`;
-	  x.type = `text/css`;
-	  x.href = loc(`css`,href);
-	  x.async = false;
-	  document.head.appendChild(x);
-	});
-	[	`REC`,
-		`EVO`,
-		`EVO${num}`,
-		`CBT`,
-		`CRS`,
-		`TPR`,
-		//`EXO`,
-		`VNT`,
-		//`depth`,
-	].forEach((src)=>{
-	  let x = document.createElement(`script`);
-	  x.type = `text/javascript`;
-	  x.src = loc(`js`,src);
-	  x.async = false;
-	  document.head.appendChild(x);
-	});
-})();
+/*Save File load*/
+if (save.chk(`REC`)){REC = save.get(`REC`);}
+else {save.set(`REC`);}
+if (save.chk(`EVO`)){EVO = save.get(`EVO`);}
+else {save.set(`EVO`);}
+let num = EVO.stage.num,
+	chk =x=>(window.location.origin == 'http://localhost:5000'),
+	loc =(x,y)=>(`${chk()?'':'https://cdn.jsdelivr.net/gh/tygari/EVO-Idle@latest/client/'}${x}/${y}${chk()?'':'.min'}.${x}`);
+[	`EVO`,
+	`EVO${num}`,
+	`CBT`,
+	`CRS`,
+	`TPR`,
+	//`EXO`,
+].forEach((href)=>{
+  let x = document.createElement(`link`);
+  x.rel = `stylesheet`;
+  x.type = `text/css`;
+  x.href = loc(`css`,href);
+  x.async = false;
+  document.head.appendChild(x);
+});
+[	`REC`,
+	`EVO`,
+	`EVO${num}`,
+	`CBT`,
+	`CRS`,
+	`TPR`,
+	//`EXO`,
+	`VNT`,
+	//`depth`,
+].forEach((src)=>{
+  let x = document.createElement(`script`);
+  x.type = `text/javascript`;
+  x.src = loc(`js`,src);
+  x.async = false;
+  document.head.appendChild(x);
+});
 
 const socket = io();
 socket.emit(`playerInfo`,REC.player);
@@ -282,7 +280,7 @@ const copy =(loc,id,pos)=>{
 }
 
 const clock =(t)=>{//Pass 't' a number for milliseconds
-	let c =(x,y)=>{
+	let c=(x,y)=>{
 		i=~~((t/x)%y);
 		if(i>0||r!==``){r+=(i>9?i:(r!==``?`0`+i:i))};
 		if(r!==``&&x!==clock.second){r+=`:`;}

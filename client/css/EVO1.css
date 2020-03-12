@@ -297,5 +297,6 @@ struc#bubble::before,struc#doublebubble::before,struc#phospholipid::before,struc
 	display: var(--evotut,none);
 }
 #evotut::before{
+	white-space: nowrap;
 	content: 'Hover Over The Evolution Tab ----->';
 }
