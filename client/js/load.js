@@ -241,7 +241,6 @@ window.addEventListener(`load`,()=>{
 	C(`stamina`,`stmn`);
 	C(`retreat`,`rtrt`);
 	css(`mouse`,`none`,true);
-	ID(`protein`).removeAttribute(`onclick`);
 	
 	css(`player-id`,REC.player.id);
 	ID(`chat-form`).onsubmit =x=>{
