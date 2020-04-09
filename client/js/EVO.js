@@ -324,8 +324,8 @@ core.growth = {
 			if (isNaN(x)){throw `core.growth.metabolism is NaN`;}
 			else {return x;}
 		}
-		catch(err){
-			console.log(err);
+		catch(e){
+			console.log(e);
 			return 0;
 		}
 	},
@@ -336,8 +336,8 @@ core.growth = {
 			if (isNaN(x)){throw `core.growth.metabolism is NaN`;}
 			else {return x;}
 		}
-		catch(err){
-			console.log(err);
+		catch(e){
+			console.log(e);
 			return 0;
 		}
 	},

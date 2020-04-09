@@ -98,7 +98,13 @@ save =x=>{
 		setTimeout(core.save,clock.second*10,Date.now());
 	}
 }
-save.set =x=>(localStorage.setItem(x,JSON.stringify(window[x])));
+save.set =x=>{
+	if (typeof window[x] === `object` && EVO !== null){
+		localStorage.setItem(x,JSON.stringify(window[x]));
+		return true;
+	}
+	else {return false}
+};
 save.get =x=>(JSON.parse(save.chk(x)));
 save.del =x=>(localStorage.removeItem(x));
 save.chk =x=>(localStorage.getItem(x));
@@ -194,7 +200,7 @@ socket.on(`donation`,(data)=>{
 	donation = data;
 });
 
-window.addEventListener("load",()=>{
+window.addEventListener(`load`,()=>{
 	//Creates Evolution Side Navs
 	let A,
 		C=(x,y,z)=>{
