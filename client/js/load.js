@@ -95,7 +95,7 @@ save =x=>{
 	else {
 		EVO.game.date = Date.now();
 		save.set(`EVO`);
-		setTimeout(core.save,clock.second*10,Date.now());
+		setTimeout(save,clock.second*10,Date.now());
 	}
 }
 save.set =x=>{
