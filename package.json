@@ -4,6 +4,6 @@
   "dependencies": {
     "aws-sdk": "^2.368.0",
     "express": "^4.16.4",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.5.0"
   }
 }
